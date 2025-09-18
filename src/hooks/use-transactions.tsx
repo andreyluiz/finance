@@ -23,7 +23,7 @@ export interface Totals {
   };
 }
 
-type NewTransaction = Omit<Transaction, 'id' | 'paid'>
+type NewTransaction = Omit<Transaction, 'id' | 'paid'>;
 
 export const useTransactions = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -91,16 +91,16 @@ export const useTransactions = () => {
         }, delay);
       }
     };
-    
+
     // Reminder for tomorrow
     const tomorrowReminderTime = new Date(dueDate.getFullYear(), dueDate.getMonth(), dueDate.getDate() - 1, 12, 0, 0);
-    if(tomorrowReminderTime > now) {
+    if (tomorrowReminderTime > now) {
       notify('Lembrete de despesa', `Vence amanhã: ${transaction.name} - ${transaction.value}`, tomorrowReminderTime);
     }
 
     // Reminder for today
     const todayReminderTime = new Date(dueDate.getFullYear(), dueDate.getMonth(), dueDate.getDate(), 8, 0, 0);
-     if(todayReminderTime > now) {
+    if (todayReminderTime > now) {
       notify('Lembrete de despesa', `Vence hoje: ${transaction.name} - ${transaction.value}`, todayReminderTime);
     }
   }, []);
@@ -108,7 +108,8 @@ export const useTransactions = () => {
   const addTransaction = useCallback(
     (transaction: NewTransaction) => {
       const newTransactions: Transaction[] = [];
-      const totalInstallments = transaction.recurrence === 'monthly' ? transaction.installments : 1;
+      const totalInstallments =
+        transaction.recurrence === 'monthly' && transaction.installments ? transaction.installments : 1;
 
       for (let i = 0; i < totalInstallments; i++) {
         const installmentDueDate = addMonths(transaction.dueDate, i);
@@ -127,16 +128,19 @@ export const useTransactions = () => {
         };
 
         newTransactions.push(newTransaction);
-        
+
         if (newTransaction.type === 'despesa') {
           scheduleNotification(newTransaction);
         }
       }
-      
+
       persistTransactions([...transactions, ...newTransactions]);
 
       if (totalInstallments > 1) {
-        toast({ title: 'Transações adicionadas', description: `${totalInstallments} parcelas de '${transaction.name}' foram adicionadas.` });
+        toast({
+          title: 'Transações adicionadas',
+          description: `${totalInstallments} parcelas de '${transaction.name}' foram adicionadas.`,
+        });
       } else {
         toast({ title: 'Transação adicionada', description: `'${transaction.name}' foi adicionado.` });
       }
@@ -166,9 +170,7 @@ export const useTransactions = () => {
 
   const toggleTransactionPaid = useCallback(
     (id: string) => {
-      const newTransactions = transactions.map((t) =>
-        t.id === id ? { ...t, paid: !t.paid } : t
-      );
+      const newTransactions = transactions.map((t) => (t.id === id ? { ...t, paid: !t.paid } : t));
       persistTransactions(newTransactions);
       const updatedTransaction = newTransactions.find((t) => t.id === id);
       if (updatedTransaction) {
@@ -189,7 +191,7 @@ export const useTransactions = () => {
       if (a.paid !== b.paid) {
         return a.paid ? 1 : -1;
       }
-      
+
       const priorityDiff = priorityOrder[b.priority] - priorityOrder[a.priority];
       if (priorityDiff !== 0) return priorityDiff;
 

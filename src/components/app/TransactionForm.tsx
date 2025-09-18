@@ -29,6 +29,7 @@ import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { priorities, transactionTypes, type Transaction, recurrenceTypes } from '@/lib/types';
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
+import * as React from 'react';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'O nome deve ter pelo menos 2 caracteres.' }),
@@ -54,21 +55,28 @@ interface TransactionFormProps {
 const getlastDayOfMonth = () => {
   const today = new Date();
   return new Date(today.getFullYear(), today.getMonth() + 1, 0);
-}
+};
+
+const defaultFormValues: Omit<FormValues, 'installments'> & { installments?: number } = {
+  name: '',
+  type: 'despesa',
+  value: 0,
+  currency: 'CHF',
+  dueDate: format(getlastDayOfMonth(), 'yyyy-MM-dd'),
+  priority: 'média',
+  recurrence: 'one-time',
+  installments: 1,
+};
 
 export default function TransactionForm({ onSubmit, initialData, onCancel }: TransactionFormProps) {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: initialData?.name ?? '',
-      type: initialData?.type ?? 'despesa',
-      value: initialData?.value ?? 0,
-      currency: initialData?.currency ?? 'CHF',
-      dueDate: initialData?.dueDate ? format(initialData.dueDate, 'yyyy-MM-dd') : format(getlastDayOfMonth(), 'yyyy-MM-dd'),
-      priority: initialData?.priority ?? 'média',
-      recurrence: initialData?.recurrence ?? 'one-time',
-      installments: initialData?.installments ?? 1,
-    },
+    defaultValues: initialData
+      ? {
+          ...initialData,
+          dueDate: format(initialData.dueDate, 'yyyy-MM-dd'),
+        }
+      : defaultFormValues,
   });
 
   const isEditing = !!initialData;
@@ -77,8 +85,7 @@ export default function TransactionForm({ onSubmit, initialData, onCancel }: Tra
   const handleFormSubmit = (data: FormValues) => {
     onSubmit(data);
     if (!isEditing) {
-      form.reset();
-      form.setValue('dueDate', format(getlastDayOfMonth(), 'yyyy-MM-dd'));
+      form.reset(defaultFormValues);
     }
   };
 
@@ -199,7 +206,7 @@ export default function TransactionForm({ onSubmit, initialData, onCancel }: Tra
                 </FormItem>
               )}
             />
-             <FormField
+            <FormField
               control={form.control}
               name="recurrence"
               render={({ field }) => (
@@ -230,7 +237,7 @@ export default function TransactionForm({ onSubmit, initialData, onCancel }: Tra
                 </FormItem>
               )}
             />
-             {recurrence === 'monthly' && (
+            {recurrence === 'monthly' && (
               <FormField
                 control={form.control}
                 name="installments"
