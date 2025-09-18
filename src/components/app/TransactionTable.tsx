@@ -1,0 +1,157 @@
+'use client';
+
+import * as React from 'react';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
+import {
+  MoreHorizontal,
+  Pencil,
+  Trash2,
+  ArrowUp,
+  ArrowDown,
+  Minus,
+  ArrowUpCircle,
+  ArrowDownCircle,
+} from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import type { Priority, Transaction, TransactionType } from '@/lib/types';
+import { cn } from '@/lib/utils';
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
+
+interface TransactionTableProps {
+  transactions: Transaction[];
+  onEdit: (transaction: Transaction) => void;
+  onDelete: (id: string) => void;
+  loading: boolean;
+}
+
+const priorityIcons: Record<Priority, React.ReactElement> = {
+  'muito alta': <ArrowUpCircle className="h-5 w-5 text-red-500" />,
+  'alta': <ArrowUp className="h-5 w-5 text-orange-500" />,
+  'média': <Minus className="h-5 w-5 text-yellow-500" />,
+  'baixa': <ArrowDown className="h-5 w-5 text-blue-500" />,
+  'muito baixa': <ArrowDownCircle className="h-5 w-5 text-green-500" />,
+};
+
+const priorityText: Record<Priority, string> = {
+    'muito alta': 'Muito Alta',
+    'alta': 'Alta',
+    'média': 'Média',
+    'baixa': 'Baixa',
+    'muito baixa': 'Muito Baixa',
+  };
+
+const typeVariant: Record<TransactionType, 'destructive' | 'secondary'> = {
+  'despesa': 'destructive',
+  'receita': 'secondary',
+};
+
+const typeText: Record<TransactionType, string> = {
+  'despesa': 'Despesa',
+  'receita': 'Receita',
+};
+
+function formatCurrency(value: number, currency: string) {
+    try {
+      return new Intl.NumberFormat('pt-BR', { style: 'currency', currency }).format(value);
+    } catch (error) {
+      return `${value.toFixed(2)} ${currency}`;
+    }
+  }
+
+
+export function TransactionTable({ transactions, onEdit, onDelete, loading }: TransactionTableProps) {
+  if (loading) {
+    return <div className="flex items-center justify-center p-8">Carregando transações...</div>;
+  }
+  
+  return (
+    <div className="w-full overflow-auto">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[100px]">Tipo</TableHead>
+            <TableHead>Nome</TableHead>
+            <TableHead>Vencimento</TableHead>
+            <TableHead className="text-center">Prioridade</TableHead>
+            <TableHead className="text-right">Valor</TableHead>
+            <TableHead className="w-[50px] text-right">Ações</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {transactions.length > 0 ? (
+            transactions.map((transaction) => (
+              <TableRow
+                key={transaction.id}
+                className="transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+              >
+                <TableCell>
+                  <Badge variant={typeVariant[transaction.type]}>{typeText[transaction.type]}</Badge>
+                </TableCell>
+                <TableCell className="font-medium">{transaction.name}</TableCell>
+                <TableCell>{format(transaction.dueDate, 'dd/MM/yyyy', { locale: ptBR })}</TableCell>
+                <TableCell>
+                    <div className="flex items-center justify-center gap-2">
+                        {priorityIcons[transaction.priority]}
+                        <span className="hidden md:inline">{priorityText[transaction.priority]}</span>
+                    </div>
+                </TableCell>
+                <TableCell
+                  className={cn(
+                    'text-right font-semibold',
+                    transaction.type === 'receita' ? 'text-green-600' : 'text-red-600'
+                  )}
+                >
+                  {transaction.type === 'receita' ? '+' : '-'} {formatCurrency(transaction.value, transaction.currency)}
+                </TableCell>
+                <TableCell className="text-right">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="h-8 w-8 p-0">
+                        <span className="sr-only">Abrir menu</span>
+                        <MoreHorizontal className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem onClick={() => onEdit(transaction)}>
+                        <Pencil className="mr-2 h-4 w-4" />
+                        Editar
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => onDelete(transaction.id)}
+                        className="text-red-600 focus:text-red-600"
+                      >
+                        <Trash2 className="mr-2 h-4 w-4" />
+                        Excluir
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={6} className="h-24 text-center">
+                Nenhuma transação encontrada.
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </div>
+  );
+}
