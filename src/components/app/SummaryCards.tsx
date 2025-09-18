@@ -1,7 +1,7 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { TrendingUp, TrendingDown, Scale } from 'lucide-react';
+import { TrendingUp, TrendingDown, Scale, AlertTriangle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { Totals } from '@/hooks/use-transactions';
 
@@ -41,10 +41,19 @@ export default function SummaryCards({ totals }: SummaryCardsProps) {
                     <div className="text-2xl font-bold">R$0,00</div>
                 </CardContent>
             </Card>
-            <Card className="shadow-md md:col-span-2">
+            <Card className="shadow-md">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">Saldo</CardTitle>
                     <Scale className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                    <div className="text-2xl font-bold">R$0,00</div>
+                </CardContent>
+            </Card>
+            <Card className="shadow-md border-red-500/50 dark:border-red-500/50">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Pagamentos Críticos</CardTitle>
+                    <AlertTriangle className="h-4 w-4 text-red-500" />
                 </CardHeader>
                 <CardContent>
                     <div className="text-2xl font-bold">R$0,00</div>
@@ -82,7 +91,7 @@ export default function SummaryCards({ totals }: SummaryCardsProps) {
           ))}
         </CardContent>
       </Card>
-      <Card className="shadow-md md:col-span-2">
+      <Card className="shadow-md">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Saldo</CardTitle>
           <Scale className="h-4 w-4 text-muted-foreground" />
@@ -102,6 +111,19 @@ export default function SummaryCards({ totals }: SummaryCardsProps) {
               </div>
             );
           })}
+        </CardContent>
+      </Card>
+      <Card className="shadow-md border-red-500/50 dark:border-red-500/50">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-sm font-medium">Pagamentos Críticos</CardTitle>
+          <AlertTriangle className="h-4 w-4 text-red-500" />
+        </CardHeader>
+        <CardContent>
+          {currencies.map((currency) => (
+            <div key={currency} className="text-2xl font-bold text-red-600 dark:text-red-500">
+              {formatCurrency(totals[currency].veryHighPriorityTotal, currency)}
+            </div>
+          ))}
         </CardContent>
       </Card>
     </>

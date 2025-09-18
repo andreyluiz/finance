@@ -8,26 +8,30 @@ export function getBillingCycle(date: Date): BillingCycle {
   const referenceMonth = date.getMonth();
   const referenceYear = date.getFullYear();
 
-  // The start date is the 10th of the selected month.
   const startDate = new Date(referenceYear, referenceMonth, BILLING_DAY_OF_MONTH);
-
-  // The end date is the 10th of the next month (exclusive, so it includes up to the 9th).
-  const endDate = new Date(referenceYear, referenceMonth + 1, BILLING_DAY_OF_MONTH);
+  const endDate = addMonths(startDate, 1);
 
   return { startDate, endDate };
 }
 
 export function getBillingCycleTotals(transactions: Transaction[]): Totals {
     return transactions.reduce((acc, t) => {
-        const { currency, type, value } = t;
+        const { currency, type, value, priority, paid } = t;
+        if (paid) return acc;
+
         if (!acc[currency]) {
-          acc[currency] = { revenue: 0, expense: 0, balance: 0 };
+          acc[currency] = { revenue: 0, expense: 0, balance: 0, veryHighPriorityTotal: 0 };
         }
+        
         if (type === 'receita') {
           acc[currency].revenue += value;
         } else {
           acc[currency].expense += value;
+          if (priority === 'muito alta') {
+            acc[currency].veryHighPriorityTotal += value;
+          }
         }
+        
         acc[currency].balance = acc[currency].revenue - acc[currency].expense;
         return acc;
       }, {} as Totals);
