@@ -23,7 +23,7 @@ export interface Totals {
   };
 }
 
-type NewTransaction = Omit<Transaction, 'id'>
+type NewTransaction = Omit<Transaction, 'id' | 'paid'>
 
 export const useTransactions = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -37,6 +37,7 @@ export const useTransactions = () => {
         const parsed = JSON.parse(storedTransactions).map((t: any) => ({
           ...t,
           dueDate: new Date(t.dueDate),
+          paid: t.paid ?? false,
         }));
         setTransactions(parsed);
       }
@@ -122,6 +123,7 @@ export const useTransactions = () => {
           name: installmentName,
           dueDate: installmentDueDate,
           installments: totalInstallments,
+          paid: false,
         };
 
         newTransactions.push(newTransaction);
@@ -162,6 +164,21 @@ export const useTransactions = () => {
     [transactions, persistTransactions, toast]
   );
 
+  const toggleTransactionPaid = useCallback(
+    (id: string) => {
+      const newTransactions = transactions.map((t) =>
+        t.id === id ? { ...t, paid: !t.paid } : t
+      );
+      persistTransactions(newTransactions);
+      const updatedTransaction = newTransactions.find((t) => t.id === id);
+      if (updatedTransaction) {
+        const status = updatedTransaction.paid ? 'paga' : 'não paga';
+        toast({ title: `Transação marcada como ${status}` });
+      }
+    },
+    [transactions, persistTransactions, toast]
+  );
+
   const resetTransactions = useCallback(() => {
     persistTransactions([]);
     toast({ title: 'Dados resetados', description: 'Todas as transações foram apagadas.' });
@@ -169,6 +186,10 @@ export const useTransactions = () => {
 
   const sortedTransactions = useMemo(() => {
     return [...transactions].sort((a, b) => {
+      if (a.paid !== b.paid) {
+        return a.paid ? 1 : -1;
+      }
+      
       const priorityDiff = priorityOrder[b.priority] - priorityOrder[a.priority];
       if (priorityDiff !== 0) return priorityDiff;
 
@@ -181,6 +202,7 @@ export const useTransactions = () => {
 
   const totals = useMemo<Totals>(() => {
     return transactions.reduce((acc, t) => {
+      if (t.paid) return acc;
       const { currency, type, value } = t;
       if (!acc[currency]) {
         acc[currency] = { revenue: 0, expense: 0, balance: 0 };
@@ -200,6 +222,7 @@ export const useTransactions = () => {
     addTransaction,
     updateTransaction,
     removeTransaction,
+    toggleTransactionPaid,
     resetTransactions,
     totals,
     loading,

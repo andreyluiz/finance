@@ -31,11 +31,13 @@ import type { Priority, Transaction, TransactionType } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { Checkbox } from '../ui/checkbox';
 
 interface TransactionTableProps {
   transactions: Transaction[];
   onEdit: (transaction: Transaction) => void;
   onDelete: (id: string) => void;
+  onTogglePaid: (id: string) => void;
   loading: boolean;
 }
 
@@ -74,7 +76,7 @@ function formatCurrency(value: number, currency: string) {
   }
 
 
-export function TransactionTable({ transactions, onEdit, onDelete, loading }: TransactionTableProps) {
+export function TransactionTable({ transactions, onEdit, onDelete, onTogglePaid, loading }: TransactionTableProps) {
   if (loading) {
     return <div className="flex items-center justify-center p-8">Carregando transações...</div>;
   }
@@ -84,6 +86,7 @@ export function TransactionTable({ transactions, onEdit, onDelete, loading }: Tr
       <Table>
         <TableHeader>
           <TableRow>
+            <TableHead className="w-[50px]">Pago</TableHead>
             <TableHead className="w-[100px]">Tipo</TableHead>
             <TableHead>Nome</TableHead>
             <TableHead>Vencimento</TableHead>
@@ -97,13 +100,27 @@ export function TransactionTable({ transactions, onEdit, onDelete, loading }: Tr
             transactions.map((transaction) => (
               <TableRow
                 key={transaction.id}
-                className="transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+                className={cn(
+                  'transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted',
+                  transaction.paid && 'bg-green-100/50 dark:bg-green-900/20'
+                )}
               >
+                <TableCell>
+                  <Checkbox
+                    checked={transaction.paid}
+                    onCheckedChange={() => onTogglePaid(transaction.id)}
+                    aria-label={transaction.paid ? 'Marcar como não pago' : 'Marcar como pago'}
+                  />
+                </TableCell>
                 <TableCell>
                   <Badge variant={typeVariant[transaction.type]}>{typeText[transaction.type]}</Badge>
                 </TableCell>
-                <TableCell className="font-medium">{transaction.name}</TableCell>
-                <TableCell>{format(transaction.dueDate, 'dd/MM/yyyy', { locale: ptBR })}</TableCell>
+                <TableCell className={cn("font-medium", transaction.paid && 'line-through text-muted-foreground')}>
+                  {transaction.name}
+                </TableCell>
+                <TableCell className={cn(transaction.paid && 'line-through text-muted-foreground')}>
+                  {format(transaction.dueDate, 'dd/MM/yyyy', { locale: ptBR })}
+                </TableCell>
                 <TableCell>
                     <div className="flex items-center justify-center gap-2">
                         {priorityIcons[transaction.priority]}
@@ -113,7 +130,8 @@ export function TransactionTable({ transactions, onEdit, onDelete, loading }: Tr
                 <TableCell
                   className={cn(
                     'text-right font-semibold',
-                    transaction.type === 'receita' ? 'text-green-600' : 'text-red-600'
+                    transaction.type === 'receita' ? 'text-green-600' : 'text-red-600',
+                    transaction.paid && 'line-through text-muted-foreground'
                   )}
                 >
                   {transaction.type === 'receita' ? '+' : '-'} {formatCurrency(transaction.value, transaction.currency)}
@@ -145,7 +163,7 @@ export function TransactionTable({ transactions, onEdit, onDelete, loading }: Tr
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={6} className="h-24 text-center">
+              <TableCell colSpan={7} className="h-24 text-center">
                 Nenhuma transação encontrada.
               </TableCell>
             </TableRow>

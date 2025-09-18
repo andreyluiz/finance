@@ -17,6 +17,7 @@ export interface Transaction {
   priority: Priority;
   recurrence: RecurrenceType;
   installments: number;
+  paid: boolean;
 }
 
 export interface BillingCycle {

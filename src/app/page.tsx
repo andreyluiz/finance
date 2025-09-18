@@ -19,6 +19,7 @@ export default function Home() {
     updateTransaction,
     removeTransaction,
     resetTransactions,
+    toggleTransactionPaid,
     loading,
   } = useTransactions();
   const [editingTransaction, setEditingTransaction] = React.useState<Transaction | null>(null);
@@ -78,6 +79,7 @@ export default function Home() {
                   transactions={filteredTransactions}
                   onEdit={handleEdit}
                   onDelete={removeTransaction}
+                  onTogglePaid={toggleTransactionPaid}
                   loading={loading}
                 />
               </CardContent>
