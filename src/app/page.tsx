@@ -24,6 +24,7 @@ export default function Home() {
     loading,
   } = useTransactions();
   const [editingTransaction, setEditingTransaction] = React.useState<Transaction | null>(null);
+  const [formKey, setFormKey] = React.useState(Date.now());
 
   // If it's before the 10th, the default cycle should be the previous month.
   const initialDate = new Date().getDate() < 10 ? subMonths(new Date(), 1) : new Date();
@@ -31,10 +32,12 @@ export default function Home() {
 
   const handleEdit = (transaction: Transaction) => {
     setEditingTransaction(transaction);
+    setFormKey(Date.now());
   };
 
   const handleCancelEdit = () => {
     setEditingTransaction(null);
+    setFormKey(Date.now());
   };
 
   const handleSaveTransaction = (data: FormValues) => {
@@ -46,6 +49,7 @@ export default function Home() {
       addTransaction(transactionData);
     }
     setEditingTransaction(null);
+    setFormKey(Date.now());
   };
 
   const billingCycle = getBillingCycle(currentBillingMonth);
@@ -69,7 +73,7 @@ export default function Home() {
           <div className="lg:col-span-1 print:hidden">
             <div className="sticky top-24">
               <TransactionForm
-                key={editingTransaction?.id ?? 'new'}
+                key={formKey}
                 onSubmit={handleSaveTransaction}
                 initialData={editingTransaction}
                 onCancel={handleCancelEdit}

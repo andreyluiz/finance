@@ -84,9 +84,6 @@ export default function TransactionForm({ onSubmit, initialData, onCancel }: Tra
 
   const handleFormSubmit = (data: FormValues) => {
     onSubmit(data);
-    if (!isEditing) {
-      form.reset(defaultFormValues);
-    }
   };
 
   return (
