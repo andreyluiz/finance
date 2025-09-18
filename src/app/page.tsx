@@ -66,7 +66,7 @@ export default function Home() {
           <SummaryCards totals={billingCycleTotals} />
         </div>
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-8">
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-1 print:hidden">
             <div className="sticky top-24">
               <TransactionForm
                 key={editingTransaction?.id ?? 'new'}

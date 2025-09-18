@@ -92,7 +92,7 @@ export function TransactionTable({ transactions, onEdit, onDelete, onTogglePaid,
             <TableHead>Vencimento</TableHead>
             <TableHead>Prioridade</TableHead>
             <TableHead className="text-right">Valor</TableHead>
-            <TableHead className="w-[50px] text-right">Ações</TableHead>
+            <TableHead className="w-[50px] text-right print:hidden">Ações</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -136,7 +136,7 @@ export function TransactionTable({ transactions, onEdit, onDelete, onTogglePaid,
                 >
                   {transaction.type === 'receita' ? '+' : '-'} {formatCurrency(transaction.value, transaction.currency)}
                 </TableCell>
-                <TableCell className="text-right">
+                <TableCell className="text-right print:hidden">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" className="h-8 w-8 p-0">

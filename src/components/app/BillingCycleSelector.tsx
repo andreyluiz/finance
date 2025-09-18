@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { format, addMonths, subMonths } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { cn } from '@/lib/utils';
 
 interface BillingCycleSelectorProps {
   currentBillingMonth: Date;
@@ -20,7 +21,7 @@ export default function BillingCycleSelector({ currentBillingMonth, onMonthChang
   };
 
   return (
-    <div className="flex items-center justify-center gap-4 mb-4">
+    <div className={cn("flex items-center justify-center gap-4 mb-4", "print:hidden")}>
       <Button variant="outline" size="icon" onClick={handlePrevMonth}>
         <ChevronLeft className="h-4 w-4" />
       </Button>
