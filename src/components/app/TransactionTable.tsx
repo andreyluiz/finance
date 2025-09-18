@@ -90,7 +90,7 @@ export function TransactionTable({ transactions, onEdit, onDelete, onTogglePaid,
             <TableHead className="w-[100px]">Tipo</TableHead>
             <TableHead>Nome</TableHead>
             <TableHead>Vencimento</TableHead>
-            <TableHead className="text-center">Prioridade</TableHead>
+            <TableHead>Prioridade</TableHead>
             <TableHead className="text-right">Valor</TableHead>
             <TableHead className="w-[50px] text-right">Ações</TableHead>
           </TableRow>
@@ -122,7 +122,7 @@ export function TransactionTable({ transactions, onEdit, onDelete, onTogglePaid,
                   {format(transaction.dueDate, 'dd/MM/yyyy', { locale: ptBR })}
                 </TableCell>
                 <TableCell>
-                    <div className="flex items-center justify-center gap-2">
+                    <div className="flex items-center gap-2">
                         {priorityIcons[transaction.priority]}
                         <span className="hidden md:inline">{priorityText[transaction.priority]}</span>
                     </div>
