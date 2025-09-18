@@ -8,6 +8,8 @@ import TransactionForm from '@/components/app/TransactionForm';
 import { TransactionTable } from '@/components/app/TransactionTable';
 import { Card, CardContent } from '@/components/ui/card';
 import { type Transaction } from '@/lib/types';
+import { type FormValues } from '@/components/app/TransactionForm';
+
 
 export default function Home() {
   const {
@@ -29,8 +31,8 @@ export default function Home() {
     setEditingTransaction(null);
   };
 
-  const handleSaveTransaction = (data: Omit<Transaction, 'id' | 'dueDate'> & { dueDate: string }) => {
-    const transactionData = { ...data, dueDate: new Date(data.dueDate) };
+  const handleSaveTransaction = (data: FormValues) => {
+    const transactionData = { ...data, dueDate: new Date(data.dueDate), installments: data.installments ?? 1 };
 
     if (editingTransaction) {
       updateTransaction(editingTransaction.id, transactionData);

@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { type Transaction, type Priority } from '@/lib/types';
+import { type Transaction, type Priority, RecurrenceType } from '@/lib/types';
 import { useToast } from './use-toast';
+import { addMonths } from 'date-fns';
 
 const LOCAL_STORAGE_KEY = 'financial_transactions';
 
@@ -21,6 +22,8 @@ export interface Totals {
     balance: number;
   };
 }
+
+type NewTransaction = Omit<Transaction, 'id'>
 
 export const useTransactions = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -102,13 +105,38 @@ export const useTransactions = () => {
   }, []);
 
   const addTransaction = useCallback(
-    (transaction: Omit<Transaction, 'id'>) => {
-      const newTransaction = { ...transaction, id: crypto.randomUUID() };
-      const newTransactions = [...transactions, newTransaction];
-      persistTransactions(newTransactions);
-      toast({ title: 'Transação adicionada', description: `'${newTransaction.name}' foi adicionado.` });
-      if (newTransaction.type === 'despesa') {
-        scheduleNotification(newTransaction);
+    (transaction: NewTransaction) => {
+      const newTransactions: Transaction[] = [];
+      const totalInstallments = transaction.recurrence === 'monthly' ? transaction.installments : 1;
+
+      for (let i = 0; i < totalInstallments; i++) {
+        const installmentDueDate = addMonths(transaction.dueDate, i);
+        const installmentName =
+          totalInstallments > 1
+            ? `${transaction.name} (${i + 1}/${totalInstallments})`
+            : transaction.name;
+
+        const newTransaction: Transaction = {
+          ...transaction,
+          id: crypto.randomUUID(),
+          name: installmentName,
+          dueDate: installmentDueDate,
+          installments: totalInstallments,
+        };
+
+        newTransactions.push(newTransaction);
+        
+        if (newTransaction.type === 'despesa') {
+          scheduleNotification(newTransaction);
+        }
+      }
+      
+      persistTransactions([...transactions, ...newTransactions]);
+
+      if (totalInstallments > 1) {
+        toast({ title: 'Transações adicionadas', description: `${totalInstallments} parcelas de '${transaction.name}' foram adicionadas.` });
+      } else {
+        toast({ title: 'Transação adicionada', description: `'${transaction.name}' foi adicionado.` });
       }
     },
     [transactions, persistTransactions, scheduleNotification, toast]

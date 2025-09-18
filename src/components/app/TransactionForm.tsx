@@ -27,7 +27,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { priorities, transactionTypes, type Transaction } from '@/lib/types';
+import { priorities, transactionTypes, type Transaction, recurrenceTypes } from '@/lib/types';
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 
 const formSchema = z.object({
@@ -39,9 +39,11 @@ const formSchema = z.object({
     message: 'Data de vencimento inválida.',
   }),
   priority: z.enum(priorities, { required_error: 'Selecione uma prioridade.' }),
+  recurrence: z.enum(recurrenceTypes, { required_error: 'Selecione a recorrência.' }),
+  installments: z.coerce.number().optional(),
 });
 
-type FormValues = z.infer<typeof formSchema>;
+export type FormValues = z.infer<typeof formSchema>;
 
 interface TransactionFormProps {
   onSubmit: (data: FormValues) => void;
@@ -59,10 +61,13 @@ export default function TransactionForm({ onSubmit, initialData, onCancel }: Tra
       currency: initialData?.currency ?? 'BRL',
       dueDate: initialData?.dueDate ? format(initialData.dueDate, 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd'),
       priority: initialData?.priority ?? 'média',
+      recurrence: initialData?.recurrence ?? 'one-time',
+      installments: initialData?.installments ?? 1,
     },
   });
 
   const isEditing = !!initialData;
+  const recurrence = form.watch('recurrence');
 
   const handleFormSubmit = (data: FormValues) => {
     onSubmit(data);
@@ -189,6 +194,52 @@ export default function TransactionForm({ onSubmit, initialData, onCancel }: Tra
                 </FormItem>
               )}
             />
+             <FormField
+              control={form.control}
+              name="recurrence"
+              render={({ field }) => (
+                <FormItem className="space-y-3">
+                  <FormLabel>Recorrência</FormLabel>
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className="flex space-x-4"
+                      disabled={isEditing}
+                    >
+                      <FormItem className="flex items-center space-x-2 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="one-time" />
+                        </FormControl>
+                        <FormLabel className="font-normal">Única</FormLabel>
+                      </FormItem>
+                      <FormItem className="flex items-center space-x-2 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="monthly" />
+                        </FormControl>
+                        <FormLabel className="font-normal">Mensal</FormLabel>
+                      </FormItem>
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+             {recurrence === 'monthly' && (
+              <FormField
+                control={form.control}
+                name="installments"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Número de Parcelas</FormLabel>
+                    <FormControl>
+                      <Input type="number" min={2} {...field} disabled={isEditing} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
             <FormField
               control={form.control}
               name="priority"
