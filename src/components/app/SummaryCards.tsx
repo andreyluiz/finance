@@ -1,7 +1,7 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { TrendingUp, TrendingDown, DollarSign, Scale } from 'lucide-react';
+import { TrendingUp, TrendingDown, Scale } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { Totals } from '@/hooks/use-transactions';
 
@@ -41,7 +41,7 @@ export default function SummaryCards({ totals }: SummaryCardsProps) {
                     <div className="text-2xl font-bold">R$0,00</div>
                 </CardContent>
             </Card>
-            <Card className="shadow-md col-span-1 md:col-span-2">
+            <Card className="shadow-md md:col-span-2">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">Saldo</CardTitle>
                     <Scale className="h-4 w-4 text-muted-foreground" />

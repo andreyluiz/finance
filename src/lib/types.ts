@@ -18,3 +18,8 @@ export interface Transaction {
   recurrence: RecurrenceType;
   installments: number;
 }
+
+export interface BillingCycle {
+  startDate: Date;
+  endDate: Date;
+}

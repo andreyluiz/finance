@@ -9,7 +9,8 @@ import { TransactionTable } from '@/components/app/TransactionTable';
 import { Card, CardContent } from '@/components/ui/card';
 import { type Transaction } from '@/lib/types';
 import { type FormValues } from '@/components/app/TransactionForm';
-
+import BillingCycleSelector from '@/components/app/BillingCycleSelector';
+import { getBillingCycle, getBillingCycleTotals } from '@/lib/billing-cycle';
 
 export default function Home() {
   const {
@@ -18,10 +19,10 @@ export default function Home() {
     updateTransaction,
     removeTransaction,
     resetTransactions,
-    totals,
     loading,
   } = useTransactions();
   const [editingTransaction, setEditingTransaction] = React.useState<Transaction | null>(null);
+  const [currentBillingMonth, setCurrentBillingMonth] = React.useState(new Date());
 
   const handleEdit = (transaction: Transaction) => {
     setEditingTransaction(transaction);
@@ -42,12 +43,22 @@ export default function Home() {
     setEditingTransaction(null);
   };
 
+  const billingCycle = getBillingCycle(currentBillingMonth);
+  const filteredTransactions = transactions.filter(
+    (t) => t.dueDate >= billingCycle.startDate && t.dueDate < billingCycle.endDate
+  );
+  const billingCycleTotals = getBillingCycleTotals(filteredTransactions);
+
   return (
     <div className="flex min-h-screen w-full flex-col">
       <Header onReset={resetTransactions} />
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
+        <BillingCycleSelector
+          currentBillingMonth={currentBillingMonth}
+          onMonthChange={setCurrentBillingMonth}
+        />
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <SummaryCards totals={totals} />
+          <SummaryCards totals={billingCycleTotals} />
         </div>
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-8">
           <div className="lg:col-span-1">
@@ -64,7 +75,7 @@ export default function Home() {
             <Card className="shadow-md">
               <CardContent className="p-0">
                 <TransactionTable
-                  transactions={transactions}
+                  transactions={filteredTransactions}
                   onEdit={handleEdit}
                   onDelete={removeTransaction}
                   loading={loading}
