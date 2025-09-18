@@ -51,6 +51,11 @@ interface TransactionFormProps {
   onCancel?: () => void;
 }
 
+const getlastDayOfMonth = () => {
+  const today = new Date();
+  return new Date(today.getFullYear(), today.getMonth() + 1, 0);
+}
+
 export default function TransactionForm({ onSubmit, initialData, onCancel }: TransactionFormProps) {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -58,8 +63,8 @@ export default function TransactionForm({ onSubmit, initialData, onCancel }: Tra
       name: initialData?.name ?? '',
       type: initialData?.type ?? 'despesa',
       value: initialData?.value ?? 0,
-      currency: initialData?.currency ?? 'BRL',
-      dueDate: initialData?.dueDate ? format(initialData.dueDate, 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd'),
+      currency: initialData?.currency ?? 'CHF',
+      dueDate: initialData?.dueDate ? format(initialData.dueDate, 'yyyy-MM-dd') : format(getlastDayOfMonth(), 'yyyy-MM-dd'),
       priority: initialData?.priority ?? 'média',
       recurrence: initialData?.recurrence ?? 'one-time',
       installments: initialData?.installments ?? 1,
@@ -73,7 +78,7 @@ export default function TransactionForm({ onSubmit, initialData, onCancel }: Tra
     onSubmit(data);
     if (!isEditing) {
       form.reset();
-      form.setValue('dueDate', format(new Date(), 'yyyy-MM-dd'));
+      form.setValue('dueDate', format(getlastDayOfMonth(), 'yyyy-MM-dd'));
     }
   };
 
@@ -149,7 +154,7 @@ export default function TransactionForm({ onSubmit, initialData, onCancel }: Tra
                   <FormItem>
                     <FormLabel>Moeda</FormLabel>
                     <FormControl>
-                      <Input placeholder="BRL" {...field} maxLength={3} />
+                      <Input placeholder="CHF" {...field} maxLength={3} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
