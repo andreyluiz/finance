@@ -5,16 +5,16 @@ import { type Totals } from '@/hooks/use-transactions';
 const BILLING_DAY_OF_MONTH = 10;
 
 export function getBillingCycle(date: Date): BillingCycle {
-    const currentMonth = date.getMonth();
-    const currentYear = date.getFullYear();
-  
-    // The start date is the 10th of the previous month.
-    const startDate = new Date(currentYear, currentMonth - 1, BILLING_DAY_OF_MONTH);
-    
-    // The end date is the 10th of the current month (exclusive, so it includes up to the 9th).
-    const endDate = new Date(currentYear, currentMonth, BILLING_DAY_OF_MONTH);
-  
-    return { startDate, endDate };
+  const referenceMonth = date.getMonth();
+  const referenceYear = date.getFullYear();
+
+  // The start date is the 10th of the selected month.
+  const startDate = new Date(referenceYear, referenceMonth, BILLING_DAY_OF_MONTH);
+
+  // The end date is the 10th of the next month (exclusive, so it includes up to the 9th).
+  const endDate = new Date(referenceYear, referenceMonth + 1, BILLING_DAY_OF_MONTH);
+
+  return { startDate, endDate };
 }
 
 export function getBillingCycleTotals(transactions: Transaction[]): Totals {

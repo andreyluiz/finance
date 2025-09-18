@@ -11,6 +11,7 @@ import { type Transaction } from '@/lib/types';
 import { type FormValues } from '@/components/app/TransactionForm';
 import BillingCycleSelector from '@/components/app/BillingCycleSelector';
 import { getBillingCycle, getBillingCycleTotals } from '@/lib/billing-cycle';
+import { subMonths } from 'date-fns';
 
 export default function Home() {
   const {
@@ -23,7 +24,10 @@ export default function Home() {
     loading,
   } = useTransactions();
   const [editingTransaction, setEditingTransaction] = React.useState<Transaction | null>(null);
-  const [currentBillingMonth, setCurrentBillingMonth] = React.useState(new Date());
+
+  // If it's before the 10th, the default cycle should be the previous month.
+  const initialDate = new Date().getDate() < 10 ? subMonths(new Date(), 1) : new Date();
+  const [currentBillingMonth, setCurrentBillingMonth] = React.useState(initialDate);
 
   const handleEdit = (transaction: Transaction) => {
     setEditingTransaction(transaction);
