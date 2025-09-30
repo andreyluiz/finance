@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { type Transaction, type Priority, RecurrenceType } from '@/lib/types';
+import { type Transaction, type Priority } from '@/lib/types';
 import { useToast } from './use-toast';
-import { addMonths } from 'date-fns';
+import { addMonths, parse } from 'date-fns';
 
 const LOCAL_STORAGE_KEY = 'financial_transactions';
 
@@ -27,6 +27,13 @@ export interface Totals {
 }
 
 type NewTransaction = Omit<Transaction, 'id' | 'paid'>;
+
+// Helper to extract the base name from an installment transaction name
+const getBaseName = (name: string): string => {
+  const match = name.match(/^(.*)\s\(\d+\/\d+\)$/);
+  return match ? match[1] : name;
+};
+
 
 export const useTransactions = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -171,6 +178,25 @@ export const useTransactions = () => {
     [transactions, persistTransactions, toast]
   );
 
+  const removeFutureInstallments = useCallback(
+    (id: string) => {
+      const transactionToRemove = transactions.find((t) => t.id === id);
+      if (!transactionToRemove) return;
+  
+      const baseName = getBaseName(transactionToRemove.name);
+      
+      const newTransactions = transactions.filter((t) => {
+        const tBaseName = getBaseName(t.name);
+        // Keep if names don't match, or if it's a past/current installment
+        return tBaseName !== baseName || t.dueDate < transactionToRemove.dueDate;
+      });
+  
+      persistTransactions(newTransactions);
+      toast({ title: 'Série de transações removida', description: 'As futuras transações desta série foram removidas.', variant: 'destructive' });
+    },
+    [transactions, persistTransactions, toast]
+  );
+
   const toggleTransactionPaid = useCallback(
     (id: string) => {
       const newTransactions = transactions.map((t) => (t.id === id ? { ...t, paid: !t.paid } : t));
@@ -210,6 +236,7 @@ export const useTransactions = () => {
     addTransaction,
     updateTransaction,
     removeTransaction,
+    removeFutureInstallments,
     toggleTransactionPaid,
     resetTransactions,
     loading,

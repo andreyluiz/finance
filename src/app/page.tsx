@@ -12,6 +12,7 @@ import { type FormValues } from '@/components/app/TransactionForm';
 import BillingCycleSelector from '@/components/app/BillingCycleSelector';
 import { getBillingCycle, getBillingCycleTotals } from '@/lib/billing-cycle';
 import { subMonths } from 'date-fns';
+import DeleteConfirmationDialog from '@/components/app/DeleteConfirmationDialog';
 
 export default function Home() {
   const {
@@ -19,11 +20,13 @@ export default function Home() {
     addTransaction,
     updateTransaction,
     removeTransaction,
+    removeFutureInstallments,
     resetTransactions,
     toggleTransactionPaid,
     loading,
   } = useTransactions();
   const [editingTransaction, setEditingTransaction] = React.useState<Transaction | null>(null);
+  const [deletingTransaction, setDeletingTransaction] = React.useState<Transaction | null>(null);
   const [formKey, setFormKey] = React.useState(Date.now());
 
   // If it's before the 10th, the default cycle should be the previous month.
@@ -34,6 +37,30 @@ export default function Home() {
     setEditingTransaction(transaction);
     setFormKey(Date.now());
   };
+
+  const handleDeleteRequest = (transaction: Transaction) => {
+    if (transaction.installments && transaction.installments > 1) {
+      setDeletingTransaction(transaction);
+    } else {
+      removeTransaction(transaction.id);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setDeletingTransaction(null);
+  };
+
+  const handleConfirmDelete = (deleteType: 'single' | 'future') => {
+    if (deletingTransaction) {
+      if (deleteType === 'single') {
+        removeTransaction(deletingTransaction.id);
+      } else {
+        removeFutureInstallments(deletingTransaction.id);
+      }
+    }
+    setDeletingTransaction(null);
+  };
+
 
   const handleCancelEdit = () => {
     setEditingTransaction(null);
@@ -86,7 +113,7 @@ export default function Home() {
                 <TransactionTable
                   transactions={filteredTransactions}
                   onEdit={handleEdit}
-                  onDelete={removeTransaction}
+                  onDelete={handleDeleteRequest}
                   onTogglePaid={toggleTransactionPaid}
                   loading={loading}
                 />
@@ -95,6 +122,11 @@ export default function Home() {
           </div>
         </div>
       </main>
+       <DeleteConfirmationDialog
+        isOpen={!!deletingTransaction}
+        onClose={handleCancelDelete}
+        onConfirm={handleConfirmDelete}
+      />
     </div>
   );
 }

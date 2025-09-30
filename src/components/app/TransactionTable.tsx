@@ -36,7 +36,7 @@ import { Checkbox } from '../ui/checkbox';
 interface TransactionTableProps {
   transactions: Transaction[];
   onEdit: (transaction: Transaction) => void;
-  onDelete: (id: string) => void;
+  onDelete: (transaction: Transaction) => void;
   onTogglePaid: (id: string) => void;
   loading: boolean;
 }
@@ -150,7 +150,7 @@ export function TransactionTable({ transactions, onEdit, onDelete, onTogglePaid,
                         Editar
                       </DropdownMenuItem>
                       <DropdownMenuItem
-                        onClick={() => onDelete(transaction.id)}
+                        onClick={() => onDelete(transaction)}
                         className="text-red-600 focus:text-red-600"
                       >
                         <Trash2 className="mr-2 h-4 w-4" />
