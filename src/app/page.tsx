@@ -13,6 +13,8 @@ import BillingCycleSelector from '@/components/app/BillingCycleSelector';
 import { getBillingCycle, getBillingCycleTotals } from '@/lib/billing-cycle';
 import { subMonths } from 'date-fns';
 import DeleteConfirmationDialog from '@/components/app/DeleteConfirmationDialog';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
 
 export default function Home() {
   const {
@@ -28,6 +30,7 @@ export default function Home() {
   const [editingTransaction, setEditingTransaction] = React.useState<Transaction | null>(null);
   const [deletingTransaction, setDeletingTransaction] = React.useState<Transaction | null>(null);
   const [formKey, setFormKey] = React.useState(Date.now());
+  const [showOverdue, setShowOverdue] = React.useState(true);
 
   // If it's before the 10th, the default cycle should be the previous month.
   const initialDate = new Date().getDate() < 10 ? subMonths(new Date(), 1) : new Date();
@@ -80,9 +83,19 @@ export default function Home() {
   };
 
   const billingCycle = getBillingCycle(currentBillingMonth);
-  const filteredTransactions = transactions.filter(
-    (t) => t.dueDate >= billingCycle.startDate && t.dueDate < billingCycle.endDate
-  );
+
+  const filteredTransactions = React.useMemo(() => {
+    return transactions.filter((t) => {
+      const isOverdue = !t.paid && t.dueDate < billingCycle.startDate;
+      const isInCycle = t.dueDate >= billingCycle.startDate && t.dueDate < billingCycle.endDate;
+      
+      if (showOverdue) {
+        return isInCycle || isOverdue;
+      }
+      return isInCycle;
+    });
+  }, [transactions, billingCycle, showOverdue]);
+  
   const billingCycleTotals = getBillingCycleTotals(filteredTransactions);
 
   return (
@@ -93,6 +106,10 @@ export default function Home() {
           currentBillingMonth={currentBillingMonth}
           onMonthChange={setCurrentBillingMonth}
         />
+         <div className="flex items-center justify-center space-x-2 mb-4 print:hidden">
+          <Switch id="show-overdue" checked={showOverdue} onCheckedChange={setShowOverdue} />
+          <Label htmlFor="show-overdue">Mostrar contas vencidas de meses anteriores</Label>
+        </div>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-6">
           <SummaryCards totals={billingCycleTotals} />
         </div>

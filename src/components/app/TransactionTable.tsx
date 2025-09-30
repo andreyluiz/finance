@@ -29,7 +29,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import type { Priority, Transaction, TransactionType } from '@/lib/types';
 import { cn } from '@/lib/utils';
-import { format } from 'date-fns';
+import { format, isToday, isTomorrow, isPast, differenceInDays } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Checkbox } from '../ui/checkbox';
 
@@ -75,6 +75,31 @@ function formatCurrency(value: number, currency: string) {
     }
   }
 
+const DueDateInfo: React.FC<{ transaction: Transaction }> = ({ transaction }) => {
+    const { dueDate, paid } = transaction;
+    const now = new Date();
+  
+    if (paid) {
+      return <span className="line-through text-muted-foreground">{format(dueDate, 'dd/MM/yyyy', { locale: ptBR })}</span>;
+    }
+  
+    if (isToday(dueDate)) {
+      return <Badge className="bg-yellow-500 text-white hover:bg-yellow-600">Vence Hoje</Badge>;
+    }
+    if (isTomorrow(dueDate)) {
+      return <Badge className="bg-orange-500 text-white hover:bg-orange-600">Vence Amanhã</Badge>;
+    }
+    if (isPast(dueDate)) {
+      return (
+        <div className="flex flex-col">
+            <span>{format(dueDate, 'dd/MM/yyyy', { locale: ptBR })}</span>
+            <Badge variant="destructive">Vencida</Badge>
+        </div>
+      );
+    }
+    return <span>{format(dueDate, 'dd/MM/yyyy', { locale: ptBR })}</span>;
+  };
+
 
 export function TransactionTable({ transactions, onEdit, onDelete, onTogglePaid, loading }: TransactionTableProps) {
   if (loading) {
@@ -97,12 +122,17 @@ export function TransactionTable({ transactions, onEdit, onDelete, onTogglePaid,
         </TableHeader>
         <TableBody>
           {transactions.length > 0 ? (
-            transactions.map((transaction) => (
+            transactions.map((transaction) => {
+              const isOverdue = !transaction.paid && isPast(transaction.dueDate);
+              const isVeryOverdue = isOverdue && differenceInDays(new Date(), transaction.dueDate) > 30;
+
+              return (
               <TableRow
                 key={transaction.id}
                 className={cn(
                   'transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted',
-                  transaction.paid && 'bg-green-100/50 dark:bg-green-900/20'
+                  transaction.paid && 'bg-green-100/50 dark:bg-green-900/20',
+                  isVeryOverdue && 'bg-red-100/50 dark:bg-red-900/20'
                 )}
               >
                 <TableCell>
@@ -118,8 +148,8 @@ export function TransactionTable({ transactions, onEdit, onDelete, onTogglePaid,
                 <TableCell className={cn("font-medium", transaction.paid && 'line-through text-muted-foreground')}>
                   {transaction.name}
                 </TableCell>
-                <TableCell className={cn(transaction.paid && 'line-through text-muted-foreground')}>
-                  {format(transaction.dueDate, 'dd/MM/yyyy', { locale: ptBR })}
+                <TableCell>
+                  <DueDateInfo transaction={transaction} />
                 </TableCell>
                 <TableCell>
                     <div className="flex items-center gap-2">
@@ -160,7 +190,8 @@ export function TransactionTable({ transactions, onEdit, onDelete, onTogglePaid,
                   </DropdownMenu>
                 </TableCell>
               </TableRow>
-            ))
+            )
+            })
           ) : (
             <TableRow>
               <TableCell colSpan={7} className="h-24 text-center">
