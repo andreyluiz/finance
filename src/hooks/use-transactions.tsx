@@ -21,6 +21,8 @@ export interface Totals {
     expense: number;
     balance: number;
     veryHighPriorityTotal: number;
+    paidTotal: number;
+    balanceAfterCritical: number;
   };
 }
 
@@ -203,26 +205,6 @@ export const useTransactions = () => {
     });
   }, [transactions]);
 
-  const totals = useMemo<Totals>(() => {
-    return transactions.reduce((acc, t) => {
-      if (t.paid) return acc;
-      const { currency, type, value, priority } = t;
-      if (!acc[currency]) {
-        acc[currency] = { revenue: 0, expense: 0, balance: 0, veryHighPriorityTotal: 0 };
-      }
-      if (type === 'receita') {
-        acc[currency].revenue += value;
-      } else {
-        acc[currency].expense += value;
-        if (priority === 'muito alta') {
-          acc[currency].veryHighPriorityTotal += value;
-        }
-      }
-      acc[currency].balance = acc[currency].revenue - acc[currency].expense;
-      return acc;
-    }, {} as Totals);
-  }, [transactions]);
-
   return {
     transactions: sortedTransactions,
     addTransaction,
@@ -230,7 +212,6 @@ export const useTransactions = () => {
     removeTransaction,
     toggleTransactionPaid,
     resetTransactions,
-    totals,
     loading,
   };
 };
