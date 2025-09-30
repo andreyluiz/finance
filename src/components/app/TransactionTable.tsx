@@ -76,28 +76,33 @@ function formatCurrency(value: number, currency: string) {
   }
 
 const DueDateInfo: React.FC<{ transaction: Transaction }> = ({ transaction }) => {
-    const { dueDate, paid } = transaction;
-    const now = new Date();
+    const { dueDate, paid, type } = transaction;
   
+    const formattedDate = format(dueDate, 'dd/MM/yyyy', { locale: ptBR });
+
     if (paid) {
-      return <span className="line-through text-muted-foreground">{format(dueDate, 'dd/MM/yyyy', { locale: ptBR })}</span>;
+      return <span className="line-through text-muted-foreground">{formattedDate}</span>;
     }
   
-    if (isToday(dueDate)) {
-      return <Badge className="bg-yellow-500 text-white hover:bg-yellow-600">Vence Hoje</Badge>;
+    // Only show special badges for expenses
+    if (type === 'despesa') {
+        if (isToday(dueDate)) {
+            return <Badge className="bg-yellow-500 text-white hover:bg-yellow-600">Vence Hoje</Badge>;
+        }
+        if (isTomorrow(dueDate)) {
+            return <Badge className="bg-orange-500 text-white hover:bg-orange-600">Vence Amanhã</Badge>;
+        }
+        if (isPast(dueDate)) {
+            return (
+                <div className="flex flex-col items-start gap-1">
+                    <span>{formattedDate}</span>
+                    <Badge variant="destructive">Vencida</Badge>
+                </div>
+            );
+        }
     }
-    if (isTomorrow(dueDate)) {
-      return <Badge className="bg-orange-500 text-white hover:bg-orange-600">Vence Amanhã</Badge>;
-    }
-    if (isPast(dueDate)) {
-      return (
-        <div className="flex flex-col">
-            <span>{format(dueDate, 'dd/MM/yyyy', { locale: ptBR })}</span>
-            <Badge variant="destructive">Vencida</Badge>
-        </div>
-      );
-    }
-    return <span>{format(dueDate, 'dd/MM/yyyy', { locale: ptBR })}</span>;
+
+    return <span>{formattedDate}</span>;
   };
 
 
