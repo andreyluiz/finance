@@ -86,7 +86,7 @@ export default function Home() {
 
   const filteredTransactions = React.useMemo(() => {
     return transactions.filter((t) => {
-      const isOverdue = !t.paid && t.dueDate < billingCycle.startDate;
+      const isOverdue = t.type === 'despesa' && !t.paid && t.dueDate < billingCycle.startDate;
       const isInCycle = t.dueDate >= billingCycle.startDate && t.dueDate < billingCycle.endDate;
       
       if (showOverdue) {
