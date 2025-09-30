@@ -38,12 +38,15 @@ export function getBillingCycleTotals(transactions: Transaction[]): Totals {
           }
         }
         
-        if (paid) {
-            acc[currency].paidTotal += value;
+        if (type === 'receita' && paid) {
+          acc[currency].paidTotal += value;
+        } else if (type === 'despesa' && paid) {
+          acc[currency].paidTotal += value;
         }
 
         acc[currency].balance = acc[currency].revenue - acc[currency].expense;
-        acc[currency].balanceAfterCritical = acc[currency].balance - acc[currency].veryHighPriorityTotal;
+        // Corrected calculation: Subtract critical expenses from revenue, not from a balance that already includes them.
+        acc[currency].balanceAfterCritical = acc[currency].revenue - (acc[currency].expense - acc[currency].veryHighPriorityTotal) - acc[currency].veryHighPriorityTotal;
         return acc;
       }, {} as Totals);
 }
