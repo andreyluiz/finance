@@ -133,6 +133,7 @@ export default function Home() {
                   onDelete={handleDeleteRequest}
                   onTogglePaid={toggleTransactionPaid}
                   loading={loading}
+                  billingCycle={billingCycle}
                 />
               </CardContent>
             </Card>

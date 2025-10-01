@@ -27,7 +27,7 @@ import {
   ArrowDownCircle,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import type { Priority, Transaction, TransactionType } from '@/lib/types';
+import type { Priority, Transaction, TransactionType, BillingCycle } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { format, isToday, isTomorrow, isPast, differenceInDays } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
@@ -39,6 +39,7 @@ interface TransactionTableProps {
   onDelete: (transaction: Transaction) => void;
   onTogglePaid: (id: string) => void;
   loading: boolean;
+  billingCycle?: BillingCycle;
 }
 
 const priorityIcons: Record<Priority, React.ReactElement> = {
@@ -106,7 +107,7 @@ const DueDateInfo: React.FC<{ transaction: Transaction }> = ({ transaction }) =>
   };
 
 
-export function TransactionTable({ transactions, onEdit, onDelete, onTogglePaid, loading }: TransactionTableProps) {
+export function TransactionTable({ transactions, onEdit, onDelete, onTogglePaid, loading, billingCycle }: TransactionTableProps) {
   if (loading) {
     return <div className="flex items-center justify-center p-8">Carregando transações...</div>;
   }
@@ -130,6 +131,7 @@ export function TransactionTable({ transactions, onEdit, onDelete, onTogglePaid,
             transactions.map((transaction) => {
               const isOverdue = !transaction.paid && isPast(transaction.dueDate);
               const isVeryOverdue = isOverdue && differenceInDays(new Date(), transaction.dueDate) > 30;
+              const isCarriedOver = billingCycle && transaction.dueDate < billingCycle.startDate;
 
               return (
               <TableRow
@@ -137,7 +139,8 @@ export function TransactionTable({ transactions, onEdit, onDelete, onTogglePaid,
                 className={cn(
                   'transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted',
                   transaction.paid && 'bg-green-100/50 dark:bg-green-900/20',
-                  isVeryOverdue && 'bg-red-100/50 dark:bg-red-900/20'
+                  isVeryOverdue && 'bg-red-100/50 dark:bg-red-900/20',
+                  isCarriedOver && !transaction.paid && 'bg-yellow-100/50 dark:bg-yellow-900/20'
                 )}
               >
                 <TableCell>
