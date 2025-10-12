@@ -1,10 +1,15 @@
+"use client";
+
 import Link from "next/link";
 import { Header } from "@/components/header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { H1, Lead, Muted } from "@/components/ui/typography";
+import { useAuth } from "@/contexts/auth-context";
 
 export default function Home() {
+  const { user, loading } = useAuth();
+
   return (
     <div className="min-h-screen">
       <Header />
@@ -18,12 +23,21 @@ export default function Home() {
             and past due. Simple, intuitive, and built for you.
           </Lead>
           <div className="flex gap-4 justify-center">
-            <Button asChild size="lg">
-              <Link href="/app">Get Started</Link>
-            </Button>
-            <Button asChild variant="outline" size="lg">
-              <Link href="/app">View Demo</Link>
-            </Button>
+            {!loading &&
+              (user ? (
+                <Button asChild size="lg">
+                  <Link href="/app">Go to Dashboard</Link>
+                </Button>
+              ) : (
+                <>
+                  <Button asChild size="lg">
+                    <Link href="/signup">Get Started</Link>
+                  </Button>
+                  <Button asChild variant="outline" size="lg">
+                    <Link href="/signin">Sign In</Link>
+                  </Button>
+                </>
+              ))}
           </div>
         </div>
 
