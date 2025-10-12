@@ -93,13 +93,25 @@ src/
 - Configuration file: `components.json`
 
 #### Adding New shadcn Components
-To add new shadcn/ui components, manually create them in `src/components/ui/` following the shadcn/ui documentation, as the CLI may not be fully compatible with this setup.
+**Always use the shadcn CLI to add new components:**
+```bash
+npx shadcn@latest add [component-name]
+```
+
+Available components include: button, card, input, label, select, dialog, dropdown-menu, popover, tooltip, badge, avatar, checkbox, radio-group, switch, slider, tabs, accordion, alert, separator, skeleton, table, toast, and many more.
+
+If a component is not available via CLI, manually create it in `src/components/ui/` following the shadcn/ui documentation.
 
 #### Component Guidelines
 - All UI components live in `src/components/ui/`
 - Use the `cn()` utility from `@/lib/utils` for conditional class names
 - Components follow shadcn/ui patterns with class-variance-authority for variants
 - Built on Radix UI primitives for accessibility
+- **KISS (Keep It Simple, Stupid)**: Write simple, straightforward components that do one thing well
+- **DRY (Don't Repeat Yourself)**: Extract and reuse components whenever possible
+  - If UI patterns appear more than once, create a shared component
+  - Prefer composition over duplication
+  - Extract common layouts, headers, footers, and repeated UI elements into reusable components
 
 ### TypeScript Configuration
 
@@ -116,6 +128,11 @@ To add new shadcn/ui components, manually create them in `src/components/ui/` fo
 - The app uses the Next.js App Router (not Pages Router)
 - Theme switching is client-side only - use `"use client"` directive when using theme hooks
 - The `suppressHydrationWarning` prop on `<html>` prevents hydration warnings from next-themes
+
+## Available Tools
+
+### Context7 MCP
+When in doubt about implementation details, best practices, or technology-specific questions, use the Context7 MCP tool to search for relevant documentation and examples.
 
 ## Code Quality Requirements
 

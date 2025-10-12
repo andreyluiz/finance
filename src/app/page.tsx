@@ -1,57 +1,75 @@
-import { ThemeSwitcher } from "@/components/theme-switcher";
+import Link from "next/link";
+import { Header } from "@/components/header";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { H1, Lead, Muted } from "@/components/ui/typography";
 
 export default function Home() {
   return (
-    <div className="min-h-screen p-8 pb-20 sm:p-20">
-      <div className="flex justify-end mb-8">
-        <ThemeSwitcher />
-      </div>
+    <div className="min-h-screen">
+      <Header />
 
-      <main className="max-w-4xl mx-auto">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4">Finance Tracker</h1>
-          <p className="text-muted-foreground text-lg">
-            Track and manage your payments with ease
-          </p>
+      {/* Hero Section */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="py-20 text-center">
+          <H1 className="mb-6">Track Your Payments with Ease</H1>
+          <Lead className="mb-8 max-w-2xl mx-auto">
+            Stay on top of your finances by easily managing what's pending, due,
+            and past due. Simple, intuitive, and built for you.
+          </Lead>
+          <div className="flex gap-4 justify-center">
+            <Button asChild size="lg">
+              <Link href="/app">Get Started</Link>
+            </Button>
+            <Button asChild variant="outline" size="lg">
+              <Link href="/app">View Demo</Link>
+            </Button>
+          </div>
         </div>
 
-        <div className="flex flex-col items-center gap-6">
-          <div className="p-8 border rounded-lg bg-card">
-            <h2 className="text-2xl font-semibold mb-4">
-              shadcn/ui Button Showcase
-            </h2>
-            <p className="text-muted-foreground mb-6">
-              Examples of different button variants from shadcn/ui
-            </p>
-
-            <div className="flex flex-wrap gap-4">
-              <Button>Default Button</Button>
-              <Button variant="secondary">Secondary</Button>
-              <Button variant="destructive">Destructive</Button>
-              <Button variant="outline">Outline</Button>
-              <Button variant="ghost">Ghost</Button>
-              <Button variant="link">Link</Button>
-            </div>
-
-            <div className="flex flex-wrap gap-4 mt-4">
-              <Button size="sm">Small</Button>
-              <Button size="default">Default</Button>
-              <Button size="lg">Large</Button>
-            </div>
-          </div>
-
-          <div className="p-8 border rounded-lg bg-card w-full">
-            <h2 className="text-2xl font-semibold mb-4">Getting Started</h2>
-            <p className="text-muted-foreground">
-              This is a financial tracker application built with Next.js,
-              TypeScript, and Tailwind CSS. The application supports both light
-              and dark themes, which you can toggle using the button in the
-              top-right corner.
-            </p>
-          </div>
+        {/* Features Section */}
+        <div className="py-16 grid md:grid-cols-3 gap-8">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Payment Tracking</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Muted>
+                Monitor all your payments in one place with clear status
+                indicators.
+              </Muted>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Due Date Alerts</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Muted>
+                Never miss a payment with automated reminders and notifications.
+              </Muted>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Financial Overview</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Muted>
+                Get insights into your spending and payment patterns at a
+                glance.
+              </Muted>
+            </CardContent>
+          </Card>
         </div>
       </main>
+
+      {/* Footer */}
+      <footer className="border-t mt-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center">
+          <Muted>Built with Next.js, TypeScript, and shadcn/ui</Muted>
+        </div>
+      </footer>
     </div>
   );
 }
