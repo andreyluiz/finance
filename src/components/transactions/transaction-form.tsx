@@ -64,21 +64,18 @@ export function TransactionForm({ className }: TransactionFormProps) {
       const dueDate = new Date(editingTransaction.dueDate);
       const formattedDate = dueDate.toISOString().split("T")[0];
 
-      // Reset all fields except date
+      // Reset all fields
       reset({
         type: editingTransaction.type,
         name: editingTransaction.name,
         value: Number(editingTransaction.value),
         currency: editingTransaction.currency,
-        dueDate: new Date(editingTransaction.dueDate),
+        dueDate: formattedDate as unknown as Date,
         priority: editingTransaction.priority,
         paid: editingTransaction.paid,
       });
-
-      // Set date field value separately as string for input[type="date"]
-      setValue("dueDate", formattedDate as unknown as Date);
     }
-  }, [isEditMode, editingTransaction, reset, setValue]);
+  }, [isEditMode, editingTransaction, reset]);
 
   const onSubmit = async (data: TransactionFormData) => {
     setIsSubmitting(true);
