@@ -60,15 +60,17 @@ export function TransactionForm({ className }: TransactionFormProps) {
   // Populate form when editing
   useEffect(() => {
     if (isEditMode && editingTransaction) {
-      setValue("type", editingTransaction.type);
-      setValue("name", editingTransaction.name);
-      setValue("value", Number(editingTransaction.value));
-      setValue("currency", editingTransaction.currency);
-      setValue("dueDate", new Date(editingTransaction.dueDate));
-      setValue("priority", editingTransaction.priority);
-      setValue("paid", editingTransaction.paid);
+      reset({
+        type: editingTransaction.type,
+        name: editingTransaction.name,
+        value: Number(editingTransaction.value),
+        currency: editingTransaction.currency,
+        dueDate: new Date(editingTransaction.dueDate),
+        priority: editingTransaction.priority,
+        paid: editingTransaction.paid,
+      });
     }
-  }, [isEditMode, editingTransaction, setValue]);
+  }, [isEditMode, editingTransaction, reset]);
 
   const onSubmit = async (data: TransactionFormData) => {
     setIsSubmitting(true);
