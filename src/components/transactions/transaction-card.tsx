@@ -164,7 +164,13 @@ export function TransactionCard({ transaction }: TransactionCardProps) {
             </div>
 
             <div className="flex items-center gap-4">
-              <Muted className="font-medium">
+              <Muted
+                className={`font-medium ${
+                  transaction.type === "income"
+                    ? "text-green-600 dark:text-green-400"
+                    : "text-red-600 dark:text-red-400"
+                }`}
+              >
                 {transaction.currency} {Number(transaction.value).toFixed(2)}
               </Muted>
               <Muted>Due: {formattedDate}</Muted>
