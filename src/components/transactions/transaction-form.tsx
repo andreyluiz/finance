@@ -60,6 +60,11 @@ export function TransactionForm({ className }: TransactionFormProps) {
   // Populate form when editing
   useEffect(() => {
     if (isEditMode && editingTransaction) {
+      // Format date to YYYY-MM-DD for input[type="date"]
+      const dueDate = new Date(editingTransaction.dueDate);
+      const formattedDate = dueDate.toISOString().split("T")[0];
+
+      // Reset all fields except date
       reset({
         type: editingTransaction.type,
         name: editingTransaction.name,
@@ -69,8 +74,11 @@ export function TransactionForm({ className }: TransactionFormProps) {
         priority: editingTransaction.priority,
         paid: editingTransaction.paid,
       });
+
+      // Set date field value separately as string for input[type="date"]
+      setValue("dueDate", formattedDate as unknown as Date);
     }
-  }, [isEditMode, editingTransaction, reset]);
+  }, [isEditMode, editingTransaction, reset, setValue]);
 
   const onSubmit = async (data: TransactionFormData) => {
     setIsSubmitting(true);
