@@ -5,7 +5,7 @@ import { Muted } from "@/components/ui/typography";
 export default function AppPage() {
   return (
     <div className="min-h-screen">
-      <Header showBackButton />
+      <Header />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Card>

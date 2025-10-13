@@ -126,56 +126,56 @@ export const TransactionCard = memo(function TransactionCard({
 
   return (
     <Card>
-      <CardContent className="p-4">
+      <CardContent className="px-4">
         <div className="flex items-start justify-between gap-4">
           {/* Left side - Main info */}
-          <div className="flex-1 space-y-2">
-            <div className="flex items-start gap-3">
-              <Checkbox
-                checked={transaction.paid}
-                onCheckedChange={handlePaidToggle}
-                aria-label={
-                  transaction.paid
-                    ? "Mark transaction as unpaid"
-                    : "Mark transaction as paid"
-                }
-                className="mt-0.5"
-              />
+          <div className="flex-1 flex items-start gap-3">
+            <Checkbox
+              checked={transaction.paid}
+              onCheckedChange={handlePaidToggle}
+              aria-label={
+                transaction.paid
+                  ? "Mark transaction as unpaid"
+                  : "Mark transaction as paid"
+              }
+              className="mt-0.5"
+            />
+            <div className="flex-1 space-y-2">
               <h3
                 className={`font-semibold ${transaction.paid ? "line-through text-muted-foreground" : ""}`}
               >
                 {transaction.name}
               </h3>
-            </div>
 
-            <div className="flex flex-wrap items-center gap-2">
-              <Badge variant={typeVariants[transaction.type].variant}>
-                {typeVariants[transaction.type].label}
-              </Badge>
-              <Badge variant={priorityVariants[transaction.priority].variant}>
-                {priorityVariants[transaction.priority].label}
-              </Badge>
-              {transaction.paid && (
-                <Badge
-                  variant="outline"
-                  className="bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-400"
-                >
-                  Paid
+              <div className="flex flex-wrap items-center gap-2">
+                <Badge variant={typeVariants[transaction.type].variant}>
+                  {typeVariants[transaction.type].label}
                 </Badge>
-              )}
-            </div>
+                <Badge variant={priorityVariants[transaction.priority].variant}>
+                  {priorityVariants[transaction.priority].label}
+                </Badge>
+                {transaction.paid && (
+                  <Badge
+                    variant="outline"
+                    className="bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-400"
+                  >
+                    Paid
+                  </Badge>
+                )}
+              </div>
 
-            <div className="flex items-center gap-4">
-              <Muted
-                className={`font-medium ${
-                  transaction.type === "income"
-                    ? "text-green-600 dark:text-green-400"
-                    : "text-red-600 dark:text-red-400"
-                }`}
-              >
-                {transaction.currency} {Number(transaction.value).toFixed(2)}
-              </Muted>
-              <Muted>Due: {formattedDate}</Muted>
+              <div className="flex items-center gap-4">
+                <Muted
+                  className={`font-medium ${
+                    transaction.type === "income"
+                      ? "text-green-600 dark:text-green-400"
+                      : "text-red-600 dark:text-red-400"
+                  }`}
+                >
+                  {transaction.currency} {Number(transaction.value).toFixed(2)}
+                </Muted>
+                <Muted>Due: {formattedDate}</Muted>
+              </div>
             </div>
           </div>
 
