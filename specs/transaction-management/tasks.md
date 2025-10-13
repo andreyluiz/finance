@@ -2,113 +2,113 @@
 
 ## Phase 1: Database & Schema Setup
 
-- [ ] 1. Update database schema
-  - [ ] 1.1 Add `userId` column to transactions table
-  - [ ] 1.2 Add database indexes for performance
-  - [ ] 1.3 Run database migration
+- [x] 1. Update database schema
+  - [x] 1.1 Add `userId` column to transactions table
+  - [x] 1.2 Add database indexes for performance
+  - [x] 1.3 Run database migration
   - _Requirements: 1, 2, 3, 4, 5_
 
 ## Phase 2: Dependencies Installation
 
-- [ ] 2. Install required packages
-  - [ ] 2.1 Install React Query (@tanstack/react-query)
-  - [ ] 2.2 Install Zustand
-  - [ ] 2.3 Add shadcn toast component
-  - [ ] 2.4 Add shadcn select component
-  - [ ] 2.5 Add shadcn checkbox component
-  - [ ] 2.6 Add shadcn badge component
+- [x] 2. Install required packages
+  - [x] 2.1 Install React Query (@tanstack/react-query)
+  - [x] 2.2 Install Zustand
+  - [x] 2.3 Add shadcn toast component
+  - [x] 2.4 Add shadcn select component
+  - [x] 2.5 Add shadcn checkbox component
+  - [x] 2.6 Add shadcn badge component
   - _Requirements: All_
 
 ## Phase 3: Validation & Utilities
 
-- [ ] 3. Create validation schemas and utilities
-  - [ ] 3.1 Create transaction Zod schema with type and priority enums
-  - [ ] 3.2 Create transaction sorting utility function
-  - [ ] 3.3 Create React Query configuration and query keys
+- [x] 3. Create validation schemas and utilities
+  - [x] 3.1 Create transaction Zod schema with type and priority enums
+  - [x] 3.2 Create transaction sorting utility function
+  - [x] 3.3 Create React Query configuration and query keys
   - _Requirements: 1, 2, 6_
 
 ## Phase 4: State Management
 
-- [ ] 4. Setup client-side state management
-  - [ ] 4.1 Create Zustand transaction store for edit mode
-  - [ ] 4.2 Add React Query provider to app layout
+- [x] 4. Setup client-side state management
+  - [x] 4.1 Create Zustand transaction store for edit mode
+  - [x] 4.2 Add React Query provider to app layout
   - _Requirements: 3_
 
 ## Phase 5: Server Actions
 
-- [ ] 5. Implement server actions for data mutations
-  - [ ] 5.1 Create `getTransactionsAction` with user filtering and sorting
-  - [ ] 5.2 Create `createTransactionAction` with auth and validation
-  - [ ] 5.3 Create `updateTransactionAction` with ownership check
-  - [ ] 5.4 Create `deleteTransactionAction` with ownership check
-  - [ ] 5.5 Create `updateTransactionPaidAction` for toggle functionality
+- [x] 5. Implement server actions for data mutations
+  - [x] 5.1 Create `getTransactionsAction` with user filtering and sorting
+  - [x] 5.2 Create `createTransactionAction` with auth and validation
+  - [x] 5.3 Create `updateTransactionAction` with ownership check
+  - [x] 5.4 Create `deleteTransactionAction` with ownership check
+  - [x] 5.5 Create `updateTransactionPaidAction` for toggle functionality
   - _Requirements: 1, 2, 3, 4, 5_
 
 ## Phase 6: Core Components
 
-- [ ] 6. Build transaction management components
-  - [ ] 6.1 Create TransactionForm component with react-hook-form
-  - [ ] 6.2 Integrate form with Zustand store for edit mode
-  - [ ] 6.3 Implement form submission handlers (create/update)
-  - [ ] 6.4 Add form validation error display
-  - [ ] 6.5 Add cancel button and clear form logic
-  - [ ] 6.6 Add visual indicator for edit mode (title, button text, styling)
+- [x] 6. Build transaction management components
+  - [x] 6.1 Create TransactionForm component with react-hook-form
+  - [x] 6.2 Integrate form with Zustand store for edit mode
+  - [x] 6.3 Implement form submission handlers (create/update)
+  - [x] 6.4 Add form validation error display
+  - [x] 6.5 Add cancel button and clear form logic
+  - [x] 6.6 Add visual indicator for edit mode (title, button text, styling)
   - _Requirements: 1, 3, 6_
 
-- [ ] 7. Build transaction list components
-  - [ ] 7.1 Create TransactionList component with React Query
-  - [ ] 7.2 Implement loading state with skeleton/spinner
-  - [ ] 7.3 Implement empty state message
-  - [ ] 7.4 Apply transaction sorting logic
-  - [ ] 7.5 Create TransactionCard component with all transaction details
-  - [ ] 7.6 Add edit button with click handler
-  - [ ] 7.7 Add delete button with confirmation
-  - [ ] 7.8 Add paid toggle checkbox
-  - [ ] 7.9 Display priority badge with appropriate styling
-  - [ ] 7.10 Display transaction type indicator (income/expense)
+- [x] 7. Build transaction list components
+  - [x] 7.1 Create TransactionList component with React Query
+  - [x] 7.2 Implement loading state with skeleton/spinner
+  - [x] 7.3 Implement empty state message
+  - [x] 7.4 Apply transaction sorting logic
+  - [x] 7.5 Create TransactionCard component with all transaction details
+  - [x] 7.6 Add edit button with click handler
+  - [x] 7.7 Add delete button with confirmation
+  - [x] 7.8 Add paid toggle checkbox
+  - [x] 7.9 Display priority badge with appropriate styling
+  - [x] 7.10 Display transaction type indicator (income/expense)
   - _Requirements: 2, 3, 4, 5_
 
 ## Phase 7: Page Integration
 
-- [ ] 8. Create transactions page
-  - [ ] 8.1 Create `/app/transactions` page component
-  - [ ] 8.2 Implement responsive layout (desktop: 35/65, tablet: 40/60, mobile: stack)
-  - [ ] 8.3 Add proper spacing and padding
+- [x] 8. Create transactions page
+  - [x] 8.1 Create `/app/transactions` page component
+  - [x] 8.2 Implement responsive layout (desktop: 35/65, tablet: 40/60, mobile: stack)
+  - [x] 8.3 Add proper spacing and padding
   - _Requirements: 1, 2, 8_
 
 ## Phase 8: Toast Notifications
 
-- [ ] 9. Implement user feedback
-  - [ ] 9.1 Setup shadcn Toaster component in layout
-  - [ ] 9.2 Add success toast for create transaction
-  - [ ] 9.3 Add success toast for update transaction
-  - [ ] 9.4 Add success toast for delete transaction
-  - [ ] 9.5 Add error toasts for failed operations
+- [x] 9. Implement user feedback
+  - [x] 9.1 Setup shadcn Toaster component in layout
+  - [x] 9.2 Add success toast for create transaction
+  - [x] 9.3 Add success toast for update transaction
+  - [x] 9.4 Add success toast for delete transaction
+  - [x] 9.5 Add error toasts for failed operations
   - _Requirements: 1, 3, 4_
 
 ## Phase 9: Optimistic Updates
 
-- [ ] 10. Add optimistic UI updates
-  - [ ] 10.1 Implement optimistic update for paid toggle
-  - [ ] 10.2 Configure React Query cache invalidation on mutations
+- [x] 10. Add optimistic UI updates
+  - [x] 10.1 Implement optimistic update for paid toggle
+  - [x] 10.2 Configure React Query cache invalidation on mutations
   - _Requirements: 5_
 
 ## Phase 10: Theme Support
 
-- [ ] 11. Ensure theme compatibility
-  - [ ] 11.1 Verify all components use theme-aware Tailwind classes
-  - [ ] 11.2 Test edit mode indicator visibility in both themes
-  - [ ] 11.3 Verify color contrast meets WCAG AA in both themes
+- [x] 11. Ensure theme compatibility
+  - [x] 11.1 Verify all components use theme-aware Tailwind classes
+  - [x] 11.2 Test edit mode indicator visibility in both themes
+  - [x] 11.3 Verify color contrast meets WCAG AA in both themes
   - _Requirements: 7_
 
 ## Phase 11: Responsive Design
 
-- [ ] 12. Implement responsive behavior
-  - [ ] 12.1 Test layout on desktop (≥1024px)
-  - [ ] 12.2 Test layout on tablet (768px-1023px)
-  - [ ] 12.3 Test layout on mobile (<768px)
-  - [ ] 12.4 Verify touch target sizes on mobile (min 44x44px)
-  - [ ] 12.5 Test form inputs on mobile devices
+- [x] 12. Implement responsive behavior
+  - [x] 12.1 Test layout on desktop (≥1024px)
+  - [x] 12.2 Test layout on tablet (768px-1023px)
+  - [x] 12.3 Test layout on mobile (<768px)
+  - [x] 12.4 Verify touch target sizes on mobile (min 44x44px)
+  - [x] 12.5 Test form inputs on mobile devices
   - _Requirements: 8_
 
 ## Phase 12: Accessibility
@@ -156,12 +156,12 @@
 
 ## Phase 15: Final Review
 
-- [ ] 18. Code review and polish
-  - [ ] 18.1 Run linting (npm run lint)
-  - [ ] 18.2 Run formatting (npm run format)
-  - [ ] 18.3 Review all acceptance criteria from spec
-  - [ ] 18.4 Verify all requirements are met
-  - [ ] 18.5 Test complete user flow end-to-end
+- [x] 18. Code review and polish
+  - [x] 18.1 Run linting (npm run lint)
+  - [x] 18.2 Run formatting (npm run format)
+  - [x] 18.3 Review all acceptance criteria from spec
+  - [x] 18.4 Verify all requirements are met
+  - [x] 18.5 Test complete user flow end-to-end
   - _Requirements: All_
 
 ## Notes
