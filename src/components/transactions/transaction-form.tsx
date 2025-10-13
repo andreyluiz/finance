@@ -37,6 +37,19 @@ export function TransactionForm({ className }: TransactionFormProps) {
     useTransactionStore();
   const queryClient = useQueryClient();
 
+  // Calculate last day of current month for default date
+  const getLastDayOfMonth = () => {
+    const now = new Date();
+    const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+    return lastDay.toISOString().split("T")[0];
+  };
+
+  // Get cached currency from localStorage
+  const getCachedCurrency = () => {
+    if (typeof window === "undefined") return "USD";
+    return localStorage.getItem("lastUsedCurrency") || "USD";
+  };
+
   const {
     register,
     handleSubmit,
@@ -48,14 +61,23 @@ export function TransactionForm({ className }: TransactionFormProps) {
     resolver: zodResolver(transactionSchema),
     defaultValues: {
       type: "expense",
-      currency: "USD",
+      currency: getCachedCurrency(),
       priority: "medium",
       paid: false,
+      dueDate: getLastDayOfMonth() as unknown as Date,
     },
   });
 
   const selectedType = watch("type");
   const selectedPriority = watch("priority");
+  const selectedCurrency = watch("currency");
+
+  // Cache currency to localStorage when it changes
+  useEffect(() => {
+    if (selectedCurrency && !isEditMode) {
+      localStorage.setItem("lastUsedCurrency", selectedCurrency);
+    }
+  }, [selectedCurrency, isEditMode]);
 
   // Populate form when editing
   useEffect(() => {
@@ -100,7 +122,15 @@ export function TransactionForm({ className }: TransactionFormProps) {
         if (result.success) {
           toast.success("Transaction created successfully");
           queryClient.invalidateQueries({ queryKey: QUERY_KEYS.transactions });
-          reset();
+          reset({
+            type: "expense",
+            currency: getCachedCurrency(),
+            priority: "medium",
+            paid: false,
+            name: "",
+            value: undefined,
+            dueDate: getLastDayOfMonth() as unknown as Date,
+          });
         } else {
           toast.error(result.error || "Failed to create transaction");
         }
@@ -116,12 +146,12 @@ export function TransactionForm({ className }: TransactionFormProps) {
     clearEditMode();
     reset({
       type: "expense",
-      currency: "USD",
+      currency: getCachedCurrency(),
       priority: "medium",
       paid: false,
       name: "",
       value: undefined,
-      dueDate: undefined,
+      dueDate: getLastDayOfMonth() as unknown as Date,
     });
   };
 
