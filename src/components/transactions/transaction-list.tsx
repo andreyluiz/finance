@@ -2,9 +2,9 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { getTransactionsAction } from "@/actions/transaction-actions";
+import { H2, Muted } from "@/components/ui/typography";
 import { QUERY_KEYS } from "@/lib/react-query";
 import { TransactionCard } from "./transaction-card";
-import { H2, Muted } from "@/components/ui/typography";
 
 interface TransactionListProps {
   className?: string;

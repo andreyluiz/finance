@@ -1,21 +1,21 @@
 "use client";
 
+import { useQueryClient } from "@tanstack/react-query";
+import { Edit2Icon, TrashIcon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Edit2Icon, TrashIcon } from "lucide-react";
 import {
   deleteTransactionAction,
   updateTransactionPaidAction,
 } from "@/actions/transaction-actions";
-import type { Transaction } from "@/db/schema";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Muted } from "@/components/ui/typography";
-import { useTransactionStore } from "@/stores/transaction-store";
-import { useQueryClient } from "@tanstack/react-query";
+import type { Transaction } from "@/db/schema";
 import { QUERY_KEYS } from "@/lib/react-query";
+import { useTransactionStore } from "@/stores/transaction-store";
 
 interface TransactionCardProps {
   transaction: Transaction;
@@ -59,7 +59,7 @@ export function TransactionCard({ transaction }: TransactionCardProps) {
       } else {
         toast.error(result.error || "Failed to delete transaction");
       }
-    } catch (error) {
+    } catch (_error) {
       toast.error("An unexpected error occurred");
     } finally {
       setIsDeleting(false);
@@ -68,11 +68,14 @@ export function TransactionCard({ transaction }: TransactionCardProps) {
 
   const handlePaidToggle = async (checked: boolean) => {
     // Optimistic update
-    queryClient.setQueryData(QUERY_KEYS.transactions, (old: Transaction[] = []) => {
-      return old.map((t) =>
-        t.id === transaction.id ? { ...t, paid: checked } : t
-      );
-    });
+    queryClient.setQueryData(
+      QUERY_KEYS.transactions,
+      (old: Transaction[] = []) => {
+        return old.map((t) =>
+          t.id === transaction.id ? { ...t, paid: checked } : t,
+        );
+      },
+    );
 
     try {
       const result = await updateTransactionPaidAction(transaction.id, checked);
@@ -86,20 +89,26 @@ export function TransactionCard({ transaction }: TransactionCardProps) {
         queryClient.invalidateQueries({ queryKey: QUERY_KEYS.transactions });
       } else {
         // Rollback on error
-        queryClient.setQueryData(QUERY_KEYS.transactions, (old: Transaction[] = []) => {
-          return old.map((t) =>
-            t.id === transaction.id ? { ...t, paid: !checked } : t
-          );
-        });
+        queryClient.setQueryData(
+          QUERY_KEYS.transactions,
+          (old: Transaction[] = []) => {
+            return old.map((t) =>
+              t.id === transaction.id ? { ...t, paid: !checked } : t,
+            );
+          },
+        );
         toast.error(result.error || "Failed to update transaction");
       }
-    } catch (error) {
+    } catch (_error) {
       // Rollback on error
-      queryClient.setQueryData(QUERY_KEYS.transactions, (old: Transaction[] = []) => {
-        return old.map((t) =>
-          t.id === transaction.id ? { ...t, paid: !checked } : t
-        );
-      });
+      queryClient.setQueryData(
+        QUERY_KEYS.transactions,
+        (old: Transaction[] = []) => {
+          return old.map((t) =>
+            t.id === transaction.id ? { ...t, paid: !checked } : t,
+          );
+        },
+      );
       toast.error("An unexpected error occurred");
     }
   };
@@ -140,13 +149,14 @@ export function TransactionCard({ transaction }: TransactionCardProps) {
               <Badge variant={typeVariants[transaction.type].variant}>
                 {typeVariants[transaction.type].label}
               </Badge>
-              <Badge
-                variant={priorityVariants[transaction.priority].variant}
-              >
+              <Badge variant={priorityVariants[transaction.priority].variant}>
                 {priorityVariants[transaction.priority].label}
               </Badge>
               {transaction.paid && (
-                <Badge variant="outline" className="bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-400">
+                <Badge
+                  variant="outline"
+                  className="bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-400"
+                >
                   Paid
                 </Badge>
               )}

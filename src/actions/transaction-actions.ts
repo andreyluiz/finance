@@ -1,13 +1,13 @@
 "use server";
 
-import { db } from "@/db";
-import { transactions } from "@/db/schema";
-import type { NewTransaction, Transaction } from "@/db/schema";
-import { sortTransactions } from "@/lib/utils/sort-transactions";
-import { transactionSchema } from "@/lib/validations/transaction-schema";
-import { createClient } from "@/lib/supabase/server";
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { db } from "@/db";
+import type { NewTransaction, Transaction } from "@/db/schema";
+import { transactions } from "@/db/schema";
+import { createClient } from "@/lib/supabase/server";
+import { sortTransactions } from "@/lib/utils/sort-transactions";
+import { transactionSchema } from "@/lib/validations/transaction-schema";
 
 export async function getTransactionsAction(): Promise<Transaction[]> {
   try {

@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -19,13 +20,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { QUERY_KEYS } from "@/lib/react-query";
 import {
   type TransactionFormData,
   transactionSchema,
 } from "@/lib/validations/transaction-schema";
 import { useTransactionStore } from "@/stores/transaction-store";
-import { useQueryClient } from "@tanstack/react-query";
-import { QUERY_KEYS } from "@/lib/react-query";
 
 interface TransactionFormProps {
   className?: string;
@@ -75,7 +75,10 @@ export function TransactionForm({ className }: TransactionFormProps) {
 
     try {
       if (isEditMode && editingTransaction) {
-        const result = await updateTransactionAction(editingTransaction.id, data);
+        const result = await updateTransactionAction(
+          editingTransaction.id,
+          data,
+        );
 
         if (result.success) {
           toast.success("Transaction updated successfully");
@@ -95,7 +98,7 @@ export function TransactionForm({ className }: TransactionFormProps) {
           toast.error(result.error || "Failed to create transaction");
         }
       }
-    } catch (error) {
+    } catch (_error) {
       toast.error("An unexpected error occurred");
     } finally {
       setIsSubmitting(false);

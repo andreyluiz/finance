@@ -89,21 +89,12 @@
     "public.priority": {
       "name": "priority",
       "schema": "public",
-      "values": [
-        "very_high",
-        "high",
-        "medium",
-        "low",
-        "very_low"
-      ]
+      "values": ["very_high", "high", "medium", "low", "very_low"]
     },
     "public.transaction_type": {
       "name": "transaction_type",
       "schema": "public",
-      "values": [
-        "income",
-        "expense"
-      ]
+      "values": ["income", "expense"]
     }
   },
   "schemas": {},

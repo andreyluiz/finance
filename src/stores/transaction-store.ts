@@ -1,5 +1,5 @@
-import type { Transaction } from "@/db/schema";
 import { create } from "zustand";
+import type { Transaction } from "@/db/schema";
 
 interface TransactionStore {
   editingTransaction: Transaction | null;
