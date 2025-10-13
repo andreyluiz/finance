@@ -128,7 +128,7 @@ export function TransactionCard({ transaction }: TransactionCardProps) {
         <div className="flex items-start justify-between gap-4">
           {/* Left side - Main info */}
           <div className="flex-1 space-y-2">
-            <div className="flex items-center gap-2">
+            <div className="flex items-start gap-3">
               <Checkbox
                 checked={transaction.paid}
                 onCheckedChange={handlePaidToggle}
@@ -137,6 +137,7 @@ export function TransactionCard({ transaction }: TransactionCardProps) {
                     ? "Mark transaction as unpaid"
                     : "Mark transaction as paid"
                 }
+                className="mt-0.5"
               />
               <h3
                 className={`font-semibold ${transaction.paid ? "line-through text-muted-foreground" : ""}`}
