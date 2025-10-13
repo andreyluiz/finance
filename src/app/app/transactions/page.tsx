@@ -9,7 +9,7 @@ export default function TransactionsPage() {
       <Header showBackButton />
       <div className="p-4 sm:p-6 lg:p-8">
         <div className="max-w-7xl mx-auto">
-          <H1 className="mb-6">Transactions</H1>
+          <H1 className="mb-6 pb-2 border-b">Transactions</H1>
 
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Form: full width on mobile, 35% on desktop */}
