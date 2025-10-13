@@ -113,6 +113,18 @@ If a component is not available via CLI, manually create it in `src/components/u
   - Prefer composition over duplication
   - Extract common layouts, headers, footers, and repeated UI elements into reusable components
 
+#### Before Creating UI Components
+**IMPORTANT:** Before creating any UI component, always check `src/components/ui/` to see if there are existing shadcn components that might fit your needs.
+
+Common components to check for:
+- **Typography**: Check `src/components/ui/typography.tsx` for `H1`, `H2`, `H3`, `H4`, `P`, `Lead`, `Large`, `Small`, `Muted` components
+- **Forms**: `input`, `label`, `select`, `checkbox`, `radio-group`, `switch`, `slider`, `textarea`
+- **Feedback**: `button`, `badge`, `alert`, `toast`, `dialog`, `popover`, `tooltip`
+- **Layout**: `card`, `separator`, `tabs`, `accordion`, `table`
+- **Navigation**: `dropdown-menu`, `navigation-menu`, `breadcrumb`
+
+**Always reuse existing components instead of creating new ones or using raw HTML elements.**
+
 ### TypeScript Configuration
 
 - Target: ES2017
@@ -133,6 +145,13 @@ If a component is not available via CLI, manually create it in `src/components/u
 
 ### Context7 MCP
 When in doubt about implementation details, best practices, or technology-specific questions, use the Context7 MCP tool to search for relevant documentation and examples.
+
+### Chrome Dev Tools MCP
+The Chrome Dev Tools MCP is available for browser automation and testing. Test credentials are stored in `.env.local`:
+- **Username**: `TEST_USER` environment variable
+- **Password**: `TEST_PASSWORD` environment variable
+
+Use this tool to verify UI functionality, test user flows, and validate implementations in the browser.
 
 ## Code Quality Requirements
 
@@ -238,6 +257,8 @@ graph TD
 - Sub-tasks (numbered: 2.1, 2.2, 2.3...)
 - Optional tasks marked with `*` after the checkbox
 - Requirements referenced at the end of each task description
+- **Task titles MUST be descriptive like commit messages** (e.g., "Phase 3: Validation & Utilities", "Phase 5: Server Actions")
+- Task titles will be used as commit messages at the end of each phase
 
 **Location:** `specs/[feature-name]/tasks.md`
 
@@ -250,6 +271,9 @@ When a new feature is requested:
 3. **Planning Phase**: Create the tasks document with implementation breakdown
 4. **Review Phase**: Review all three documents before coding begins
 5. **Implementation Phase**: Follow the tasks document, marking tasks as completed
+   - **IMPORTANT**: Create a git commit at the end of each phase to save changes step by step
+   - Use the phase/task title from `tasks.md` as the commit message
+   - Example: `git commit -m "Phase 3: Validation & Utilities"`
 6. **Validation Phase**: Verify all acceptance criteria from the spec are met
 
 ### Document Storage
