@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Muted } from "@/components/ui/typography";
 import { useTransactionStore } from "@/stores/transaction-store";
 import { useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "@/lib/react-query";
@@ -132,11 +133,11 @@ export function TransactionCard({ transaction }: TransactionCardProps) {
               )}
             </div>
 
-            <div className="flex items-center gap-4 text-sm text-muted-foreground">
-              <span className="font-medium">
+            <div className="flex items-center gap-4">
+              <Muted className="font-medium">
                 {transaction.currency} {Number(transaction.value).toFixed(2)}
-              </span>
-              <span>Due: {formattedDate}</span>
+              </Muted>
+              <Muted>Due: {formattedDate}</Muted>
             </div>
           </div>
 
