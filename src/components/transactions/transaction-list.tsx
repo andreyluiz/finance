@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { getTransactionsAction } from "@/actions/transaction-actions";
-import { H2, Muted } from "@/components/ui/typography";
+import { Muted } from "@/components/ui/typography";
 import { QUERY_KEYS } from "@/lib/react-query";
 import { TransactionCard } from "./transaction-card";
 
@@ -56,9 +56,6 @@ export function TransactionList({ className }: TransactionListProps) {
   return (
     <div className={className}>
       <div className="space-y-4">
-        <div className="flex items-center justify-between mb-4">
-          <H2>Transactions ({transactions.length})</H2>
-        </div>
         {transactions.map((transaction) => (
           <TransactionCard key={transaction.id} transaction={transaction} />
         ))}
