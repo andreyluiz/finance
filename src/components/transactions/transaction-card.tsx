@@ -2,7 +2,7 @@
 
 import { useQueryClient } from "@tanstack/react-query";
 import { Edit2Icon, TrashIcon } from "lucide-react";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { toast } from "sonner";
 import {
   deleteTransactionAction,
@@ -34,7 +34,9 @@ const typeVariants = {
   expense: { label: "Expense", variant: "outline" as const },
 };
 
-export function TransactionCard({ transaction }: TransactionCardProps) {
+export const TransactionCard = memo(function TransactionCard({
+  transaction,
+}: TransactionCardProps) {
   const [isDeleting, setIsDeleting] = useState(false);
   const { setEditingTransaction } = useTransactionStore();
   const queryClient = useQueryClient();
@@ -201,4 +203,4 @@ export function TransactionCard({ transaction }: TransactionCardProps) {
       </CardContent>
     </Card>
   );
-}
+});
