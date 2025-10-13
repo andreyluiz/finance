@@ -67,6 +67,13 @@ export function TransactionCard({ transaction }: TransactionCardProps) {
   };
 
   const handlePaidToggle = async (checked: boolean) => {
+    // Optimistic update
+    queryClient.setQueryData(QUERY_KEYS.transactions, (old: Transaction[] = []) => {
+      return old.map((t) =>
+        t.id === transaction.id ? { ...t, paid: checked } : t
+      );
+    });
+
     try {
       const result = await updateTransactionPaidAction(transaction.id, checked);
 
@@ -78,9 +85,21 @@ export function TransactionCard({ transaction }: TransactionCardProps) {
         );
         queryClient.invalidateQueries({ queryKey: QUERY_KEYS.transactions });
       } else {
+        // Rollback on error
+        queryClient.setQueryData(QUERY_KEYS.transactions, (old: Transaction[] = []) => {
+          return old.map((t) =>
+            t.id === transaction.id ? { ...t, paid: !checked } : t
+          );
+        });
         toast.error(result.error || "Failed to update transaction");
       }
     } catch (error) {
+      // Rollback on error
+      queryClient.setQueryData(QUERY_KEYS.transactions, (old: Transaction[] = []) => {
+        return old.map((t) =>
+          t.id === transaction.id ? { ...t, paid: !checked } : t
+        );
+      });
       toast.error("An unexpected error occurred");
     }
   };
