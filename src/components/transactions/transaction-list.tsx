@@ -20,11 +20,13 @@ import { TransactionCard } from "./transaction-card";
 interface TransactionListProps {
   className?: string;
   billingPeriod?: BillingPeriod;
+  showPastOverdue?: boolean;
 }
 
 export function TransactionList({
   className,
   billingPeriod,
+  showPastOverdue = true,
 }: TransactionListProps) {
   const [showOverdue, setShowOverdue] = useState(false);
 
@@ -109,7 +111,7 @@ export function TransactionList({
 
       <div className="space-y-4">
         {/* Overdue from Past Periods Section */}
-        {billingPeriod && overdueFromPast.length > 0 && (
+        {showPastOverdue && billingPeriod && overdueFromPast.length > 0 && (
           <Collapsible
             open={showOverdue}
             onOpenChange={setShowOverdue}

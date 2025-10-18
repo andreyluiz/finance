@@ -1,11 +1,15 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import { getTransactionsAction } from "@/actions/transaction-actions";
 import { Header } from "@/components/header";
 import { BillingPeriodSelector } from "@/components/transactions/billing-period-selector";
+import { BillingPeriodTotals } from "@/components/transactions/billing-period-totals";
 import { TransactionForm } from "@/components/transactions/transaction-form";
 import { TransactionList } from "@/components/transactions/transaction-list";
 import { H1 } from "@/components/ui/typography";
+import { QUERY_KEYS } from "@/lib/react-query";
 import {
   type BillingPeriod,
   getCurrentBillingPeriod,
@@ -15,6 +19,13 @@ export default function TransactionsPage() {
   const [billingPeriod, setBillingPeriod] = useState<BillingPeriod | null>(
     null,
   );
+  const [includePastOverdue, setIncludePastOverdue] = useState(true);
+
+  // Fetch all transactions
+  const { data: transactions = [] } = useQuery({
+    queryKey: QUERY_KEYS.transactions,
+    queryFn: getTransactionsAction,
+  });
 
   // Initialize to current billing period on mount
   useEffect(() => {
@@ -43,8 +54,21 @@ export default function TransactionsPage() {
               />
             )}
 
+            {/* Billing Period Totals */}
+            {billingPeriod && (
+              <BillingPeriodTotals
+                transactions={transactions}
+                billingPeriod={billingPeriod}
+                includePastOverdue={includePastOverdue}
+                onIncludePastOverdueChange={setIncludePastOverdue}
+              />
+            )}
+
             {/* Transaction List */}
-            <TransactionList billingPeriod={billingPeriod || undefined} />
+            <TransactionList
+              billingPeriod={billingPeriod || undefined}
+              showPastOverdue={includePastOverdue}
+            />
           </div>
         </div>
       </main>
