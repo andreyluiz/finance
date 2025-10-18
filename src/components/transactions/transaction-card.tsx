@@ -14,6 +14,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Muted } from "@/components/ui/typography";
 import type { Transaction } from "@/db/schema";
+import { cn } from "@/lib/utils";
 import { QUERY_KEYS } from "@/lib/react-query";
 import { useTransactionStore } from "@/stores/transaction-store";
 
@@ -24,41 +25,55 @@ interface TransactionCardProps {
 const priorityVariants = {
   very_low: {
     label: "Very Low",
-    className:
-      "bg-green-100 text-green-800 dark:bg-green-950 dark:text-green-400 border-green-500 dark:border-green-600",
+    className: cn(
+      "bg-green-50 text-green-700 border-green-300",
+      "dark:bg-green-950 dark:text-green-400 dark:border-green-700",
+    ),
   },
   low: {
     label: "Low",
-    className:
-      "bg-lime-100 text-lime-800 dark:bg-lime-950 dark:text-lime-400 border-lime-500 dark:border-lime-600",
+    className: cn(
+      "bg-lime-50 text-lime-700 border-lime-300",
+      "dark:bg-lime-950 dark:text-lime-400 dark:border-lime-700",
+    ),
   },
   medium: {
     label: "Medium",
-    className:
-      "bg-yellow-100 text-yellow-800 dark:bg-yellow-950 dark:text-yellow-400 border-yellow-500 dark:border-yellow-600",
+    className: cn(
+      "bg-yellow-50 text-yellow-700 border-yellow-300",
+      "dark:bg-yellow-950 dark:text-yellow-400 dark:border-yellow-700",
+    ),
   },
   high: {
     label: "High",
-    className:
-      "bg-orange-100 text-orange-800 dark:bg-orange-950 dark:text-orange-400 border-orange-500 dark:border-orange-600",
+    className: cn(
+      "bg-orange-50 text-orange-700 border-orange-300",
+      "dark:bg-orange-950 dark:text-orange-400 dark:border-orange-700",
+    ),
   },
   very_high: {
     label: "Very High",
-    className:
-      "bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-400 border-red-500 dark:border-red-600",
+    className: cn(
+      "bg-red-50 text-red-700 border-red-300",
+      "dark:bg-red-950 dark:text-red-400 dark:border-red-700",
+    ),
   },
 };
 
 const typeVariants = {
   income: {
     label: "Income",
-    className:
-      "bg-green-100 text-green-800 dark:bg-green-950 dark:text-green-400 border-green-500 dark:border-green-600",
+    className: cn(
+      "bg-green-50 text-green-700 border-green-300",
+      "dark:bg-green-950 dark:text-green-400 dark:border-green-700",
+    ),
   },
   expense: {
     label: "Expense",
-    className:
-      "bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-400 border-red-500 dark:border-red-600",
+    className: cn(
+      "bg-red-50 text-red-700 border-red-300",
+      "dark:bg-red-950 dark:text-red-400 dark:border-red-700",
+    ),
   },
 };
 
@@ -175,11 +190,11 @@ export const TransactionCard = memo(function TransactionCard({
   );
 
   // Determine card styling based on status
-  const cardClassName = overdue
-    ? "border-destructive bg-destructive/5"
-    : dueToday
-      ? "border-yellow-500 dark:border-yellow-600 bg-yellow-50 dark:bg-yellow-950/20"
-      : "";
+  const cardClassName = cn({
+    "border-destructive bg-destructive/5": overdue,
+    "border-yellow-500 dark:border-yellow-600 bg-yellow-50 dark:bg-yellow-950/20":
+      dueToday,
+  });
 
   return (
     <Card className={cardClassName}>
