@@ -30,8 +30,16 @@ const priorityVariants = {
 };
 
 const typeVariants = {
-  income: { label: "Income", variant: "default" as const },
-  expense: { label: "Expense", variant: "outline" as const },
+  income: {
+    label: "Income",
+    className:
+      "bg-green-100 text-green-800 dark:bg-green-950 dark:text-green-400 border-green-500 dark:border-green-600",
+  },
+  expense: {
+    label: "Expense",
+    className:
+      "bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-400 border-red-500 dark:border-red-600",
+  },
 };
 
 export const TransactionCard = memo(function TransactionCard({
@@ -177,7 +185,10 @@ export const TransactionCard = memo(function TransactionCard({
               </h3>
 
               <div className="flex flex-wrap items-center gap-2">
-                <Badge variant={typeVariants[transaction.type].variant}>
+                <Badge
+                  variant="outline"
+                  className={typeVariants[transaction.type].className}
+                >
                   {typeVariants[transaction.type].label}
                 </Badge>
                 <Badge variant={priorityVariants[transaction.priority].variant}>
