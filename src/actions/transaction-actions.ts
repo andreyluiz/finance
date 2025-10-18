@@ -33,7 +33,7 @@ export async function getTransactionsAction(): Promise<Transaction[]> {
 }
 
 export async function createTransactionAction(
-  data: NewTransaction,
+  data: Omit<NewTransaction, "userId">,
 ): Promise<{ success: boolean; error?: string; transaction?: Transaction }> {
   try {
     const supabase = await createClient();

@@ -72,7 +72,10 @@ async function seedTransactions(userId: string, count: number) {
 
   for (let i = 0; i < count; i++) {
     const createdAt = getRandomDate(threeMonthsAgo, now);
-    const dueDate = getRandomDate(now, new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000)); // Next 90 days
+    const dueDate = getRandomDate(
+      now,
+      new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000),
+    ); // Next 90 days
 
     transactionsToInsert.push({
       userId,
@@ -103,7 +106,9 @@ async function main() {
   const count = Number.parseInt(process.argv[2] || "100", 10);
 
   if (Number.isNaN(count) || count < 1) {
-    console.error("Invalid count. Usage: npx tsx src/scripts/seed-transactions.ts [count]");
+    console.error(
+      "Invalid count. Usage: npx tsx src/scripts/seed-transactions.ts [count]",
+    );
     process.exit(1);
   }
 
