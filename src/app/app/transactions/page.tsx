@@ -1,9 +1,26 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { Header } from "@/components/header";
+import { BillingPeriodSelector } from "@/components/transactions/billing-period-selector";
 import { TransactionForm } from "@/components/transactions/transaction-form";
 import { TransactionList } from "@/components/transactions/transaction-list";
 import { H1 } from "@/components/ui/typography";
+import {
+  type BillingPeriod,
+  getCurrentBillingPeriod,
+} from "@/lib/utils/billing-period";
 
 export default function TransactionsPage() {
+  const [billingPeriod, setBillingPeriod] = useState<BillingPeriod | null>(
+    null,
+  );
+
+  // Initialize to current billing period on mount
+  useEffect(() => {
+    setBillingPeriod(getCurrentBillingPeriod());
+  }, []);
+
   return (
     <div className="min-h-screen">
       <Header />
@@ -17,8 +34,17 @@ export default function TransactionsPage() {
           </div>
 
           {/* List: full width on mobile, 65% on desktop */}
-          <div className="w-full lg:w-[65%]">
-            <TransactionList />
+          <div className="w-full lg:w-[65%] space-y-4">
+            {/* Billing Period Selector */}
+            {billingPeriod && (
+              <BillingPeriodSelector
+                period={billingPeriod}
+                onPeriodChange={setBillingPeriod}
+              />
+            )}
+
+            {/* Transaction List */}
+            <TransactionList billingPeriod={billingPeriod || undefined} />
           </div>
         </div>
       </main>

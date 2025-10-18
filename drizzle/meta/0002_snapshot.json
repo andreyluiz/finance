@@ -258,12 +258,8 @@
           "name": "transactions_installment_plan_id_installment_plans_id_fk",
           "tableFrom": "transactions",
           "tableTo": "installment_plans",
-          "columnsFrom": [
-            "installment_plan_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["installment_plan_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -279,21 +275,12 @@
     "public.priority": {
       "name": "priority",
       "schema": "public",
-      "values": [
-        "very_high",
-        "high",
-        "medium",
-        "low",
-        "very_low"
-      ]
+      "values": ["very_high", "high", "medium", "low", "very_low"]
     },
     "public.transaction_type": {
       "name": "transaction_type",
       "schema": "public",
-      "values": [
-        "income",
-        "expense"
-      ]
+      "values": ["income", "expense"]
     }
   },
   "schemas": {},
