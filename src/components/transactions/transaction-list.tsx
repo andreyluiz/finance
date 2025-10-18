@@ -1,7 +1,14 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { ChevronDown, ChevronRight } from "lucide-react";
+import { useState } from "react";
 import { getTransactionsAction } from "@/actions/transaction-actions";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { Muted } from "@/components/ui/typography";
 import { QUERY_KEYS } from "@/lib/react-query";
 import {
@@ -19,6 +26,8 @@ export function TransactionList({
   className,
   billingPeriod,
 }: TransactionListProps) {
+  const [showOverdue, setShowOverdue] = useState(false);
+
   const {
     data: transactions = [],
     isLoading,
@@ -34,6 +43,18 @@ export function TransactionList({
         isDateInBillingPeriod(new Date(transaction.dueDate), billingPeriod),
       )
     : transactions;
+
+  // Filter overdue expenses from past periods (before current billing period)
+  const overdueFromPast = billingPeriod
+    ? transactions.filter((transaction) => {
+        const dueDate = new Date(transaction.dueDate);
+        return (
+          transaction.type === "expense" &&
+          !transaction.paid &&
+          dueDate < billingPeriod.startDate
+        );
+      })
+    : [];
 
   if (isLoading) {
     return (
@@ -87,6 +108,42 @@ export function TransactionList({
       )}
 
       <div className="space-y-4">
+        {/* Overdue from Past Periods Section */}
+        {billingPeriod && overdueFromPast.length > 0 && (
+          <Collapsible
+            open={showOverdue}
+            onOpenChange={setShowOverdue}
+            className="border border-destructive rounded-lg bg-destructive/5"
+          >
+            <CollapsibleTrigger className="w-full px-4 py-3 hover:bg-destructive/10 rounded-lg transition-colors">
+              <div className="flex items-center gap-2">
+                {showOverdue ? (
+                  <ChevronDown className="h-4 w-4 text-destructive" />
+                ) : (
+                  <ChevronRight className="h-4 w-4 text-destructive" />
+                )}
+                <span className="font-semibold text-destructive">
+                  Overdue from Past Periods
+                </span>
+                <span className="text-sm text-muted-foreground">
+                  ({overdueFromPast.length} unpaid expense
+                  {overdueFromPast.length !== 1 ? "s" : ""})
+                </span>
+              </div>
+            </CollapsibleTrigger>
+
+            <CollapsibleContent className="px-4 pb-4 space-y-3">
+              {overdueFromPast.map((transaction) => (
+                <TransactionCard
+                  key={transaction.id}
+                  transaction={transaction}
+                />
+              ))}
+            </CollapsibleContent>
+          </Collapsible>
+        )}
+
+        {/* Current Period Transactions */}
         {filteredTransactions.map((transaction) => (
           <TransactionCard key={transaction.id} transaction={transaction} />
         ))}
