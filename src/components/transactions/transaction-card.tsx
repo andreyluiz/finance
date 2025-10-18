@@ -22,11 +22,31 @@ interface TransactionCardProps {
 }
 
 const priorityVariants = {
-  very_high: { label: "Very High", variant: "destructive" as const },
-  high: { label: "High", variant: "destructive" as const },
-  medium: { label: "Medium", variant: "default" as const },
-  low: { label: "Low", variant: "secondary" as const },
-  very_low: { label: "Very Low", variant: "secondary" as const },
+  very_low: {
+    label: "Very Low",
+    className:
+      "bg-green-100 text-green-800 dark:bg-green-950 dark:text-green-400 border-green-500 dark:border-green-600",
+  },
+  low: {
+    label: "Low",
+    className:
+      "bg-lime-100 text-lime-800 dark:bg-lime-950 dark:text-lime-400 border-lime-500 dark:border-lime-600",
+  },
+  medium: {
+    label: "Medium",
+    className:
+      "bg-yellow-100 text-yellow-800 dark:bg-yellow-950 dark:text-yellow-400 border-yellow-500 dark:border-yellow-600",
+  },
+  high: {
+    label: "High",
+    className:
+      "bg-orange-100 text-orange-800 dark:bg-orange-950 dark:text-orange-400 border-orange-500 dark:border-orange-600",
+  },
+  very_high: {
+    label: "Very High",
+    className:
+      "bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-400 border-red-500 dark:border-red-600",
+  },
 };
 
 const typeVariants = {
@@ -191,7 +211,10 @@ export const TransactionCard = memo(function TransactionCard({
                 >
                   {typeVariants[transaction.type].label}
                 </Badge>
-                <Badge variant={priorityVariants[transaction.priority].variant}>
+                <Badge
+                  variant="outline"
+                  className={priorityVariants[transaction.priority].className}
+                >
                   {priorityVariants[transaction.priority].label}
                 </Badge>
                 {transaction.paid && (
