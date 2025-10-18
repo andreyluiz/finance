@@ -41,6 +41,28 @@ export const TransactionCard = memo(function TransactionCard({
   const { setEditingTransaction } = useTransactionStore();
   const queryClient = useQueryClient();
 
+  // Helper functions for date checking
+  const isOverdue = () => {
+    if (transaction.paid) return false;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const dueDate = new Date(transaction.dueDate);
+    dueDate.setHours(0, 0, 0, 0);
+    return dueDate < today;
+  };
+
+  const isDueToday = () => {
+    if (transaction.paid) return false;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const dueDate = new Date(transaction.dueDate);
+    dueDate.setHours(0, 0, 0, 0);
+    return dueDate.getTime() === today.getTime();
+  };
+
+  const overdue = isOverdue();
+  const dueToday = isDueToday();
+
   const handleEdit = () => {
     setEditingTransaction(transaction);
   };
@@ -124,8 +146,15 @@ export const TransactionCard = memo(function TransactionCard({
     },
   );
 
+  // Determine card styling based on status
+  const cardClassName = overdue
+    ? "border-destructive bg-destructive/5"
+    : dueToday
+      ? "border-yellow-500 dark:border-yellow-600 bg-yellow-50 dark:bg-yellow-950/20"
+      : "";
+
   return (
-    <Card>
+    <Card className={cardClassName}>
       <CardContent className="px-4">
         <div className="flex items-start justify-between gap-4">
           {/* Left side - Main info */}
@@ -162,6 +191,19 @@ export const TransactionCard = memo(function TransactionCard({
                     Paid
                   </Badge>
                 )}
+                {overdue && (
+                  <Badge variant="destructive" className="font-semibold">
+                    Overdue
+                  </Badge>
+                )}
+                {dueToday && (
+                  <Badge
+                    variant="outline"
+                    className="bg-yellow-100 text-yellow-800 dark:bg-yellow-950 dark:text-yellow-400 border-yellow-500 dark:border-yellow-600 font-semibold"
+                  >
+                    Due Today
+                  </Badge>
+                )}
               </div>
 
               <div className="flex items-center gap-4">
@@ -174,7 +216,17 @@ export const TransactionCard = memo(function TransactionCard({
                 >
                   {transaction.currency} {Number(transaction.value).toFixed(2)}
                 </Muted>
-                <Muted>Due: {formattedDate}</Muted>
+                <Muted
+                  className={
+                    overdue
+                      ? "text-destructive font-semibold"
+                      : dueToday
+                        ? "text-yellow-700 dark:text-yellow-500 font-semibold"
+                        : ""
+                  }
+                >
+                  Due: {formattedDate}
+                </Muted>
               </div>
             </div>
           </div>
