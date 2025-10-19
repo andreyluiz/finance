@@ -1,8 +1,10 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { useRouter, usePathname } from "@/i18n/navigation";
+import { localeNames, type Locale } from "@/i18n/config";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -14,6 +16,13 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   getBillingPeriodDay,
   setBillingPeriodDay,
@@ -28,15 +37,20 @@ export function SettingsModal({ open, onOpenChange }: SettingsModalProps) {
   const [billingDay, setBillingDay] = useState<string>("");
   const [error, setError] = useState<string>("");
   const t = useTranslations("settings");
+  const locale = useLocale();
+  const router = useRouter();
+  const pathname = usePathname();
+  const [selectedLocale, setSelectedLocale] = useState<Locale>(locale as Locale);
 
   // Load current billing day when modal opens
   useEffect(() => {
     if (open) {
       const currentDay = getBillingPeriodDay();
       setBillingDay(currentDay.toString());
+      setSelectedLocale(locale as Locale);
       setError("");
     }
-  }, [open]);
+  }, [open, locale]);
 
   const handleSave = () => {
     const day = Number.parseInt(billingDay, 10);
@@ -57,8 +71,13 @@ export function SettingsModal({ open, onOpenChange }: SettingsModalProps) {
       toast.success(t("success.saved"));
       onOpenChange(false);
 
-      // Reload the page to refresh the billing period calculations
-      window.location.reload();
+      // If locale changed, navigate to new locale
+      if (selectedLocale !== locale) {
+        router.replace(pathname, { locale: selectedLocale });
+      } else {
+        // Reload the page to refresh the billing period calculations
+        window.location.reload();
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : t("errors.saveFailed"));
     }
@@ -96,6 +115,25 @@ export function SettingsModal({ open, onOpenChange }: SettingsModalProps) {
             <p className="text-xs text-muted-foreground">
               {t("billingPeriodDayHelp")}
             </p>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="language">{t("language")}</Label>
+            <Select
+              value={selectedLocale}
+              onValueChange={(value) => setSelectedLocale(value as Locale)}
+            >
+              <SelectTrigger id="language">
+                <SelectValue placeholder={t("languagePlaceholder")} />
+              </SelectTrigger>
+              <SelectContent>
+                {Object.entries(localeNames).map(([code, name]) => (
+                  <SelectItem key={code} value={code}>
+                    {name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </div>
 
