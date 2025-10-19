@@ -1,8 +1,11 @@
 import { createServerClient } from "@supabase/ssr";
 import { type NextRequest, NextResponse } from "next/server";
 
-export async function updateSession(request: NextRequest) {
-  let supabaseResponse = NextResponse.next({
+export async function updateSession(
+  request: NextRequest,
+  response?: NextResponse,
+) {
+  let supabaseResponse = response || NextResponse.next({
     request,
   });
 
@@ -34,10 +37,16 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Protect /app routes
-  if (request.nextUrl.pathname.startsWith("/app") && !user) {
+  // Protect /app routes - check for locale-prefixed paths
+  const pathname = request.nextUrl.pathname;
+  const isProtectedRoute =
+    pathname.includes("/app") && !pathname.match(/^\/(en|pt)\/app/);
+  const isProtectedLocaleRoute = pathname.match(/^\/(en|pt)\/app/);
+
+  if ((isProtectedRoute || isProtectedLocaleRoute) && !user) {
     const redirectUrl = request.nextUrl.clone();
-    redirectUrl.pathname = "/";
+    const locale = pathname.match(/^\/(en|pt)/)?.[1] || "en";
+    redirectUrl.pathname = `/${locale}`;
     redirectUrl.searchParams.set("redirected", "true");
     return NextResponse.redirect(redirectUrl);
   }

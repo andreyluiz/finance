@@ -1,0 +1,299 @@
+{
+  "common": {
+    "loading": "Carregando...",
+    "save": "Salvar",
+    "saveChanges": "Salvar Alterações",
+    "cancel": "Cancelar",
+    "edit": "Editar",
+    "delete": "Excluir",
+    "create": "Criar",
+    "update": "Atualizar",
+    "confirm": "Confirmar",
+    "close": "Fechar",
+    "home": "Início",
+    "dashboard": "Painel",
+    "transactions": "Transações",
+    "settings": "Configurações",
+    "signOut": "Sair",
+    "financeTracker": "Gerenciador Financeiro"
+  },
+  "pages": {
+    "home": {
+      "hero": {
+        "title": "Gerencie Seus Pagamentos com Facilidade",
+        "subtitle": "Mantenha suas finanças em ordem gerenciando facilmente o que está pendente, vencendo e vencido. Simples, intuitivo e feito para você.",
+        "goToDashboard": "Ir para o Painel",
+        "getStarted": "Começar",
+        "signIn": "Entrar"
+      },
+      "features": {
+        "paymentTracking": {
+          "title": "Rastreamento de Pagamentos",
+          "description": "Monitore todos os seus pagamentos em um só lugar com indicadores de status claros."
+        },
+        "dueDateAlerts": {
+          "title": "Alertas de Vencimento",
+          "description": "Nunca perca um pagamento com lembretes e notificações automatizadas."
+        },
+        "financialOverview": {
+          "title": "Visão Geral Financeira",
+          "description": "Obtenha insights sobre seus gastos e padrões de pagamento rapidamente."
+        }
+      },
+      "footer": {
+        "builtWith": "Desenvolvido com Next.js, TypeScript e shadcn/ui"
+      }
+    },
+    "signin": {
+      "title": "Bem-vindo de Volta",
+      "subtitle": "Entre na sua conta do Gerenciador Financeiro",
+      "cardTitle": "Entrar",
+      "email": "E-mail",
+      "emailPlaceholder": "voce@exemplo.com",
+      "password": "Senha",
+      "passwordPlaceholder": "••••••••",
+      "signingIn": "Entrando...",
+      "signIn": "Entrar",
+      "orContinueWith": "Ou continue com",
+      "continueWithGoogle": "Continuar com Google",
+      "noAccount": "Não tem uma conta?",
+      "signUp": "Criar conta",
+      "backToHome": "← Voltar para o início",
+      "error": "Ocorreu um erro"
+    },
+    "signup": {
+      "title": "Criar Conta",
+      "subtitle": "Comece a rastrear suas finanças hoje",
+      "cardTitle": "Cadastrar",
+      "displayName": "Nome de Exibição",
+      "displayNamePlaceholder": "João Silva",
+      "email": "E-mail",
+      "emailPlaceholder": "voce@exemplo.com",
+      "password": "Senha",
+      "passwordPlaceholder": "••••••••",
+      "confirmPassword": "Confirmar Senha",
+      "creatingAccount": "Criando conta...",
+      "signUp": "Cadastrar",
+      "orContinueWith": "Ou continue com",
+      "continueWithGoogle": "Continuar com Google",
+      "hasAccount": "Já tem uma conta?",
+      "signIn": "Entrar",
+      "backToHome": "← Voltar para o início",
+      "error": "Ocorreu um erro"
+    },
+    "dashboard": {
+      "title": "Painel",
+      "loadingDashboard": "Carregando painel..."
+    },
+    "transactions": {
+      "title": "Transações"
+    }
+  },
+  "header": {
+    "financeTracker": "Gerenciador Financeiro",
+    "home": "Início",
+    "dashboard": "Painel",
+    "transactions": "Transações",
+    "settings": "Configurações",
+    "signOut": "Sair"
+  },
+  "settings": {
+    "title": "Configurações",
+    "description": "Configure suas preferências de período de cobrança.",
+    "billingPeriodDay": "Dia do Período de Cobrança",
+    "billingPeriodDayPlaceholder": "Insira o dia (1-31)",
+    "billingPeriodDayHelp": "Seu período de cobrança começará neste dia de cada mês. Por exemplo, se você definir como 10, seu período de cobrança será do dia 10 de um mês até o dia 10 do próximo mês.",
+    "language": "Idioma",
+    "languagePlaceholder": "Selecione o idioma",
+    "cancel": "Cancelar",
+    "saveChanges": "Salvar Alterações",
+    "errors": {
+      "invalidNumber": "Por favor, insira um número válido",
+      "dayRange": "O dia deve estar entre 1 e 31",
+      "saveFailed": "Falha ao salvar configurações"
+    },
+    "success": {
+      "saved": "Configurações salvas com sucesso"
+    }
+  },
+  "dashboard": {
+    "summaryCards": {
+      "incomeThisMonth": "Receita Este Mês",
+      "expensesThisMonth": "Despesas Este Mês",
+      "balanceThisMonth": "Saldo Este Mês",
+      "overdue": "Vencidas",
+      "transactions": "transações",
+      "positive": "Positivo",
+      "negative": "Negativo",
+      "cashFlow": "fluxo de caixa",
+      "total": "total"
+    },
+    "incomeExpenseChart": {
+      "title": "Receita vs Despesas (Últimos 6 Meses)",
+      "income": "Receita",
+      "expenses": "Despesas"
+    },
+    "expenseBreakdown": {
+      "title": "Despesas por Prioridade (Este Mês)",
+      "noExpenses": "Nenhuma despesa este mês",
+      "priorities": "Prioridades"
+    },
+    "upcomingPayments": {
+      "title": "Próximos Pagamentos (Próximos 7 Dias)",
+      "noUpcoming": "Nenhum pagamento nos próximos 7 dias",
+      "viewAllTransactions": "Ver Todas as Transações",
+      "today": "Hoje",
+      "tomorrow": "Amanhã",
+      "days": "dias"
+    }
+  },
+  "transactions": {
+    "form": {
+      "title": "Adicionar Transação",
+      "editTitle": "Editar Transação",
+      "paymentType": "Tipo de Pagamento",
+      "singlePayment": "Pagamento Único",
+      "monthlyInstallments": "Parcelas Mensais",
+      "type": "Tipo",
+      "typePlaceholder": "Selecione o tipo",
+      "name": "Nome",
+      "namePlaceholder": "Nome da transação",
+      "value": "Valor",
+      "totalValue": "Valor Total",
+      "valuePlaceholder": "0,00",
+      "currency": "Moeda",
+      "currencyPlaceholder": "BRL",
+      "dueDate": "Data de Vencimento",
+      "startDate": "Data de Início",
+      "numberOfInstallments": "Número de Parcelas",
+      "numberOfInstallmentsPlaceholder": "ex: 12",
+      "numberOfInstallmentsHelp": "Insira um número entre 2 e 60",
+      "priority": "Prioridade",
+      "priorityPlaceholder": "Selecione a prioridade",
+      "create": "Criar",
+      "update": "Atualizar",
+      "cancel": "Cancelar",
+      "creating": "Criando...",
+      "updating": "Atualizando...",
+      "previewInstallments": "Visualizar Parcelas"
+    },
+    "card": {
+      "paid": "Pago",
+      "overdue": "Vencido",
+      "dueToday": "Vence Hoje",
+      "due": "Vence",
+      "markAsPaid": "Marcar transação como paga",
+      "markAsUnpaid": "Marcar transação como não paga",
+      "editTransaction": "Editar transação",
+      "deleteTransaction": "Excluir transação",
+      "deleteConfirm": "Tem certeza que deseja excluir esta transação?"
+    },
+    "billingPeriod": {
+      "title": "Período de Cobrança",
+      "currentPeriod": "(Período Atual)",
+      "previous": "Período de cobrança anterior",
+      "next": "Próximo período de cobrança",
+      "selectMonth": "Selecione o mês",
+      "selectYear": "Selecione o ano"
+    },
+    "billingPeriodTotals": {
+      "includePastOverdue": "Incluir despesas vencidas anteriores",
+      "income": "Receita",
+      "expenses": "Despesas",
+      "balance": "Saldo",
+      "current": "Atual",
+      "overdue": "Vencido"
+    },
+    "installmentPreview": {
+      "title": "Visualização do Plano de Parcelas",
+      "description": "Revise o plano de parcelas antes de criá-lo.",
+      "planSummary": "Resumo do Plano",
+      "name": "Nome",
+      "totalValue": "Valor Total",
+      "installments": "Parcelas",
+      "breakdown": "Detalhamento",
+      "installment": "Parcela",
+      "dueDate": "Data de Vencimento",
+      "amount": "Valor",
+      "confirm": "Confirmar e Criar",
+      "cancel": "Cancelar",
+      "creating": "Criando..."
+    },
+    "list": {
+      "pastOverdue": "Vencidas Anteriormente ({count})",
+      "noPastOverdue": "Nenhuma transação vencida anteriormente",
+      "currentPeriod": "Período Atual ({count})",
+      "noTransactions": "Nenhuma transação para este período"
+    },
+    "status": {
+      "income": "Receita",
+      "expense": "Despesa"
+    },
+    "priority": {
+      "very_high": "Muito Alta",
+      "high": "Alta",
+      "medium": "Média",
+      "low": "Baixa",
+      "very_low": "Muito Baixa"
+    },
+    "success": {
+      "created": "Transação criada com sucesso",
+      "updated": "Transação atualizada com sucesso",
+      "deleted": "Transação excluída com sucesso",
+      "markedPaid": "Transação marcada como paga",
+      "markedUnpaid": "Transação marcada como não paga",
+      "installmentPlanCreated": "Plano de parcelas criado com sucesso com {count} transações"
+    },
+    "errors": {
+      "createFailed": "Falha ao criar transação",
+      "updateFailed": "Falha ao atualizar transação",
+      "deleteFailed": "Falha ao excluir transação",
+      "updatePaidFailed": "Falha ao atualizar transação",
+      "installmentPlanFailed": "Falha ao criar plano de parcelas",
+      "invalidInstallments": "Por favor, insira um número válido de parcelas (mínimo 2)",
+      "unexpected": "Ocorreu um erro inesperado"
+    }
+  },
+  "validation": {
+    "nameRequired": "Nome é obrigatório",
+    "valueRequired": "O valor deve ser um número",
+    "valuePositive": "O valor deve ser um número positivo",
+    "valueDecimals": "O valor pode ter no máximo 2 casas decimais",
+    "dueDateRequired": "Data de vencimento é obrigatória",
+    "startDateRequired": "Data de início é obrigatória",
+    "installmentCountRequired": "O número de parcelas deve ser um número",
+    "installmentCountInteger": "O número de parcelas deve ser um número inteiro",
+    "installmentCountMin": "Mínimo de 2 parcelas obrigatório",
+    "installmentCountMax": "Máximo de 60 parcelas permitido",
+    "invalidEmail": "Endereço de e-mail inválido",
+    "passwordMin": "A senha deve ter pelo menos 6 caracteres",
+    "displayNameMin": "O nome de exibição deve ter pelo menos 2 caracteres",
+    "passwordsDontMatch": "As senhas não coincidem"
+  },
+  "months": {
+    "january": "Janeiro",
+    "february": "Fevereiro",
+    "march": "Março",
+    "april": "Abril",
+    "may": "Maio",
+    "june": "Junho",
+    "july": "Julho",
+    "august": "Agosto",
+    "september": "Setembro",
+    "october": "Outubro",
+    "november": "Novembro",
+    "december": "Dezembro",
+    "jan": "Jan",
+    "feb": "Fev",
+    "mar": "Mar",
+    "apr": "Abr",
+    "may_short": "Mai",
+    "jun": "Jun",
+    "jul": "Jul",
+    "aug": "Ago",
+    "sep": "Set",
+    "oct": "Out",
+    "nov": "Nov",
+    "dec": "Dez"
+  }
+}

@@ -1,45 +1,19 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
-import { Toaster } from "@/components/ui/sonner";
-import { AuthProvider } from "@/contexts/auth-context";
+import type { ReactNode } from "react";
+import { notFound } from "next/navigation";
+import { locales } from "@/i18n/config";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-export const metadata: Metadata = {
-  title: "Finance Tracker",
-  description: "Track and manage your payments with ease",
+type Props = {
+  children: ReactNode;
+  params: { locale: string };
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <AuthProvider>{children}</AuthProvider>
-          <Toaster />
-        </ThemeProvider>
-      </body>
-    </html>
-  );
+// This is a minimal root layout that just validates the locale
+// The actual layout with providers is in [locale]/layout.tsx
+export default function RootLayout({ children, params }: Props) {
+  // Validate locale
+  if (!locales.includes(params.locale as any)) {
+    notFound();
+  }
+
+  return children;
 }
