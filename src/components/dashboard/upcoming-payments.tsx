@@ -1,7 +1,8 @@
 "use client";
 
 import { Calendar, DollarSign } from "lucide-react";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,6 +14,9 @@ interface UpcomingPaymentsProps {
 }
 
 export function UpcomingPayments({ transactions }: UpcomingPaymentsProps) {
+  const t = useTranslations("dashboard.upcomingPayments");
+  const tStatus = useTranslations("transactions.status");
+
   // Get upcoming payments (unpaid, due in the next 7 days)
   const now = new Date();
   now.setHours(0, 0, 0, 0);
@@ -55,19 +59,19 @@ export function UpcomingPayments({ transactions }: UpcomingPaymentsProps) {
     const dueDate = new Date(date);
     dueDate.setHours(0, 0, 0, 0);
     const diff = Math.ceil((dueDate.getTime() - now.getTime()) / 86400000);
-    if (diff === 0) return "Today";
-    if (diff === 1) return "Tomorrow";
-    return `${diff} days`;
+    if (diff === 0) return t("today");
+    if (diff === 1) return t("tomorrow");
+    return `${diff} ${t("days")}`;
   };
 
   const typeVariants = {
     income: {
-      label: "Income",
+      label: tStatus("income"),
       className:
         "bg-green-50 text-green-700 border-green-300 dark:bg-green-950 dark:text-green-400 dark:border-green-700",
     },
     expense: {
-      label: "Expense",
+      label: tStatus("expense"),
       className:
         "bg-red-50 text-red-700 border-red-300 dark:bg-red-950 dark:text-red-400 dark:border-red-700",
     },
@@ -76,12 +80,12 @@ export function UpcomingPayments({ transactions }: UpcomingPaymentsProps) {
   return (
     <Card className="col-span-3">
       <CardHeader>
-        <CardTitle>Upcoming Payments (Next 7 Days)</CardTitle>
+        <CardTitle>{t("title")}</CardTitle>
       </CardHeader>
       <CardContent>
         {upcomingPayments.length === 0 ? (
           <p className="text-sm text-muted-foreground text-center py-8">
-            No upcoming payments in the next 7 days
+            {t("noUpcoming")}
           </p>
         ) : (
           <div className="space-y-4">
@@ -122,7 +126,7 @@ export function UpcomingPayments({ transactions }: UpcomingPaymentsProps) {
             ))}
 
             <Button variant="outline" className="w-full mt-4" asChild>
-              <Link href="/app/transactions">View All Transactions</Link>
+              <Link href="/app/transactions">{t("viewAllTransactions")}</Link>
             </Button>
           </div>
         )}

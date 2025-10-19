@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -26,6 +27,7 @@ interface SettingsModalProps {
 export function SettingsModal({ open, onOpenChange }: SettingsModalProps) {
   const [billingDay, setBillingDay] = useState<string>("");
   const [error, setError] = useState<string>("");
+  const t = useTranslations("settings");
 
   // Load current billing day when modal opens
   useEffect(() => {
@@ -41,24 +43,24 @@ export function SettingsModal({ open, onOpenChange }: SettingsModalProps) {
 
     // Validation
     if (Number.isNaN(day)) {
-      setError("Please enter a valid number");
+      setError(t("errors.invalidNumber"));
       return;
     }
 
     if (day < 1 || day > 31) {
-      setError("Day must be between 1 and 31");
+      setError(t("errors.dayRange"));
       return;
     }
 
     try {
       setBillingPeriodDay(day);
-      toast.success("Settings saved successfully");
+      toast.success(t("success.saved"));
       onOpenChange(false);
 
       // Reload the page to refresh the billing period calculations
       window.location.reload();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to save settings");
+      setError(err instanceof Error ? err.message : t("errors.saveFailed"));
     }
   };
 
@@ -71,15 +73,13 @@ export function SettingsModal({ open, onOpenChange }: SettingsModalProps) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px] border-border">
         <DialogHeader>
-          <DialogTitle>Settings</DialogTitle>
-          <DialogDescription>
-            Configure your billing period preferences.
-          </DialogDescription>
+          <DialogTitle>{t("title")}</DialogTitle>
+          <DialogDescription>{t("description")}</DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 py-4">
           <div className="space-y-2">
-            <Label htmlFor="billingDay">Billing Period Day</Label>
+            <Label htmlFor="billingDay">{t("billingPeriodDay")}</Label>
             <Input
               id="billingDay"
               type="number"
@@ -90,23 +90,21 @@ export function SettingsModal({ open, onOpenChange }: SettingsModalProps) {
                 setBillingDay(e.target.value);
                 setError("");
               }}
-              placeholder="Enter day (1-31)"
+              placeholder={t("billingPeriodDayPlaceholder")}
             />
             {error && <p className="text-sm text-destructive">{error}</p>}
             <p className="text-xs text-muted-foreground">
-              Your billing period will start on this day of each month. For
-              example, if you set it to 10, your billing period will run from
-              the 10th of one month to the 10th of the next month.
+              {t("billingPeriodDayHelp")}
             </p>
           </div>
         </div>
 
         <DialogFooter>
           <Button type="button" variant="outline" onClick={handleCancel}>
-            Cancel
+            {t("cancel")}
           </Button>
           <Button type="button" onClick={handleSave}>
-            Save Changes
+            {t("saveChanges")}
           </Button>
         </DialogFooter>
       </DialogContent>

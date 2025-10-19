@@ -1,6 +1,7 @@
 "use client";
 
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { useTranslations } from "next-intl";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   ChartContainer,
@@ -14,6 +15,8 @@ interface IncomeExpenseChartProps {
 }
 
 export function IncomeExpenseChart({ transactions }: IncomeExpenseChartProps) {
+  const t = useTranslations("dashboard.incomeExpenseChart");
+
   // Get last 6 months of data
   const months: {
     month: string;
@@ -51,11 +54,11 @@ export function IncomeExpenseChart({ transactions }: IncomeExpenseChartProps) {
 
   const chartConfig = {
     income: {
-      label: "Income",
+      label: t("income"),
       color: "hsl(142.1 76.2% 36.3%)",
     },
     expenses: {
-      label: "Expenses",
+      label: t("expenses"),
       color: "hsl(0 72.2% 50.6%)",
     },
   };
@@ -63,7 +66,7 @@ export function IncomeExpenseChart({ transactions }: IncomeExpenseChartProps) {
   return (
     <Card className="col-span-4">
       <CardHeader>
-        <CardTitle>Income vs Expenses (Last 6 Months)</CardTitle>
+        <CardTitle>{t("title")}</CardTitle>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className="h-[350px] w-full">

@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -38,41 +39,35 @@ export function InstallmentPreviewModal({
   installments,
 }: InstallmentPreviewModalProps) {
   const { name, totalValue, currency, installmentCount } = installmentData;
+  const t = useTranslations("transactions.installmentPreview");
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl max-h-[80vh] flex flex-col border-border">
         <DialogHeader>
-          <DialogTitle>Confirm Monthly Installments</DialogTitle>
-          <DialogDescription>
-            Review the installment breakdown before creating {installmentCount}{" "}
-            transactions
-          </DialogDescription>
+          <DialogTitle>{t("title")}</DialogTitle>
+          <DialogDescription>{t("description")}</DialogDescription>
         </DialogHeader>
 
         <div className="flex-1 overflow-y-auto space-y-4">
           {/* Summary Card */}
           <div className="rounded-lg border border-border bg-muted/50 p-4 space-y-2">
             <div className="flex justify-between items-center">
-              <span className="text-sm font-medium">Transaction Name:</span>
+              <span className="text-sm font-medium">{t("name")}:</span>
               <span className="text-sm">{name}</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-sm font-medium">Total Amount:</span>
+              <span className="text-sm font-medium">{t("totalValue")}:</span>
               <span className="text-sm font-semibold">
                 {formatCurrency(totalValue, currency)}
               </span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-sm font-medium">
-                Number of Installments:
-              </span>
+              <span className="text-sm font-medium">{t("installments")}:</span>
               <span className="text-sm">{installmentCount}</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-sm font-medium">
-                Value per Installment:
-              </span>
+              <span className="text-sm font-medium">{t("amount")}:</span>
               <span className="text-sm">
                 {formatCurrency(installments[0]?.value || 0, currency)}
               </span>
@@ -81,12 +76,12 @@ export function InstallmentPreviewModal({
 
           {/* Installments List */}
           <div className="space-y-2">
-            <h4 className="text-sm font-medium">Installment Breakdown</h4>
+            <h4 className="text-sm font-medium">{t("breakdown")}</h4>
             <div className="rounded-lg border border-border">
               <div className="grid grid-cols-3 gap-4 p-3 bg-muted/30 border-b border-border font-medium text-sm">
-                <div>Installment</div>
-                <div>Due Date</div>
-                <div className="text-right">Amount</div>
+                <div>{t("installment")}</div>
+                <div>{t("dueDate")}</div>
+                <div className="text-right">{t("amount")}</div>
               </div>
               <div className="divide-y max-h-[300px] overflow-y-auto">
                 {installments.map((installment) => (
@@ -115,10 +110,10 @@ export function InstallmentPreviewModal({
             onClick={() => onOpenChange(false)}
             disabled={isSubmitting}
           >
-            Cancel
+            {t("cancel")}
           </Button>
           <Button type="button" onClick={onConfirm} disabled={isSubmitting}>
-            {isSubmitting ? "Creating..." : "Confirm & Create"}
+            {isSubmitting ? t("creating") : t("confirm")}
           </Button>
         </DialogFooter>
       </DialogContent>

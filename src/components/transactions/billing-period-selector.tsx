@@ -1,6 +1,7 @@
 "use client";
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -23,21 +24,6 @@ interface BillingPeriodSelectorProps {
   onPeriodChange: (period: BillingPeriod) => void;
 }
 
-const MONTHS = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
-
 // Generate years: 5 years in the past to 2 years in the future
 const currentYear = new Date().getFullYear();
 const YEARS = Array.from({ length: 8 }, (_, i) => currentYear - 5 + i);
@@ -46,6 +32,24 @@ export function BillingPeriodSelector({
   period,
   onPeriodChange,
 }: BillingPeriodSelectorProps) {
+  const t = useTranslations("transactions.billingPeriod");
+  const tMonths = useTranslations("months");
+
+  const MONTHS = [
+    tMonths("january"),
+    tMonths("february"),
+    tMonths("march"),
+    tMonths("april"),
+    tMonths("may"),
+    tMonths("june"),
+    tMonths("july"),
+    tMonths("august"),
+    tMonths("september"),
+    tMonths("october"),
+    tMonths("november"),
+    tMonths("december"),
+  ];
+
   const isCurrent = isCurrentBillingPeriod(period);
 
   const handlePrevious = () => {
@@ -74,13 +78,13 @@ export function BillingPeriodSelector({
       {/* Period Display */}
       <div className="flex items-center gap-2">
         <div className="flex flex-col">
-          <span className="text-sm font-medium">Billing Period</span>
+          <span className="text-sm font-medium">{t("title")}</span>
           <span className="text-lg font-semibold">
             {formatBillingPeriod(period)}
           </span>
           {isCurrent && (
             <span className="text-xs text-muted-foreground">
-              (Current Period)
+              {t("currentPeriod")}
             </span>
           )}
         </div>
@@ -93,7 +97,7 @@ export function BillingPeriodSelector({
           variant="outline"
           size="icon"
           onClick={handlePrevious}
-          aria-label="Previous billing period"
+          aria-label={t("previous")}
         >
           <ChevronLeft className="h-4 w-4" />
         </Button>
@@ -104,7 +108,7 @@ export function BillingPeriodSelector({
           onValueChange={handleMonthChange}
         >
           <SelectTrigger className="w-[130px]">
-            <SelectValue placeholder="Select month" />
+            <SelectValue placeholder={t("selectMonth")} />
           </SelectTrigger>
           <SelectContent>
             {MONTHS.map((month, index) => (
@@ -118,7 +122,7 @@ export function BillingPeriodSelector({
         {/* Year Selector */}
         <Select value={period.year.toString()} onValueChange={handleYearChange}>
           <SelectTrigger className="w-[100px]">
-            <SelectValue placeholder="Select year" />
+            <SelectValue placeholder={t("selectYear")} />
           </SelectTrigger>
           <SelectContent>
             {YEARS.map((year) => (
@@ -134,7 +138,7 @@ export function BillingPeriodSelector({
           variant="outline"
           size="icon"
           onClick={handleNext}
-          aria-label="Next billing period"
+          aria-label={t("next")}
         >
           <ChevronRight className="h-4 w-4" />
         </Button>

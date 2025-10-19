@@ -6,6 +6,7 @@ import {
   ArrowUpCircle,
   DollarSign,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { Transaction } from "@/db/schema";
 import { cn } from "@/lib/utils";
@@ -15,6 +16,8 @@ interface SummaryCardsProps {
 }
 
 export function SummaryCards({ transactions }: SummaryCardsProps) {
+  const t = useTranslations("dashboard.summaryCards");
+
   // Calculate current month totals
   const now = new Date();
   const currentMonth = now.getMonth();
@@ -73,7 +76,7 @@ export function SummaryCards({ transactions }: SummaryCardsProps) {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">
-            Income This Month
+            {t("incomeThisMonth")}
           </CardTitle>
           <ArrowUpCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
         </CardHeader>
@@ -83,7 +86,7 @@ export function SummaryCards({ transactions }: SummaryCardsProps) {
           </div>
           <p className="text-xs text-muted-foreground">
             {currentMonthTransactions.filter((t) => t.type === "income").length}{" "}
-            transactions
+            {t("transactions")}
           </p>
         </CardContent>
       </Card>
@@ -92,7 +95,7 @@ export function SummaryCards({ transactions }: SummaryCardsProps) {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">
-            Expenses This Month
+            {t("expensesThisMonth")}
           </CardTitle>
           <ArrowDownCircle className="h-4 w-4 text-red-600 dark:text-red-400" />
         </CardHeader>
@@ -105,7 +108,7 @@ export function SummaryCards({ transactions }: SummaryCardsProps) {
               currentMonthTransactions.filter((t) => t.type === "expense")
                 .length
             }{" "}
-            transactions
+            {t("transactions")}
           </p>
         </CardContent>
       </Card>
@@ -114,7 +117,7 @@ export function SummaryCards({ transactions }: SummaryCardsProps) {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">
-            Balance This Month
+            {t("balanceThisMonth")}
           </CardTitle>
           <DollarSign
             className={cn(
@@ -137,7 +140,7 @@ export function SummaryCards({ transactions }: SummaryCardsProps) {
             {formatCurrency(balance)}
           </div>
           <p className="text-xs text-muted-foreground">
-            {balance >= 0 ? "Positive" : "Negative"} cash flow
+            {balance >= 0 ? t("positive") : t("negative")} {t("cashFlow")}
           </p>
         </CardContent>
       </Card>
@@ -145,7 +148,7 @@ export function SummaryCards({ transactions }: SummaryCardsProps) {
       {/* Overdue Card */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Overdue</CardTitle>
+          <CardTitle className="text-sm font-medium">{t("overdue")}</CardTitle>
           <AlertCircle className="h-4 w-4 text-destructive" />
         </CardHeader>
         <CardContent>
@@ -153,7 +156,7 @@ export function SummaryCards({ transactions }: SummaryCardsProps) {
             {overdueCount}
           </div>
           <p className="text-xs text-muted-foreground">
-            {formatCurrency(overdueAmount)} total
+            {formatCurrency(overdueAmount)} {t("total")}
           </p>
         </CardContent>
       </Card>

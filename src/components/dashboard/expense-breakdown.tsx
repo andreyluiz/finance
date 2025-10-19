@@ -1,6 +1,7 @@
 "use client";
 
 import { Label, Pie, PieChart } from "recharts";
+import { useTranslations } from "next-intl";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   ChartContainer,
@@ -14,6 +15,9 @@ interface ExpenseBreakdownProps {
 }
 
 export function ExpenseBreakdown({ transactions }: ExpenseBreakdownProps) {
+  const t = useTranslations("dashboard.expenseBreakdown");
+  const tPriority = useTranslations("transactions.priority");
+
   // Get current month expenses grouped by priority
   const now = new Date();
   const currentMonth = now.getMonth();
@@ -38,12 +42,7 @@ export function ExpenseBreakdown({ transactions }: ExpenseBreakdownProps) {
 
   const chartData = Array.from(priorityMap.entries()).map(
     ([priority, value]) => ({
-      priority:
-        priority === "very_high"
-          ? "Very High"
-          : priority === "very_low"
-            ? "Very Low"
-            : priority.charAt(0).toUpperCase() + priority.slice(1),
+      priority: tPriority(priority as "very_high" | "high" | "medium" | "low" | "very_low"),
       value: Number(value.toFixed(2)),
       fill: `var(--color-${priority.replace("_", "-")})`,
     }),
@@ -56,23 +55,23 @@ export function ExpenseBreakdown({ transactions }: ExpenseBreakdownProps) {
       label: "Amount",
     },
     "very-high": {
-      label: "Very High",
+      label: tPriority("very_high"),
       color: "hsl(0 72.2% 50.6%)",
     },
     high: {
-      label: "High",
+      label: tPriority("high"),
       color: "hsl(24.6 95% 53.1%)",
     },
     medium: {
-      label: "Medium",
+      label: tPriority("medium"),
       color: "hsl(47.9 95.8% 53.1%)",
     },
     low: {
-      label: "Low",
+      label: tPriority("low"),
       color: "hsl(142.1 76.2% 36.3%)",
     },
     "very-low": {
-      label: "Very Low",
+      label: tPriority("very_low"),
       color: "hsl(221.2 83.2% 53.3%)",
     },
   };
@@ -80,12 +79,12 @@ export function ExpenseBreakdown({ transactions }: ExpenseBreakdownProps) {
   return (
     <Card className="col-span-3">
       <CardHeader>
-        <CardTitle>Expenses by Priority (This Month)</CardTitle>
+        <CardTitle>{t("title")}</CardTitle>
       </CardHeader>
       <CardContent>
         {totalExpenses === 0 ? (
           <p className="text-center text-sm text-muted-foreground py-20">
-            No expenses this month
+            {t("noExpenses")}
           </p>
         ) : (
           <ChartContainer config={chartConfig} className="h-[300px] w-full">
@@ -123,7 +122,7 @@ export function ExpenseBreakdown({ transactions }: ExpenseBreakdownProps) {
                             y={(viewBox.cy || 0) + 24}
                             className="fill-muted-foreground"
                           >
-                            Priorities
+                            {t("priorities")}
                           </tspan>
                         </text>
                       );

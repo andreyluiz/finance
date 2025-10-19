@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { createInstallmentPlanAction } from "@/actions/installment-actions";
 import {
@@ -51,6 +52,12 @@ export function TransactionForm({ className }: TransactionFormProps) {
   const { editingTransaction, isEditMode, clearEditMode } =
     useTransactionStore();
   const queryClient = useQueryClient();
+
+  const t = useTranslations("transactions.form");
+  const tSuccess = useTranslations("transactions.success");
+  const tErrors = useTranslations("transactions.errors");
+  const tPriority = useTranslations("transactions.priority");
+  const tStatus = useTranslations("transactions.status");
 
   // Calculate last day of current month for default date
   const getLastDayOfMonth = () => {
@@ -132,14 +139,14 @@ export function TransactionForm({ className }: TransactionFormProps) {
         });
 
         if (result.success) {
-          toast.success("Transaction updated successfully");
+          toast.success(tSuccess("updated"));
           queryClient.invalidateQueries({ queryKey: QUERY_KEYS.transactions });
           handleCancel();
         } else {
-          toast.error(result.error || "Failed to update transaction");
+          toast.error(result.error || tErrors("updateFailed"));
         }
       } catch (_error) {
-        toast.error("An unexpected error occurred");
+        toast.error(tErrors("unexpected"));
       } finally {
         setIsSubmitting(false);
       }
@@ -162,7 +169,7 @@ export function TransactionForm({ className }: TransactionFormProps) {
         });
 
         if (result.success) {
-          toast.success("Transaction created successfully");
+          toast.success(tSuccess("created"));
           queryClient.invalidateQueries({ queryKey: QUERY_KEYS.transactions });
           reset({
             paymentType: "single",
@@ -174,10 +181,10 @@ export function TransactionForm({ className }: TransactionFormProps) {
             startDate: getLastDayOfMonth() as unknown as Date,
           });
         } else {
-          toast.error(result.error || "Failed to create transaction");
+          toast.error(result.error || tErrors("createFailed"));
         }
       } catch (_error) {
-        toast.error("An unexpected error occurred");
+        toast.error(tErrors("unexpected"));
       } finally {
         setIsSubmitting(false);
       }
@@ -188,7 +195,7 @@ export function TransactionForm({ className }: TransactionFormProps) {
     if (data.paymentType === "installments") {
       // Validate installment count is provided
       if (!data.installmentCount || data.installmentCount < 2) {
-        toast.error("Please enter a valid number of installments (minimum 2)");
+        toast.error(tErrors("invalidInstallments"));
         return;
       }
 
@@ -224,7 +231,7 @@ export function TransactionForm({ className }: TransactionFormProps) {
 
       if (result.success) {
         toast.success(
-          `Installment plan created successfully with ${pendingInstallmentData.installmentCount} transactions`,
+          tSuccess("installmentPlanCreated", { count: pendingInstallmentData.installmentCount }),
         );
         queryClient.invalidateQueries({ queryKey: QUERY_KEYS.transactions });
 
@@ -242,10 +249,10 @@ export function TransactionForm({ className }: TransactionFormProps) {
           startDate: getLastDayOfMonth() as unknown as Date,
         });
       } else {
-        toast.error(result.error || "Failed to create installment plan");
+        toast.error(result.error || tErrors("installmentPlanFailed"));
       }
     } catch (_error) {
-      toast.error("An unexpected error occurred");
+      toast.error(tErrors("unexpected"));
     } finally {
       setIsSubmitting(false);
     }
@@ -280,7 +287,7 @@ export function TransactionForm({ className }: TransactionFormProps) {
       >
         <CardHeader>
           <CardTitle>
-            {isEditMode ? "Edit Transaction" : "Add Transaction"}
+            {isEditMode ? t("editTitle") : t("title")}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -288,7 +295,7 @@ export function TransactionForm({ className }: TransactionFormProps) {
             {/* Payment Type - only in create mode */}
             {!isEditMode && (
               <div className="space-y-2">
-                <Label>Payment Type</Label>
+                <Label>{t("paymentType")}</Label>
                 <RadioGroup
                   value={selectedPaymentType}
                   onValueChange={(value) =>
@@ -302,7 +309,7 @@ export function TransactionForm({ className }: TransactionFormProps) {
                       htmlFor="single"
                       className="font-normal cursor-pointer"
                     >
-                      Single Payment
+                      {t("singlePayment")}
                     </Label>
                   </div>
                   <div className="flex items-center space-x-2">
@@ -311,7 +318,7 @@ export function TransactionForm({ className }: TransactionFormProps) {
                       htmlFor="installments"
                       className="font-normal cursor-pointer"
                     >
-                      Monthly Installments
+                      {t("monthlyInstallments")}
                     </Label>
                   </div>
                 </RadioGroup>
@@ -320,7 +327,7 @@ export function TransactionForm({ className }: TransactionFormProps) {
 
             {/* Type */}
             <div className="space-y-2">
-              <Label htmlFor="type">Type</Label>
+              <Label htmlFor="type">{t("type")}</Label>
               <Select
                 value={selectedType}
                 onValueChange={(value) =>
@@ -328,11 +335,11 @@ export function TransactionForm({ className }: TransactionFormProps) {
                 }
               >
                 <SelectTrigger id="type">
-                  <SelectValue placeholder="Select type" />
+                  <SelectValue placeholder={t("typePlaceholder")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="income">Income</SelectItem>
-                  <SelectItem value="expense">Expense</SelectItem>
+                  <SelectItem value="income">{tStatus("income")}</SelectItem>
+                  <SelectItem value="expense">{tStatus("expense")}</SelectItem>
                 </SelectContent>
               </Select>
               {errors.type && (
@@ -344,11 +351,11 @@ export function TransactionForm({ className }: TransactionFormProps) {
 
             {/* Name */}
             <div className="space-y-2">
-              <Label htmlFor="name">Name</Label>
+              <Label htmlFor="name">{t("name")}</Label>
               <Input
                 id="name"
                 type="text"
-                placeholder="Transaction name"
+                placeholder={t("namePlaceholder")}
                 {...register("name")}
                 aria-describedby={errors.name ? "name-error" : undefined}
               />
@@ -363,14 +370,14 @@ export function TransactionForm({ className }: TransactionFormProps) {
             <div className="space-y-2">
               <Label htmlFor="value">
                 {selectedPaymentType === "installments"
-                  ? "Total Value"
-                  : "Value"}
+                  ? t("totalValue")
+                  : t("value")}
               </Label>
               <Input
                 id="value"
                 type="number"
                 step="0.01"
-                placeholder="0.00"
+                placeholder={t("valuePlaceholder")}
                 {...register("value")}
                 aria-describedby={errors.value ? "value-error" : undefined}
               />
@@ -383,11 +390,11 @@ export function TransactionForm({ className }: TransactionFormProps) {
 
             {/* Currency */}
             <div className="space-y-2">
-              <Label htmlFor="currency">Currency</Label>
+              <Label htmlFor="currency">{t("currency")}</Label>
               <Input
                 id="currency"
                 type="text"
-                placeholder="USD"
+                placeholder={t("currencyPlaceholder")}
                 {...register("currency")}
                 aria-describedby={
                   errors.currency ? "currency-error" : undefined
@@ -404,8 +411,8 @@ export function TransactionForm({ className }: TransactionFormProps) {
             <div className="space-y-2">
               <Label htmlFor="startDate">
                 {selectedPaymentType === "installments"
-                  ? "Start Date"
-                  : "Due Date"}
+                  ? t("startDate")
+                  : t("dueDate")}
               </Label>
               <Input
                 id="startDate"
@@ -427,13 +434,13 @@ export function TransactionForm({ className }: TransactionFormProps) {
             {/* Installment Count - only for installments payment type */}
             {!isEditMode && selectedPaymentType === "installments" && (
               <div className="space-y-2">
-                <Label htmlFor="installmentCount">Number of Installments</Label>
+                <Label htmlFor="installmentCount">{t("numberOfInstallments")}</Label>
                 <Input
                   id="installmentCount"
                   type="number"
                   min="2"
                   max="60"
-                  placeholder="e.g., 12"
+                  placeholder={t("numberOfInstallmentsPlaceholder")}
                   {...register("installmentCount")}
                   aria-describedby={
                     errors.installmentCount
@@ -450,14 +457,14 @@ export function TransactionForm({ className }: TransactionFormProps) {
                   </p>
                 )}
                 <p className="text-xs text-muted-foreground">
-                  Enter a number between 2 and 60
+                  {t("numberOfInstallmentsHelp")}
                 </p>
               </div>
             )}
 
             {/* Priority */}
             <div className="space-y-2">
-              <Label htmlFor="priority">Priority</Label>
+              <Label htmlFor="priority">{t("priority")}</Label>
               <Select
                 value={selectedPriority}
                 onValueChange={(value) =>
@@ -473,14 +480,14 @@ export function TransactionForm({ className }: TransactionFormProps) {
                 }
               >
                 <SelectTrigger id="priority">
-                  <SelectValue placeholder="Select priority" />
+                  <SelectValue placeholder={t("priorityPlaceholder")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="very_high">Very High</SelectItem>
-                  <SelectItem value="high">High</SelectItem>
-                  <SelectItem value="medium">Medium</SelectItem>
-                  <SelectItem value="low">Low</SelectItem>
-                  <SelectItem value="very_low">Very Low</SelectItem>
+                  <SelectItem value="very_high">{tPriority("very_high")}</SelectItem>
+                  <SelectItem value="high">{tPriority("high")}</SelectItem>
+                  <SelectItem value="medium">{tPriority("medium")}</SelectItem>
+                  <SelectItem value="low">{tPriority("low")}</SelectItem>
+                  <SelectItem value="very_low">{tPriority("very_low")}</SelectItem>
                 </SelectContent>
               </Select>
               {errors.priority && (
@@ -495,13 +502,13 @@ export function TransactionForm({ className }: TransactionFormProps) {
               <Button type="submit" className="flex-1" disabled={isSubmitting}>
                 {isSubmitting
                   ? isEditMode
-                    ? "Updating..."
-                    : "Creating..."
+                    ? t("updating")
+                    : t("creating")
                   : isEditMode
-                    ? "Update"
+                    ? t("update")
                     : selectedPaymentType === "installments"
-                      ? "Preview Installments"
-                      : "Create"}
+                      ? t("previewInstallments")
+                      : t("create")}
               </Button>
               {isEditMode && (
                 <Button
@@ -510,7 +517,7 @@ export function TransactionForm({ className }: TransactionFormProps) {
                   onClick={handleCancel}
                   disabled={isSubmitting}
                 >
-                  Cancel
+                  {t("cancel")}
                 </Button>
               )}
             </div>

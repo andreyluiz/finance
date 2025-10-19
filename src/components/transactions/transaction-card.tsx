@@ -3,6 +3,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { Edit2Icon, TrashIcon } from "lucide-react";
 import { memo, useState } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import {
   deleteTransactionAction,
@@ -22,67 +23,72 @@ interface TransactionCardProps {
   transaction: Transaction;
 }
 
-const priorityVariants = {
-  very_low: {
-    label: "Very Low",
-    className: cn(
-      "bg-green-50 text-green-700 border-green-300",
-      "dark:bg-green-950 dark:text-green-400 dark:border-green-700",
-    ),
-  },
-  low: {
-    label: "Low",
-    className: cn(
-      "bg-lime-50 text-lime-700 border-lime-300",
-      "dark:bg-lime-950 dark:text-lime-400 dark:border-lime-700",
-    ),
-  },
-  medium: {
-    label: "Medium",
-    className: cn(
-      "bg-yellow-50 text-yellow-700 border-yellow-300",
-      "dark:bg-yellow-950 dark:text-yellow-400 dark:border-yellow-700",
-    ),
-  },
-  high: {
-    label: "High",
-    className: cn(
-      "bg-orange-50 text-orange-700 border-orange-300",
-      "dark:bg-orange-950 dark:text-orange-400 dark:border-orange-700",
-    ),
-  },
-  very_high: {
-    label: "Very High",
-    className: cn(
-      "bg-red-50 text-red-700 border-red-300",
-      "dark:bg-red-950 dark:text-red-400 dark:border-red-700",
-    ),
-  },
-};
-
-const typeVariants = {
-  income: {
-    label: "Income",
-    className: cn(
-      "bg-green-50 text-green-700 border-green-300",
-      "dark:bg-green-950 dark:text-green-400 dark:border-green-700",
-    ),
-  },
-  expense: {
-    label: "Expense",
-    className: cn(
-      "bg-red-50 text-red-700 border-red-300",
-      "dark:bg-red-950 dark:text-red-400 dark:border-red-700",
-    ),
-  },
-};
-
 export const TransactionCard = memo(function TransactionCard({
   transaction,
 }: TransactionCardProps) {
   const [isDeleting, setIsDeleting] = useState(false);
   const { setEditingTransaction } = useTransactionStore();
   const queryClient = useQueryClient();
+  const t = useTranslations("transactions.card");
+  const tPriority = useTranslations("transactions.priority");
+  const tStatus = useTranslations("transactions.status");
+  const tSuccess = useTranslations("transactions.success");
+  const tErrors = useTranslations("transactions.errors");
+
+  const priorityVariants = {
+    very_low: {
+      label: tPriority("very_low"),
+      className: cn(
+        "bg-green-50 text-green-700 border-green-300",
+        "dark:bg-green-950 dark:text-green-400 dark:border-green-700",
+      ),
+    },
+    low: {
+      label: tPriority("low"),
+      className: cn(
+        "bg-lime-50 text-lime-700 border-lime-300",
+        "dark:bg-lime-950 dark:text-lime-400 dark:border-lime-700",
+      ),
+    },
+    medium: {
+      label: tPriority("medium"),
+      className: cn(
+        "bg-yellow-50 text-yellow-700 border-yellow-300",
+        "dark:bg-yellow-950 dark:text-yellow-400 dark:border-yellow-700",
+      ),
+    },
+    high: {
+      label: tPriority("high"),
+      className: cn(
+        "bg-orange-50 text-orange-700 border-orange-300",
+        "dark:bg-orange-950 dark:text-orange-400 dark:border-orange-700",
+      ),
+    },
+    very_high: {
+      label: tPriority("very_high"),
+      className: cn(
+        "bg-red-50 text-red-700 border-red-300",
+        "dark:bg-red-950 dark:text-red-400 dark:border-red-700",
+      ),
+    },
+  };
+
+  const typeVariants = {
+    income: {
+      label: tStatus("income"),
+      className: cn(
+        "bg-green-50 text-green-700 border-green-300",
+        "dark:bg-green-950 dark:text-green-400 dark:border-green-700",
+      ),
+    },
+    expense: {
+      label: tStatus("expense"),
+      className: cn(
+        "bg-red-50 text-red-700 border-red-300",
+        "dark:bg-red-950 dark:text-red-400 dark:border-red-700",
+      ),
+    },
+  };
 
   // Helper functions for date checking
   const isOverdue = () => {
@@ -111,7 +117,7 @@ export const TransactionCard = memo(function TransactionCard({
   };
 
   const handleDelete = async () => {
-    if (!confirm("Are you sure you want to delete this transaction?")) {
+    if (!confirm(t("deleteConfirm"))) {
       return;
     }
 
@@ -121,13 +127,13 @@ export const TransactionCard = memo(function TransactionCard({
       const result = await deleteTransactionAction(transaction.id);
 
       if (result.success) {
-        toast.success("Transaction deleted successfully");
+        toast.success(tSuccess("deleted"));
         queryClient.invalidateQueries({ queryKey: QUERY_KEYS.transactions });
       } else {
-        toast.error(result.error || "Failed to delete transaction");
+        toast.error(result.error || tErrors("deleteFailed"));
       }
     } catch (_error) {
-      toast.error("An unexpected error occurred");
+      toast.error(tErrors("unexpected"));
     } finally {
       setIsDeleting(false);
     }
@@ -149,9 +155,7 @@ export const TransactionCard = memo(function TransactionCard({
 
       if (result.success) {
         toast.success(
-          checked
-            ? "Transaction marked as paid"
-            : "Transaction marked as unpaid",
+          checked ? tSuccess("markedPaid") : tSuccess("markedUnpaid"),
         );
         queryClient.invalidateQueries({ queryKey: QUERY_KEYS.transactions });
       } else {
@@ -164,7 +168,7 @@ export const TransactionCard = memo(function TransactionCard({
             );
           },
         );
-        toast.error(result.error || "Failed to update transaction");
+        toast.error(result.error || tErrors("updatePaidFailed"));
       }
     } catch (_error) {
       // Rollback on error
@@ -176,7 +180,7 @@ export const TransactionCard = memo(function TransactionCard({
           );
         },
       );
-      toast.error("An unexpected error occurred");
+      toast.error(tErrors("unexpected"));
     }
   };
 
@@ -207,8 +211,8 @@ export const TransactionCard = memo(function TransactionCard({
               onCheckedChange={handlePaidToggle}
               aria-label={
                 transaction.paid
-                  ? "Mark transaction as unpaid"
-                  : "Mark transaction as paid"
+                  ? t("markAsUnpaid")
+                  : t("markAsPaid")
               }
               className="mt-0.5"
             />
@@ -237,12 +241,12 @@ export const TransactionCard = memo(function TransactionCard({
                     variant="outline"
                     className="bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-400"
                   >
-                    Paid
+                    {t("paid")}
                   </Badge>
                 )}
                 {overdue && (
                   <Badge variant="destructive" className="font-semibold">
-                    Overdue
+                    {t("overdue")}
                   </Badge>
                 )}
                 {dueToday && (
@@ -250,7 +254,7 @@ export const TransactionCard = memo(function TransactionCard({
                     variant="outline"
                     className="bg-yellow-100 text-yellow-800 dark:bg-yellow-950 dark:text-yellow-400 border-yellow-500 dark:border-yellow-600 font-semibold"
                   >
-                    Due Today
+                    {t("dueToday")}
                   </Badge>
                 )}
               </div>
@@ -274,7 +278,7 @@ export const TransactionCard = memo(function TransactionCard({
                         : ""
                   }
                 >
-                  Due: {formattedDate}
+                  {t("due")}: {formattedDate}
                 </Muted>
               </div>
             </div>
@@ -286,7 +290,7 @@ export const TransactionCard = memo(function TransactionCard({
               variant="ghost"
               size="icon"
               onClick={handleEdit}
-              aria-label="Edit transaction"
+              aria-label={t("editTransaction")}
             >
               <Edit2Icon className="h-4 w-4" />
             </Button>
@@ -295,7 +299,7 @@ export const TransactionCard = memo(function TransactionCard({
               size="icon"
               onClick={handleDelete}
               disabled={isDeleting}
-              aria-label="Delete transaction"
+              aria-label={t("deleteTransaction")}
             >
               <TrashIcon className="h-4 w-4" />
             </Button>

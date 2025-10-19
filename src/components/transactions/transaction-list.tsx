@@ -3,6 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { getTransactionsAction } from "@/actions/transaction-actions";
 import {
   Collapsible,
@@ -29,6 +30,7 @@ export function TransactionList({
   showPastOverdue = true,
 }: TransactionListProps) {
   const [showOverdue, setShowOverdue] = useState(false);
+  const t = useTranslations("common");
 
   const {
     data: transactions = [],
@@ -62,7 +64,7 @@ export function TransactionList({
     return (
       <div className={className}>
         <div className="flex items-center justify-center p-8">
-          <Muted>Loading transactions...</Muted>
+          <Muted>{t("loading")}</Muted>
         </div>
       </div>
     );
@@ -73,7 +75,7 @@ export function TransactionList({
       <div className={className}>
         <div className="flex items-center justify-center p-8">
           <Muted className="text-destructive">
-            Error loading transactions. Please try again.
+            Error loading {t("transactions").toLowerCase()}. Please try again.
           </Muted>
         </div>
       </div>
@@ -86,8 +88,8 @@ export function TransactionList({
         <div className="flex flex-col items-center justify-center p-8 text-center">
           <Muted>
             {billingPeriod
-              ? "No transactions for this billing period."
-              : "No transactions yet."}
+              ? `No ${t("transactions").toLowerCase()} for this billing period.`
+              : `No ${t("transactions").toLowerCase()} yet.`}
           </Muted>
           <Muted>
             {billingPeriod

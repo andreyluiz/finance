@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
@@ -19,6 +20,8 @@ export function BillingPeriodTotals({
   includePastOverdue,
   onIncludePastOverdueChange,
 }: BillingPeriodTotalsProps) {
+  const t = useTranslations("transactions.billingPeriodTotals");
+
   // Calculate totals for current period
   const currentPeriodIncome = transactions
     .filter(
@@ -77,7 +80,7 @@ export function BillingPeriodTotals({
             htmlFor="include-past-overdue"
             className="text-sm font-medium cursor-pointer"
           >
-            Include past overdue expenses
+            {t("includePastOverdue")}
           </Label>
           <Switch
             id="include-past-overdue"
@@ -91,7 +94,7 @@ export function BillingPeriodTotals({
           {/* Income */}
           <div className="space-y-1">
             <div className="text-xs text-muted-foreground uppercase tracking-wide">
-              Income
+              {t("income")}
             </div>
             <div className="text-xl font-semibold text-green-600 dark:text-green-400">
               {formatCurrency(currentPeriodIncome)}
@@ -101,16 +104,16 @@ export function BillingPeriodTotals({
           {/* Expenses */}
           <div className="space-y-1">
             <div className="text-xs text-muted-foreground uppercase tracking-wide">
-              Expenses
+              {t("expenses")}
             </div>
             <div className="text-xl font-semibold text-red-600 dark:text-red-400">
               {formatCurrency(totalExpenses)}
             </div>
             {includePastOverdue && pastOverdueExpenses > 0 && (
               <div className="text-xs text-muted-foreground">
-                Current: {formatCurrency(currentPeriodExpenses)}
+                {t("current")}: {formatCurrency(currentPeriodExpenses)}
                 <br />
-                Overdue: {formatCurrency(pastOverdueExpenses)}
+                {t("overdue")}: {formatCurrency(pastOverdueExpenses)}
               </div>
             )}
           </div>
@@ -118,7 +121,7 @@ export function BillingPeriodTotals({
           {/* Balance */}
           <div className="space-y-1">
             <div className="text-xs text-muted-foreground uppercase tracking-wide">
-              Balance
+              {t("balance")}
             </div>
             <div
               className={`text-xl font-semibold ${
