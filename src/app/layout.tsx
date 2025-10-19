@@ -1,11 +1,3 @@
-import type { ReactNode } from "react";
-
-type Props = {
-  children: ReactNode;
-};
-
-// This is a minimal root layout
-// The actual layout with providers is in [locale]/layout.tsx
-export default function RootLayout({ children }: Props) {
-  return children;
-}
+// The root layout is required by Next.js
+// With [locale] routing, we export the LocaleLayout as the root
+export { default } from "./[locale]/layout";
