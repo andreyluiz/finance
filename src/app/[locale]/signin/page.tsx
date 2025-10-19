@@ -1,11 +1,11 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { Link, useRouter } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -13,18 +13,21 @@ import { Label } from "@/components/ui/label";
 import { H1, Muted } from "@/components/ui/typography";
 import { createClient } from "@/lib/supabase/client";
 
-const signInSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
-});
-
-type SignInFormData = z.infer<typeof signInSchema>;
-
 export default function SignInPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const supabase = createClient();
+  const t = useTranslations("pages.signin");
+  const tValidation = useTranslations("validation");
+
+  // Define schema inside component to access translations
+  const signInSchema = z.object({
+    email: z.string().email(tValidation("invalidEmail")),
+    password: z.string().min(6, tValidation("passwordMin")),
+  });
+
+  type SignInFormData = z.infer<typeof signInSchema>;
 
   const {
     register,
@@ -46,7 +49,7 @@ export default function SignInPage() {
       if (error) throw error;
       router.push("/app");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
+      setError(err instanceof Error ? err.message : t("error"));
     } finally {
       setLoading(false);
     }
@@ -65,7 +68,7 @@ export default function SignInPage() {
       });
       if (error) throw error;
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
+      setError(err instanceof Error ? err.message : t("error"));
       setLoading(false);
     }
   };
@@ -74,13 +77,13 @@ export default function SignInPage() {
     <div className="min-h-screen flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <H1 className="mb-2">Welcome Back</H1>
-          <Muted>Sign in to your Finance Tracker account</Muted>
+          <H1 className="mb-2">{t("title")}</H1>
+          <Muted>{t("subtitle")}</Muted>
         </div>
 
         <Card>
           <CardHeader>
-            <CardTitle>Sign In</CardTitle>
+            <CardTitle>{t("cardTitle")}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             {error && (
@@ -91,11 +94,11 @@ export default function SignInPage() {
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{t("email")}</Label>
                 <Input
                   id="email"
                   type="email"
-                  placeholder="you@example.com"
+                  placeholder={t("emailPlaceholder")}
                   {...register("email")}
                 />
                 {errors.email && (
@@ -106,11 +109,11 @@ export default function SignInPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password">{t("password")}</Label>
                 <Input
                   id="password"
                   type="password"
-                  placeholder="••••••••"
+                  placeholder={t("passwordPlaceholder")}
                   {...register("password")}
                 />
                 {errors.password && (
@@ -121,7 +124,7 @@ export default function SignInPage() {
               </div>
 
               <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? "Signing in..." : "Sign In"}
+                {loading ? t("signingIn") : t("signIn")}
               </Button>
             </form>
 
@@ -131,7 +134,7 @@ export default function SignInPage() {
               </div>
               <div className="relative flex justify-center text-xs uppercase">
                 <span className="bg-card px-2 text-muted-foreground">
-                  Or continue with
+                  {t("orContinueWith")}
                 </span>
               </div>
             </div>
@@ -166,14 +169,14 @@ export default function SignInPage() {
                   fill="#EA4335"
                 />
               </svg>
-              Continue with Google
+              {t("continueWithGoogle")}
             </Button>
 
             <div className="text-center text-sm">
               <Muted>
-                Don't have an account?{" "}
+                {t("noAccount")}{" "}
                 <Link href="/signup" className="text-primary hover:underline">
-                  Sign up
+                  {t("signUp")}
                 </Link>
               </Muted>
             </div>
@@ -185,7 +188,7 @@ export default function SignInPage() {
             href="/"
             className="text-sm text-muted-foreground hover:underline"
           >
-            ← Back to home
+            {t("backToHome")}
           </Link>
         </div>
       </div>
