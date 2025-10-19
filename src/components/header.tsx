@@ -1,9 +1,9 @@
 "use client";
 
 import { LogOut, Settings } from "lucide-react";
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
+import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { SettingsModal } from "@/components/settings/settings-modal";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -24,6 +24,7 @@ export function Header() {
   const router = useRouter();
   const pathname = usePathname();
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const t = useTranslations("header");
 
   const handleSignOut = async () => {
     await signOut();
@@ -45,7 +46,7 @@ export function Header() {
     <header className="border-b border-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
         <div className="flex items-center gap-6">
-          <H2 className="border-b-0 pb-0">Finance Tracker</H2>
+          <H2 className="border-b-0 pb-0">{t("financeTracker")}</H2>
           {user && (
             <nav className="flex items-center gap-1">
               <Button
@@ -53,14 +54,14 @@ export function Header() {
                 variant={pathname === "/" ? "secondary" : "ghost"}
                 size="sm"
               >
-                <Link href="/">Home</Link>
+                <Link href="/">{t("home")}</Link>
               </Button>
               <Button
                 asChild
                 variant={pathname === "/app" ? "secondary" : "ghost"}
                 size="sm"
               >
-                <Link href="/app">Dashboard</Link>
+                <Link href="/app">{t("dashboard")}</Link>
               </Button>
               <Button
                 asChild
@@ -69,7 +70,7 @@ export function Header() {
                 }
                 size="sm"
               >
-                <Link href="/app/transactions">Transactions</Link>
+                <Link href="/app/transactions">{t("transactions")}</Link>
               </Button>
             </nav>
           )}
@@ -112,7 +113,7 @@ export function Header() {
                   className="cursor-pointer"
                 >
                   <Settings className="mr-2 h-4 w-4" />
-                  <span>Settings</span>
+                  <span>{t("settings")}</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
@@ -120,7 +121,7 @@ export function Header() {
                   className="cursor-pointer"
                 >
                   <LogOut className="mr-2 h-4 w-4" />
-                  <span>Sign out</span>
+                  <span>{t("signOut")}</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
