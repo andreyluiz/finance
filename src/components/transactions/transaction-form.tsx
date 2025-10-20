@@ -233,7 +233,7 @@ export function TransactionForm({ className }: TransactionFormProps) {
       if (result.success) {
         toast.success(
           tSuccess("installmentPlanCreated", {
-            count: pendingInstallmentData.installmentCount,
+            count: pendingInstallmentData.installmentCount as number,
           }),
         );
         queryClient.invalidateQueries({ queryKey: QUERY_KEYS.transactions });

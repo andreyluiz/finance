@@ -18,8 +18,10 @@ function createMockTransaction(
     paid: false,
     createdAt: new Date("2025-10-01"),
     updatedAt: new Date("2025-10-01"),
+    installmentPlanId: null,
+    installmentNumber: null,
     ...overrides,
-  };
+  } satisfies Transaction;
 }
 
 describe("sortTransactions", () => {
