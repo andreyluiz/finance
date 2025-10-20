@@ -73,6 +73,17 @@ export function TransactionForm({ className }: TransactionFormProps) {
     return localStorage.getItem("lastUsedCurrency") || "USD";
   };
 
+  const form = useForm({
+    resolver: zodResolver(createInstallmentFormSchema(tValidation)),
+    defaultValues: {
+      paymentType: "single" as const,
+      type: "expense" as const,
+      currency: getCachedCurrency(),
+      priority: "medium" as const,
+      startDate: getLastDayOfMonth() as unknown as Date,
+    },
+  });
+
   const {
     register,
     handleSubmit,
@@ -80,16 +91,7 @@ export function TransactionForm({ className }: TransactionFormProps) {
     reset,
     setValue,
     watch,
-  } = useForm<InstallmentFormData>({
-    resolver: zodResolver(createInstallmentFormSchema(tValidation)),
-    defaultValues: {
-      paymentType: "single",
-      type: "expense",
-      currency: getCachedCurrency(),
-      priority: "medium",
-      startDate: getLastDayOfMonth() as unknown as Date,
-    },
-  });
+  } = form;
 
   const selectedPaymentType = watch("paymentType");
   const selectedType = watch("type");
