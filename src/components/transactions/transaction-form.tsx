@@ -296,7 +296,9 @@ export function TransactionForm({ className }: TransactionFormProps) {
             {/* Payment Type - only in create mode */}
             {!isEditMode && (
               <div className="space-y-3">
-                <Label className="text-sm font-medium">{t("paymentType")}</Label>
+                <Label className="text-sm font-medium">
+                  {t("paymentType")}
+                </Label>
                 <RadioGroup
                   value={selectedPaymentType}
                   onValueChange={(value) =>
@@ -312,7 +314,11 @@ export function TransactionForm({ className }: TransactionFormProps) {
                         : "border-muted hover:border-primary/50 hover:bg-muted/50"
                     }`}
                   >
-                    <RadioGroupItem value="single" id="single" className="sr-only" />
+                    <RadioGroupItem
+                      value="single"
+                      id="single"
+                      className="sr-only"
+                    />
                     <span>{t("singlePayment")}</span>
                   </Label>
                   <Label
@@ -323,7 +329,11 @@ export function TransactionForm({ className }: TransactionFormProps) {
                         : "border-muted hover:border-primary/50 hover:bg-muted/50"
                     }`}
                   >
-                    <RadioGroupItem value="installments" id="installments" className="sr-only" />
+                    <RadioGroupItem
+                      value="installments"
+                      id="installments"
+                      className="sr-only"
+                    />
                     <span>{t("monthlyInstallments")}</span>
                   </Label>
                 </RadioGroup>
@@ -348,7 +358,9 @@ export function TransactionForm({ className }: TransactionFormProps) {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="income">{tStatus("income")}</SelectItem>
-                    <SelectItem value="expense">{tStatus("expense")}</SelectItem>
+                    <SelectItem value="expense">
+                      {tStatus("expense")}
+                    </SelectItem>
                   </SelectContent>
                 </Select>
                 {errors.type && (
@@ -383,7 +395,9 @@ export function TransactionForm({ className }: TransactionFormProps) {
                       {tPriority("very_high")}
                     </SelectItem>
                     <SelectItem value="high">{tPriority("high")}</SelectItem>
-                    <SelectItem value="medium">{tPriority("medium")}</SelectItem>
+                    <SelectItem value="medium">
+                      {tPriority("medium")}
+                    </SelectItem>
                     <SelectItem value="low">{tPriority("low")}</SelectItem>
                     <SelectItem value="very_low">
                       {tPriority("very_low")}
