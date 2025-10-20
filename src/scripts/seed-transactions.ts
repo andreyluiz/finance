@@ -10,7 +10,13 @@ import { transactions } from "@/db/schema";
 
 config({ path: ".env.local" });
 
-const sql = postgres(process.env.DATABASE_URL!);
+const databaseUrl = process.env.DATABASE_URL;
+
+if (!databaseUrl) {
+  throw new Error("DATABASE_URL environment variable is required");
+}
+
+const sql = postgres(databaseUrl);
 const db = drizzle(sql);
 
 const priorities = ["very_high", "high", "medium", "low", "very_low"] as const;
