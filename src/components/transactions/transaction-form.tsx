@@ -17,6 +17,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Separator } from "@/components/ui/separator";
 import {
   Select,
   SelectContent,
@@ -24,15 +25,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
 import { QUERY_KEYS } from "@/lib/react-query";
 import {
   calculateInstallments,
   type InstallmentBreakdown,
 } from "@/lib/utils/calculate-installments";
 import {
+  createInstallmentFormSchema,
   type InstallmentFormData,
-  installmentFormSchema,
 } from "@/lib/validations/transaction-schema";
 import { useTransactionStore } from "@/stores/transaction-store";
 
@@ -58,7 +58,7 @@ export function TransactionForm({ className }: TransactionFormProps) {
   const tErrors = useTranslations("transactions.errors");
   const tPriority = useTranslations("transactions.priority");
   const tStatus = useTranslations("transactions.status");
-  const _tValidation = useTranslations("validation");
+  const tValidation = useTranslations("validation");
 
   // Calculate last day of current month for default date
   const getLastDayOfMonth = () => {
@@ -81,8 +81,7 @@ export function TransactionForm({ className }: TransactionFormProps) {
     setValue,
     watch,
   } = useForm<InstallmentFormData>({
-    // biome-ignore lint/suspicious/noExplicitAny: Type assertion needed for Zod resolver compatibility with static schema
-    resolver: zodResolver(installmentFormSchema) as any,
+    resolver: zodResolver(createInstallmentFormSchema(tValidation)),
     defaultValues: {
       paymentType: "single",
       type: "expense",
@@ -234,7 +233,7 @@ export function TransactionForm({ className }: TransactionFormProps) {
       if (result.success) {
         toast.success(
           tSuccess("installmentPlanCreated", {
-            count: pendingInstallmentData.installmentCount || 2,
+            count: pendingInstallmentData.installmentCount,
           }),
         );
         queryClient.invalidateQueries({ queryKey: QUERY_KEYS.transactions });
@@ -297,9 +296,7 @@ export function TransactionForm({ className }: TransactionFormProps) {
             {/* Payment Type - only in create mode */}
             {!isEditMode && (
               <div className="space-y-3">
-                <Label className="text-sm font-medium">
-                  {t("paymentType")}
-                </Label>
+                <Label className="text-sm font-medium">{t("paymentType")}</Label>
                 <RadioGroup
                   value={selectedPaymentType}
                   onValueChange={(value) =>
@@ -315,11 +312,7 @@ export function TransactionForm({ className }: TransactionFormProps) {
                         : "border-muted hover:border-primary/50 hover:bg-muted/50"
                     }`}
                   >
-                    <RadioGroupItem
-                      value="single"
-                      id="single"
-                      className="sr-only"
-                    />
+                    <RadioGroupItem value="single" id="single" className="sr-only" />
                     <span>{t("singlePayment")}</span>
                   </Label>
                   <Label
@@ -330,11 +323,7 @@ export function TransactionForm({ className }: TransactionFormProps) {
                         : "border-muted hover:border-primary/50 hover:bg-muted/50"
                     }`}
                   >
-                    <RadioGroupItem
-                      value="installments"
-                      id="installments"
-                      className="sr-only"
-                    />
+                    <RadioGroupItem value="installments" id="installments" className="sr-only" />
                     <span>{t("monthlyInstallments")}</span>
                   </Label>
                 </RadioGroup>
@@ -359,9 +348,7 @@ export function TransactionForm({ className }: TransactionFormProps) {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="income">{tStatus("income")}</SelectItem>
-                    <SelectItem value="expense">
-                      {tStatus("expense")}
-                    </SelectItem>
+                    <SelectItem value="expense">{tStatus("expense")}</SelectItem>
                   </SelectContent>
                 </Select>
                 {errors.type && (
@@ -396,9 +383,7 @@ export function TransactionForm({ className }: TransactionFormProps) {
                       {tPriority("very_high")}
                     </SelectItem>
                     <SelectItem value="high">{tPriority("high")}</SelectItem>
-                    <SelectItem value="medium">
-                      {tPriority("medium")}
-                    </SelectItem>
+                    <SelectItem value="medium">{tPriority("medium")}</SelectItem>
                     <SelectItem value="low">{tPriority("low")}</SelectItem>
                     <SelectItem value="very_low">
                       {tPriority("very_low")}

@@ -48,7 +48,7 @@ export async function createInstallmentPlanAction(
     if (!validation.success) {
       return {
         success: false,
-        error: validation.error.issues[0]?.message || "Validation error",
+        error: validation.error.errors[0]?.message || "Validation error",
       };
     }
 

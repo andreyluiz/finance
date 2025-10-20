@@ -112,7 +112,7 @@ export function BillingPeriodSelector({
           </SelectTrigger>
           <SelectContent>
             {MONTHS.map((month, index) => (
-              <SelectItem key={month} value={index.toString()}>
+              <SelectItem key={index} value={index.toString()}>
                 {month}
               </SelectItem>
             ))}

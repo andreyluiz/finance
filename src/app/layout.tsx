@@ -1,7 +1,3 @@
-import { redirect } from "next/navigation";
-
-// Root layout that redirects to default locale
-// This satisfies Next.js requirement for a root layout
-export default function RootLayout() {
-  redirect("/en");
-}
+// The root layout is required by Next.js
+// With [locale] routing, we export the LocaleLayout as the root
+export { default } from "./[locale]/layout";
