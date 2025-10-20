@@ -80,6 +80,7 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
 
   return (
     <style
+      // biome-ignore lint/security/noDangerouslySetInnerHtml: Safe usage - injecting static CSS from THEMES configuration for chart theming, not user input
       dangerouslySetInnerHTML={{
         __html: Object.entries(THEMES)
           .map(
