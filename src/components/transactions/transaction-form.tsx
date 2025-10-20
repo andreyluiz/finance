@@ -17,6 +17,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Separator } from "@/components/ui/separator";
 import {
   Select,
   SelectContent,
@@ -291,42 +292,48 @@ export function TransactionForm({ className }: TransactionFormProps) {
           <CardTitle>{isEditMode ? t("editTitle") : t("title")}</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             {/* Payment Type - only in create mode */}
             {!isEditMode && (
-              <div className="space-y-2">
-                <Label>{t("paymentType")}</Label>
+              <div className="space-y-3">
+                <Label className="text-sm font-medium">{t("paymentType")}</Label>
                 <RadioGroup
                   value={selectedPaymentType}
                   onValueChange={(value) =>
                     setValue("paymentType", value as "single" | "installments")
                   }
-                  className="flex gap-4"
+                  className="grid grid-cols-2 gap-3"
                 >
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="single" id="single" />
-                    <Label
-                      htmlFor="single"
-                      className="font-normal cursor-pointer"
-                    >
-                      {t("singlePayment")}
-                    </Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="installments" id="installments" />
-                    <Label
-                      htmlFor="installments"
-                      className="font-normal cursor-pointer"
-                    >
-                      {t("monthlyInstallments")}
-                    </Label>
-                  </div>
+                  <Label
+                    htmlFor="single"
+                    className={`flex items-center justify-center gap-2 rounded-lg border-2 p-3 cursor-pointer transition-all ${
+                      selectedPaymentType === "single"
+                        ? "border-primary bg-primary/5 font-medium"
+                        : "border-muted hover:border-primary/50 hover:bg-muted/50"
+                    }`}
+                  >
+                    <RadioGroupItem value="single" id="single" className="sr-only" />
+                    <span>{t("singlePayment")}</span>
+                  </Label>
+                  <Label
+                    htmlFor="installments"
+                    className={`flex items-center justify-center gap-2 rounded-lg border-2 p-3 cursor-pointer transition-all ${
+                      selectedPaymentType === "installments"
+                        ? "border-primary bg-primary/5 font-medium"
+                        : "border-muted hover:border-primary/50 hover:bg-muted/50"
+                    }`}
+                  >
+                    <RadioGroupItem value="installments" id="installments" className="sr-only" />
+                    <span>{t("monthlyInstallments")}</span>
+                  </Label>
                 </RadioGroup>
               </div>
             )}
 
+            {!isEditMode && <Separator className="my-6" />}
+
             {/* Type */}
-            <div className="space-y-2">
+            <div className="space-y-3">
               <Label htmlFor="type">{t("type")}</Label>
               <Select
                 value={selectedType}
@@ -350,7 +357,7 @@ export function TransactionForm({ className }: TransactionFormProps) {
             </div>
 
             {/* Name */}
-            <div className="space-y-2">
+            <div className="space-y-3">
               <Label htmlFor="name">{t("name")}</Label>
               <Input
                 id="name"
@@ -367,7 +374,7 @@ export function TransactionForm({ className }: TransactionFormProps) {
             </div>
 
             {/* Value */}
-            <div className="space-y-2">
+            <div className="space-y-3">
               <Label htmlFor="value">
                 {selectedPaymentType === "installments"
                   ? t("totalValue")
@@ -389,7 +396,7 @@ export function TransactionForm({ className }: TransactionFormProps) {
             </div>
 
             {/* Currency */}
-            <div className="space-y-2">
+            <div className="space-y-3">
               <Label htmlFor="currency">{t("currency")}</Label>
               <Input
                 id="currency"
@@ -408,7 +415,7 @@ export function TransactionForm({ className }: TransactionFormProps) {
             </div>
 
             {/* Start/Due Date */}
-            <div className="space-y-2">
+            <div className="space-y-3">
               <Label htmlFor="startDate">
                 {selectedPaymentType === "installments"
                   ? t("startDate")
@@ -433,7 +440,7 @@ export function TransactionForm({ className }: TransactionFormProps) {
 
             {/* Installment Count - only for installments payment type */}
             {!isEditMode && selectedPaymentType === "installments" && (
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <Label htmlFor="installmentCount">
                   {t("numberOfInstallments")}
                 </Label>
@@ -464,8 +471,10 @@ export function TransactionForm({ className }: TransactionFormProps) {
               </div>
             )}
 
+            <Separator className="my-6" />
+
             {/* Priority */}
-            <div className="space-y-2">
+            <div className="space-y-3">
               <Label htmlFor="priority">{t("priority")}</Label>
               <Select
                 value={selectedPriority}
