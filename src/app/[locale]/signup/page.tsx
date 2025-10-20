@@ -1,8 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -11,31 +10,31 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { H1, Muted } from "@/components/ui/typography";
+import { Link, useRouter } from "@/i18n/navigation";
 import { createClient } from "@/lib/supabase/client";
-
-const signUpSchema = z
-  .object({
-    displayName: z
-      .string()
-      .min(2, "Display name must be at least 2 characters"),
-    email: z.string().email("Invalid email address"),
-    password: z.string().min(6, "Password must be at least 6 characters"),
-    confirmPassword: z
-      .string()
-      .min(6, "Password must be at least 6 characters"),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"],
-  });
-
-type SignUpFormData = z.infer<typeof signUpSchema>;
 
 export default function SignUpPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const supabase = createClient();
+  const t = useTranslations("pages.signup");
+  const tValidation = useTranslations("validation");
+
+  // Define schema inside component to access translations
+  const signUpSchema = z
+    .object({
+      displayName: z.string().min(2, tValidation("displayNameMin")),
+      email: z.string().email(tValidation("invalidEmail")),
+      password: z.string().min(6, tValidation("passwordMin")),
+      confirmPassword: z.string().min(6, tValidation("passwordMin")),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: tValidation("passwordsDontMatch"),
+      path: ["confirmPassword"],
+    });
+
+  type SignUpFormData = z.infer<typeof signUpSchema>;
 
   const {
     register,
@@ -62,7 +61,7 @@ export default function SignUpPage() {
       if (error) throw error;
       router.push("/app");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
+      setError(err instanceof Error ? err.message : t("error"));
     } finally {
       setLoading(false);
     }
@@ -81,7 +80,7 @@ export default function SignUpPage() {
       });
       if (error) throw error;
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
+      setError(err instanceof Error ? err.message : t("error"));
       setLoading(false);
     }
   };
@@ -90,13 +89,13 @@ export default function SignUpPage() {
     <div className="min-h-screen flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <H1 className="mb-2">Create Account</H1>
-          <Muted>Start tracking your finances today</Muted>
+          <H1 className="mb-2">{t("title")}</H1>
+          <Muted>{t("subtitle")}</Muted>
         </div>
 
         <Card>
           <CardHeader>
-            <CardTitle>Sign Up</CardTitle>
+            <CardTitle>{t("cardTitle")}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             {error && (
@@ -107,11 +106,11 @@ export default function SignUpPage() {
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="displayName">Display Name</Label>
+                <Label htmlFor="displayName">{t("displayName")}</Label>
                 <Input
                   id="displayName"
                   type="text"
-                  placeholder="John Doe"
+                  placeholder={t("displayNamePlaceholder")}
                   {...register("displayName")}
                 />
                 {errors.displayName && (
@@ -122,11 +121,11 @@ export default function SignUpPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{t("email")}</Label>
                 <Input
                   id="email"
                   type="email"
-                  placeholder="you@example.com"
+                  placeholder={t("emailPlaceholder")}
                   {...register("email")}
                 />
                 {errors.email && (
@@ -137,11 +136,11 @@ export default function SignUpPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password">{t("password")}</Label>
                 <Input
                   id="password"
                   type="password"
-                  placeholder="••••••••"
+                  placeholder={t("passwordPlaceholder")}
                   {...register("password")}
                 />
                 {errors.password && (
@@ -152,11 +151,11 @@ export default function SignUpPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Confirm Password</Label>
+                <Label htmlFor="confirmPassword">{t("confirmPassword")}</Label>
                 <Input
                   id="confirmPassword"
                   type="password"
-                  placeholder="••••••••"
+                  placeholder={t("confirmPasswordPlaceholder")}
                   {...register("confirmPassword")}
                 />
                 {errors.confirmPassword && (
@@ -167,7 +166,7 @@ export default function SignUpPage() {
               </div>
 
               <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? "Creating account..." : "Sign Up"}
+                {loading ? t("creatingAccount") : t("signUp")}
               </Button>
             </form>
 
@@ -177,7 +176,7 @@ export default function SignUpPage() {
               </div>
               <div className="relative flex justify-center text-xs uppercase">
                 <span className="bg-card px-2 text-muted-foreground">
-                  Or continue with
+                  {t("orContinueWith")}
                 </span>
               </div>
             </div>
@@ -212,14 +211,14 @@ export default function SignUpPage() {
                   fill="#EA4335"
                 />
               </svg>
-              Continue with Google
+              {t("continueWithGoogle")}
             </Button>
 
             <div className="text-center text-sm">
               <Muted>
-                Already have an account?{" "}
+                {t("haveAccount")}{" "}
                 <Link href="/signin" className="text-primary hover:underline">
-                  Sign in
+                  {t("signIn")}
                 </Link>
               </Muted>
             </div>
@@ -231,7 +230,7 @@ export default function SignUpPage() {
             href="/"
             className="text-sm text-muted-foreground hover:underline"
           >
-            ← Back to home
+            {t("backToHome")}
           </Link>
         </div>
       </div>

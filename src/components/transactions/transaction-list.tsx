@@ -2,8 +2,8 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { ChevronDown, ChevronRight } from "lucide-react";
-import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { useState } from "react";
 import { getTransactionsAction } from "@/actions/transaction-actions";
 import {
   Collapsible,

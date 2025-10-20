@@ -2,12 +2,12 @@
 
 import { Calendar, DollarSign } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { Link } from "@/i18n/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import type { Transaction } from "@/db/schema";
+import { Link } from "@/i18n/navigation";
 
 interface UpcomingPaymentsProps {
   transactions: Transaction[];

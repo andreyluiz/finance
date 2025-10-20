@@ -2,8 +2,8 @@
 
 import { useQueryClient } from "@tanstack/react-query";
 import { Edit2Icon, TrashIcon } from "lucide-react";
-import { memo, useState } from "react";
 import { useTranslations } from "next-intl";
+import { memo, useState } from "react";
 import { toast } from "sonner";
 import {
   deleteTransactionAction,
@@ -15,8 +15,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Muted } from "@/components/ui/typography";
 import type { Transaction } from "@/db/schema";
-import { cn } from "@/lib/utils";
 import { QUERY_KEYS } from "@/lib/react-query";
+import { cn } from "@/lib/utils";
 import { useTransactionStore } from "@/stores/transaction-store";
 
 interface TransactionCardProps {
@@ -210,9 +210,7 @@ export const TransactionCard = memo(function TransactionCard({
               checked={transaction.paid}
               onCheckedChange={handlePaidToggle}
               aria-label={
-                transaction.paid
-                  ? t("markAsUnpaid")
-                  : t("markAsPaid")
+                transaction.paid ? t("markAsUnpaid") : t("markAsPaid")
               }
               className="mt-0.5"
             />

@@ -11,53 +11,67 @@ export const priorityEnum = z.enum([
 
 export const paymentTypeEnum = z.enum(["single", "installments"]);
 
-export const transactionSchema = z.object({
-  type: transactionTypeEnum,
-  name: z.string().min(1, "Name is required"),
-  value: z.coerce
-    .number({ invalid_type_error: "Value must be a number" })
-    .positive("Value must be a positive number")
-    .multipleOf(0.01, "Value can have at most 2 decimal places"),
-  currency: z.string().default("USD"),
-  dueDate: z.date({ required_error: "Due date is required" }),
-  priority: priorityEnum,
-  paid: z.boolean().default(false),
-});
+// Type-safe translation function type
+type TranslateFn = (key: string) => string;
 
-export const installmentFormSchema = z.object({
-  paymentType: paymentTypeEnum,
-  type: transactionTypeEnum,
-  name: z.string().min(1, "Name is required"),
-  value: z.coerce
-    .number({ invalid_type_error: "Value must be a number" })
-    .positive("Value must be a positive number")
-    .multipleOf(0.01, "Value can have at most 2 decimal places"),
-  currency: z.string().default("USD"),
-  startDate: z.date({ required_error: "Start date is required" }),
-  priority: priorityEnum,
-  installmentCount: z.coerce
-    .number({ invalid_type_error: "Installment count must be a number" })
-    .int("Installment count must be a whole number")
-    .min(2, "Minimum 2 installments required")
-    .max(60, "Maximum 60 installments allowed")
-    .optional(),
-});
+// Factory function for creating transaction schema with i18n support
+export const createTransactionSchema = (t: TranslateFn) =>
+  z.object({
+    type: transactionTypeEnum,
+    name: z.string().min(1, t("nameRequired")),
+    value: z.coerce
+      .number({ invalid_type_error: t("valueRequired") })
+      .positive(t("valuePositive"))
+      .multipleOf(0.01, t("valueDecimals")),
+    currency: z.string().default("USD"),
+    dueDate: z.date({ required_error: t("dueDateRequired") }),
+    priority: priorityEnum,
+    paid: z.boolean().default(false),
+  });
 
-export const installmentPlanSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  totalValue: z.coerce
-    .number({ invalid_type_error: "Value must be a number" })
-    .positive("Value must be a positive number")
-    .multipleOf(0.01, "Value can have at most 2 decimal places"),
-  currency: z.string().default("USD"),
-  startDate: z.date({ required_error: "Start date is required" }),
-  priority: priorityEnum,
-  installmentCount: z.coerce
-    .number({ invalid_type_error: "Installment count must be a number" })
-    .int("Installment count must be a whole number")
-    .min(2, "Minimum 2 installments required")
-    .max(60, "Maximum 60 installments allowed"),
-});
+// Factory function for creating installment form schema with i18n support
+export const createInstallmentFormSchema = (t: TranslateFn) =>
+  z.object({
+    paymentType: paymentTypeEnum,
+    type: transactionTypeEnum,
+    name: z.string().min(1, t("nameRequired")),
+    value: z.coerce
+      .number({ invalid_type_error: t("valueRequired") })
+      .positive(t("valuePositive"))
+      .multipleOf(0.01, t("valueDecimals")),
+    currency: z.string().default("USD"),
+    startDate: z.date({ required_error: t("startDateRequired") }),
+    priority: priorityEnum,
+    installmentCount: z.coerce
+      .number({ invalid_type_error: t("installmentCountRequired") })
+      .int(t("installmentCountInteger"))
+      .min(2, t("installmentCountMin"))
+      .max(60, t("installmentCountMax"))
+      .optional(),
+  });
+
+// Factory function for creating installment plan schema with i18n support
+export const createInstallmentPlanSchema = (t: TranslateFn) =>
+  z.object({
+    name: z.string().min(1, t("nameRequired")),
+    totalValue: z.coerce
+      .number({ invalid_type_error: t("valueRequired") })
+      .positive(t("valuePositive"))
+      .multipleOf(0.01, t("valueDecimals")),
+    currency: z.string().default("USD"),
+    startDate: z.date({ required_error: t("startDateRequired") }),
+    priority: priorityEnum,
+    installmentCount: z.coerce
+      .number({ invalid_type_error: t("installmentCountRequired") })
+      .int(t("installmentCountInteger"))
+      .min(2, t("installmentCountMin"))
+      .max(60, t("installmentCountMax")),
+  });
+
+// Keep the old schemas for backward compatibility (using English messages as fallback)
+export const transactionSchema = createTransactionSchema((key) => key);
+export const installmentFormSchema = createInstallmentFormSchema((key) => key);
+export const installmentPlanSchema = createInstallmentPlanSchema((key) => key);
 
 export type TransactionFormData = z.infer<typeof transactionSchema>;
 export type InstallmentFormData = z.infer<typeof installmentFormSchema>;

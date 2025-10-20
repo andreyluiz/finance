@@ -1,5 +1,5 @@
-import createMiddleware from "next-intl/middleware";
 import type { NextRequest } from "next/server";
+import createMiddleware from "next-intl/middleware";
 import { updateSession } from "@/lib/supabase/middleware";
 import { defaultLocale, locales } from "./i18n/config";
 

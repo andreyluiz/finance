@@ -2,9 +2,9 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { createInstallmentPlanAction } from "@/actions/installment-actions";
 import {
@@ -30,9 +30,8 @@ import {
   type InstallmentBreakdown,
 } from "@/lib/utils/calculate-installments";
 import {
+  createInstallmentFormSchema,
   type InstallmentFormData,
-  type TransactionFormData,
-  installmentFormSchema,
 } from "@/lib/validations/transaction-schema";
 import { useTransactionStore } from "@/stores/transaction-store";
 
@@ -58,6 +57,7 @@ export function TransactionForm({ className }: TransactionFormProps) {
   const tErrors = useTranslations("transactions.errors");
   const tPriority = useTranslations("transactions.priority");
   const tStatus = useTranslations("transactions.status");
+  const tValidation = useTranslations("validation");
 
   // Calculate last day of current month for default date
   const getLastDayOfMonth = () => {
@@ -80,7 +80,7 @@ export function TransactionForm({ className }: TransactionFormProps) {
     setValue,
     watch,
   } = useForm<InstallmentFormData>({
-    resolver: zodResolver(installmentFormSchema),
+    resolver: zodResolver(createInstallmentFormSchema(tValidation)),
     defaultValues: {
       paymentType: "single",
       type: "expense",
@@ -231,7 +231,9 @@ export function TransactionForm({ className }: TransactionFormProps) {
 
       if (result.success) {
         toast.success(
-          tSuccess("installmentPlanCreated", { count: pendingInstallmentData.installmentCount }),
+          tSuccess("installmentPlanCreated", {
+            count: pendingInstallmentData.installmentCount,
+          }),
         );
         queryClient.invalidateQueries({ queryKey: QUERY_KEYS.transactions });
 
@@ -286,9 +288,7 @@ export function TransactionForm({ className }: TransactionFormProps) {
         }
       >
         <CardHeader>
-          <CardTitle>
-            {isEditMode ? t("editTitle") : t("title")}
-          </CardTitle>
+          <CardTitle>{isEditMode ? t("editTitle") : t("title")}</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -434,7 +434,9 @@ export function TransactionForm({ className }: TransactionFormProps) {
             {/* Installment Count - only for installments payment type */}
             {!isEditMode && selectedPaymentType === "installments" && (
               <div className="space-y-2">
-                <Label htmlFor="installmentCount">{t("numberOfInstallments")}</Label>
+                <Label htmlFor="installmentCount">
+                  {t("numberOfInstallments")}
+                </Label>
                 <Input
                   id="installmentCount"
                   type="number"
@@ -483,11 +485,15 @@ export function TransactionForm({ className }: TransactionFormProps) {
                   <SelectValue placeholder={t("priorityPlaceholder")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="very_high">{tPriority("very_high")}</SelectItem>
+                  <SelectItem value="very_high">
+                    {tPriority("very_high")}
+                  </SelectItem>
                   <SelectItem value="high">{tPriority("high")}</SelectItem>
                   <SelectItem value="medium">{tPriority("medium")}</SelectItem>
                   <SelectItem value="low">{tPriority("low")}</SelectItem>
-                  <SelectItem value="very_low">{tPriority("very_low")}</SelectItem>
+                  <SelectItem value="very_low">
+                    {tPriority("very_low")}
+                  </SelectItem>
                 </SelectContent>
               </Select>
               {errors.priority && (

@@ -5,9 +5,11 @@ export async function updateSession(
   request: NextRequest,
   response?: NextResponse,
 ) {
-  let supabaseResponse = response || NextResponse.next({
-    request,
-  });
+  let supabaseResponse =
+    response ||
+    NextResponse.next({
+      request,
+    });
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,

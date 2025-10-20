@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
 import { defaultLocale } from "@/i18n/config";
+import { createClient } from "@/lib/supabase/server";
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
@@ -8,7 +8,9 @@ export async function GET(request: Request) {
   const next = searchParams.get("next") ?? "/app";
 
   // Get locale from cookie or use default
-  const cookieLocale = request.headers.get("cookie")?.match(/NEXT_LOCALE=([^;]+)/)?.[1];
+  const cookieLocale = request.headers
+    .get("cookie")
+    ?.match(/NEXT_LOCALE=([^;]+)/)?.[1];
   const locale = cookieLocale || defaultLocale;
 
   if (code) {

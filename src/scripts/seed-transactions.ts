@@ -4,8 +4,8 @@
  */
 
 import { config } from "dotenv";
-import postgres from "postgres";
 import { drizzle } from "drizzle-orm/postgres-js";
+import postgres from "postgres";
 import { transactions } from "@/db/schema";
 
 config({ path: ".env.local" });

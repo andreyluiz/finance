@@ -3,7 +3,6 @@
 import { LogOut, Settings } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { SettingsModal } from "@/components/settings/settings-modal";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -18,6 +17,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { H2 } from "@/components/ui/typography";
 import { useAuth } from "@/contexts/auth-context";
+import { Link, usePathname, useRouter } from "@/i18n/navigation";
 
 export function Header() {
   const { user, signOut } = useAuth();

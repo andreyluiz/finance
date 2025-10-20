@@ -1,7 +1,7 @@
 "use client";
 
-import { Label, Pie, PieChart } from "recharts";
 import { useTranslations } from "next-intl";
+import { Label, Pie, PieChart } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   ChartContainer,
@@ -42,7 +42,9 @@ export function ExpenseBreakdown({ transactions }: ExpenseBreakdownProps) {
 
   const chartData = Array.from(priorityMap.entries()).map(
     ([priority, value]) => ({
-      priority: tPriority(priority as "very_high" | "high" | "medium" | "low" | "very_low"),
+      priority: tPriority(
+        priority as "very_high" | "high" | "medium" | "low" | "very_low",
+      ),
       value: Number(value.toFixed(2)),
       fill: `var(--color-${priority.replace("_", "-")})`,
     }),

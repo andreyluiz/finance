@@ -3,8 +3,6 @@
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { useRouter, usePathname } from "@/i18n/navigation";
-import { localeNames, type Locale } from "@/i18n/config";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -23,6 +21,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { type Locale, localeNames } from "@/i18n/config";
+import { usePathname, useRouter } from "@/i18n/navigation";
 import {
   getBillingPeriodDay,
   setBillingPeriodDay,
@@ -40,7 +40,9 @@ export function SettingsModal({ open, onOpenChange }: SettingsModalProps) {
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
-  const [selectedLocale, setSelectedLocale] = useState<Locale>(locale as Locale);
+  const [selectedLocale, setSelectedLocale] = useState<Locale>(
+    locale as Locale,
+  );
 
   // Load current billing day when modal opens
   useEffect(() => {
