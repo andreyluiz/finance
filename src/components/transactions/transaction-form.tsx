@@ -332,28 +332,70 @@ export function TransactionForm({ className }: TransactionFormProps) {
 
             {!isEditMode && <Separator className="my-6" />}
 
-            {/* Type */}
-            <div className="space-y-3">
-              <Label htmlFor="type">{t("type")}</Label>
-              <Select
-                value={selectedType}
-                onValueChange={(value) =>
-                  setValue("type", value as "income" | "expense")
-                }
-              >
-                <SelectTrigger id="type">
-                  <SelectValue placeholder={t("typePlaceholder")} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="income">{tStatus("income")}</SelectItem>
-                  <SelectItem value="expense">{tStatus("expense")}</SelectItem>
-                </SelectContent>
-              </Select>
-              {errors.type && (
-                <p className="text-sm text-destructive">
-                  {errors.type.message}
-                </p>
-              )}
+            {/* Type and Priority - Side by Side */}
+            <div className="grid grid-cols-2 gap-4">
+              {/* Type */}
+              <div className="space-y-3">
+                <Label htmlFor="type">{t("type")}</Label>
+                <Select
+                  value={selectedType}
+                  onValueChange={(value) =>
+                    setValue("type", value as "income" | "expense")
+                  }
+                >
+                  <SelectTrigger id="type">
+                    <SelectValue placeholder={t("typePlaceholder")} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="income">{tStatus("income")}</SelectItem>
+                    <SelectItem value="expense">{tStatus("expense")}</SelectItem>
+                  </SelectContent>
+                </Select>
+                {errors.type && (
+                  <p className="text-sm text-destructive">
+                    {errors.type.message}
+                  </p>
+                )}
+              </div>
+
+              {/* Priority */}
+              <div className="space-y-3">
+                <Label htmlFor="priority">{t("priority")}</Label>
+                <Select
+                  value={selectedPriority}
+                  onValueChange={(value) =>
+                    setValue(
+                      "priority",
+                      value as
+                        | "very_high"
+                        | "high"
+                        | "medium"
+                        | "low"
+                        | "very_low",
+                    )
+                  }
+                >
+                  <SelectTrigger id="priority">
+                    <SelectValue placeholder={t("priorityPlaceholder")} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="very_high">
+                      {tPriority("very_high")}
+                    </SelectItem>
+                    <SelectItem value="high">{tPriority("high")}</SelectItem>
+                    <SelectItem value="medium">{tPriority("medium")}</SelectItem>
+                    <SelectItem value="low">{tPriority("low")}</SelectItem>
+                    <SelectItem value="very_low">
+                      {tPriority("very_low")}
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+                {errors.priority && (
+                  <p className="text-sm text-destructive">
+                    {errors.priority.message}
+                  </p>
+                )}
+              </div>
             </div>
 
             {/* Name */}
@@ -470,47 +512,6 @@ export function TransactionForm({ className }: TransactionFormProps) {
                 </p>
               </div>
             )}
-
-            <Separator className="my-6" />
-
-            {/* Priority */}
-            <div className="space-y-3">
-              <Label htmlFor="priority">{t("priority")}</Label>
-              <Select
-                value={selectedPriority}
-                onValueChange={(value) =>
-                  setValue(
-                    "priority",
-                    value as
-                      | "very_high"
-                      | "high"
-                      | "medium"
-                      | "low"
-                      | "very_low",
-                  )
-                }
-              >
-                <SelectTrigger id="priority">
-                  <SelectValue placeholder={t("priorityPlaceholder")} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="very_high">
-                    {tPriority("very_high")}
-                  </SelectItem>
-                  <SelectItem value="high">{tPriority("high")}</SelectItem>
-                  <SelectItem value="medium">{tPriority("medium")}</SelectItem>
-                  <SelectItem value="low">{tPriority("low")}</SelectItem>
-                  <SelectItem value="very_low">
-                    {tPriority("very_low")}
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-              {errors.priority && (
-                <p className="text-sm text-destructive">
-                  {errors.priority.message}
-                </p>
-              )}
-            </div>
 
             {/* Buttons */}
             <div className="flex gap-2">
