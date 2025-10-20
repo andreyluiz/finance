@@ -17,6 +17,8 @@ function createMockTransaction(
     dueDate: new Date("2025-12-31"),
     priority: "medium",
     paid: false,
+    installmentPlanId: null,
+    installmentNumber: null,
     createdAt: new Date("2025-10-01"),
     updatedAt: new Date("2025-10-01"),
     ...overrides,

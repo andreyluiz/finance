@@ -20,11 +20,11 @@ export const createTransactionSchema = (t: TranslateFn) =>
     type: transactionTypeEnum,
     name: z.string().min(1, t("nameRequired")),
     value: z.coerce
-      .number({ invalid_type_error: t("valueRequired") })
+      .number()
       .positive(t("valuePositive"))
       .multipleOf(0.01, t("valueDecimals")),
     currency: z.string().default("USD"),
-    dueDate: z.date({ required_error: t("dueDateRequired") }),
+    dueDate: z.coerce.date(),
     priority: priorityEnum,
     paid: z.boolean().default(false),
   });
@@ -36,14 +36,14 @@ export const createInstallmentFormSchema = (t: TranslateFn) =>
     type: transactionTypeEnum,
     name: z.string().min(1, t("nameRequired")),
     value: z.coerce
-      .number({ invalid_type_error: t("valueRequired") })
+      .number()
       .positive(t("valuePositive"))
       .multipleOf(0.01, t("valueDecimals")),
     currency: z.string().default("USD"),
-    startDate: z.date({ required_error: t("startDateRequired") }),
+    startDate: z.coerce.date(),
     priority: priorityEnum,
     installmentCount: z.coerce
-      .number({ invalid_type_error: t("installmentCountRequired") })
+      .number()
       .int(t("installmentCountInteger"))
       .min(2, t("installmentCountMin"))
       .max(60, t("installmentCountMax"))
@@ -55,14 +55,14 @@ export const createInstallmentPlanSchema = (t: TranslateFn) =>
   z.object({
     name: z.string().min(1, t("nameRequired")),
     totalValue: z.coerce
-      .number({ invalid_type_error: t("valueRequired") })
+      .number()
       .positive(t("valuePositive"))
       .multipleOf(0.01, t("valueDecimals")),
     currency: z.string().default("USD"),
-    startDate: z.date({ required_error: t("startDateRequired") }),
+    startDate: z.coerce.date(),
     priority: priorityEnum,
     installmentCount: z.coerce
-      .number({ invalid_type_error: t("installmentCountRequired") })
+      .number()
       .int(t("installmentCountInteger"))
       .min(2, t("installmentCountMin"))
       .max(60, t("installmentCountMax")),
