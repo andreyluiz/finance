@@ -127,10 +127,10 @@ export function TransactionList({
                   <ChevronRight className="h-4 w-4 text-destructive" />
                 )}
                 <span className="font-semibold text-destructive">
-                  Overdue from Past Periods
+                  {t("overdueFromPast")}
                 </span>
                 <span className="text-sm text-muted-foreground">
-                  ({overdueFromPast.length} unpaid expense
+                  ({overdueFromPast.length} {t("unpaidExpense")}
                   {overdueFromPast.length !== 1 ? "s" : ""})
                 </span>
               </div>

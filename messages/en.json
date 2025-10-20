@@ -15,7 +15,9 @@
     "transactions": "Transactions",
     "settings": "Settings",
     "signOut": "Sign out",
-    "financeTracker": "Finance Tracker"
+    "financeTracker": "Finance Tracker",
+    "overdueFromPast": "Overdue from Past Periods",
+    "unpaidExpense": "unpaid expense"
   },
   "pages": {
     "home": {
