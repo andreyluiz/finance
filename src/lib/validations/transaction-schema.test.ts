@@ -63,7 +63,7 @@ describe("transactionSchema", () => {
     });
 
     it("should be required", () => {
-      const { type, ...withoutType } = validTransaction;
+      const { type: _type, ...withoutType } = validTransaction;
       const result = transactionSchema.safeParse(withoutType);
       expect(result.success).toBe(false);
     });
@@ -87,7 +87,7 @@ describe("transactionSchema", () => {
     });
 
     it("should be required", () => {
-      const { name, ...withoutName } = validTransaction;
+      const { name: _name, ...withoutName } = validTransaction;
       const result = transactionSchema.safeParse(withoutName);
       expect(result.success).toBe(false);
     });
@@ -154,7 +154,7 @@ describe("transactionSchema", () => {
     });
 
     it("should be required", () => {
-      const { value, ...withoutValue } = validTransaction;
+      const { value: _value, ...withoutValue } = validTransaction;
       const result = transactionSchema.safeParse(withoutValue);
       expect(result.success).toBe(false);
     });
@@ -170,7 +170,7 @@ describe("transactionSchema", () => {
     });
 
     it("should default to USD if not provided", () => {
-      const { currency, ...withoutCurrency } = validTransaction;
+      const { currency: _currency, ...withoutCurrency } = validTransaction;
       const result = transactionSchema.safeParse(withoutCurrency);
       expect(result.success).toBe(true);
       if (result.success) {
@@ -189,7 +189,7 @@ describe("transactionSchema", () => {
     });
 
     it("should be required", () => {
-      const { dueDate, ...withoutDueDate } = validTransaction;
+      const { dueDate: _dueDate, ...withoutDueDate } = validTransaction;
       const result = transactionSchema.safeParse(withoutDueDate);
       expect(result.success).toBe(false);
     });
@@ -216,7 +216,7 @@ describe("transactionSchema", () => {
     });
 
     it("should be required", () => {
-      const { priority, ...withoutPriority } = validTransaction;
+      const { priority: _priority, ...withoutPriority } = validTransaction;
       const result = transactionSchema.safeParse(withoutPriority);
       expect(result.success).toBe(false);
     });
@@ -238,7 +238,7 @@ describe("transactionSchema", () => {
     });
 
     it("should default to false if not provided", () => {
-      const { paid, ...withoutPaid } = validTransaction;
+      const { paid: _paid, ...withoutPaid } = validTransaction;
       const result = transactionSchema.safeParse(withoutPaid);
       expect(result.success).toBe(true);
       if (result.success) {
