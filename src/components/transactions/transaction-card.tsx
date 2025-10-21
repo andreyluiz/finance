@@ -18,6 +18,10 @@ import type { Transaction } from "@/db/schema";
 import { QUERY_KEYS } from "@/lib/react-query";
 import { cn } from "@/lib/utils";
 import { useTransactionStore } from "@/stores/transaction-store";
+import {
+  PRIORITY_BADGE_CLASSNAMES,
+  TYPE_BADGE_CLASSNAMES,
+} from "./transaction-badge-variants";
 
 interface TransactionCardProps {
   transaction: Transaction;
@@ -34,61 +38,6 @@ export const TransactionCard = memo(function TransactionCard({
   const tStatus = useTranslations("transactions.status");
   const tSuccess = useTranslations("transactions.success");
   const tErrors = useTranslations("transactions.errors");
-
-  const priorityVariants = {
-    very_low: {
-      label: tPriority("very_low"),
-      className: cn(
-        "bg-green-50 text-green-700 border-green-300",
-        "dark:bg-green-950 dark:text-green-400 dark:border-green-700",
-      ),
-    },
-    low: {
-      label: tPriority("low"),
-      className: cn(
-        "bg-lime-50 text-lime-700 border-lime-300",
-        "dark:bg-lime-950 dark:text-lime-400 dark:border-lime-700",
-      ),
-    },
-    medium: {
-      label: tPriority("medium"),
-      className: cn(
-        "bg-yellow-50 text-yellow-700 border-yellow-300",
-        "dark:bg-yellow-950 dark:text-yellow-400 dark:border-yellow-700",
-      ),
-    },
-    high: {
-      label: tPriority("high"),
-      className: cn(
-        "bg-orange-50 text-orange-700 border-orange-300",
-        "dark:bg-orange-950 dark:text-orange-400 dark:border-orange-700",
-      ),
-    },
-    very_high: {
-      label: tPriority("very_high"),
-      className: cn(
-        "bg-red-50 text-red-700 border-red-300",
-        "dark:bg-red-950 dark:text-red-400 dark:border-red-700",
-      ),
-    },
-  };
-
-  const typeVariants = {
-    income: {
-      label: tStatus("income"),
-      className: cn(
-        "bg-green-50 text-green-700 border-green-300",
-        "dark:bg-green-950 dark:text-green-400 dark:border-green-700",
-      ),
-    },
-    expense: {
-      label: tStatus("expense"),
-      className: cn(
-        "bg-red-50 text-red-700 border-red-300",
-        "dark:bg-red-950 dark:text-red-400 dark:border-red-700",
-      ),
-    },
-  };
 
   // Helper functions for date checking
   const isOverdue = () => {
@@ -224,15 +173,15 @@ export const TransactionCard = memo(function TransactionCard({
               <div className="flex flex-wrap items-center gap-2">
                 <Badge
                   variant="outline"
-                  className={typeVariants[transaction.type].className}
+                  className={TYPE_BADGE_CLASSNAMES[transaction.type]}
                 >
-                  {typeVariants[transaction.type].label}
+                  {tStatus(transaction.type)}
                 </Badge>
                 <Badge
                   variant="outline"
-                  className={priorityVariants[transaction.priority].className}
+                  className={PRIORITY_BADGE_CLASSNAMES[transaction.priority]}
                 >
-                  {priorityVariants[transaction.priority].label}
+                  {tPriority(transaction.priority)}
                 </Badge>
                 {transaction.paid && (
                   <Badge

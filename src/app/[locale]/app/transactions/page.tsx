@@ -6,6 +6,7 @@ import { getTransactionsAction } from "@/actions/transaction-actions";
 import { Header } from "@/components/header";
 import { BillingPeriodSelector } from "@/components/transactions/billing-period-selector";
 import { BillingPeriodTotals } from "@/components/transactions/billing-period-totals";
+import { PaymentSessionLauncher } from "@/components/transactions/payment-session/payment-session-launcher";
 import { TransactionForm } from "@/components/transactions/transaction-form";
 import { TransactionList } from "@/components/transactions/transaction-list";
 import { H1 } from "@/components/ui/typography";
@@ -46,6 +47,10 @@ export default function TransactionsPage() {
 
           {/* List: full width on mobile, 65% on desktop */}
           <div className="w-full lg:w-[65%] space-y-4">
+            <PaymentSessionLauncher
+              transactions={transactions}
+              billingPeriod={billingPeriod}
+            />
             {/* Billing Period Selector */}
             {billingPeriod && (
               <BillingPeriodSelector
