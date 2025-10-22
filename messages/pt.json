@@ -278,6 +278,61 @@
       "installmentPlanFailed": "Falha ao criar plano de parcelas",
       "invalidInstallments": "Por favor, insira um número válido de parcelas (mínimo 2)",
       "unexpected": "Ocorreu um erro inesperado"
+    },
+    "paymentSession": {
+      "launcher": {
+        "title": "Sessão de pagamento",
+        "description": "Processe despesas não pagas passo a passo e marque-as como pagas.",
+        "startSession": "Iniciar Sessão de Pagamento"
+      },
+      "dialog": {
+        "titleSelection": "Configurar sessão de pagamento",
+        "titleRunner": "Sessão de pagamento em andamento",
+        "titleSummary": "Resumo da sessão"
+      },
+      "selection": {
+        "title": "Escolha as despesas a pagar",
+        "description": "Selecione despesas não pagas do período atual e de períodos vencidos para adicionar a esta sessão de pagamento.",
+        "noExpenses": "Nenhuma despesa não paga disponível",
+        "noExpensesDescription": "Adicione ou desmarque despesas antes de iniciar uma sessão de pagamento. Apenas despesas não pagas podem ser selecionadas.",
+        "close": "Fechar",
+        "cancel": "Cancelar",
+        "next": "Próximo",
+        "currentPeriodIncome": "Receita do período atual",
+        "selectedExpenses": "Despesas selecionadas",
+        "warningTitle": "Despesas selecionadas excedem a receita deste período",
+        "warningDescription": "Você pode continuar, mas o período de cobrança atual não cobre totalmente esses pagamentos. Ajuste as seleções ou reconheça o aviso para prosseguir.",
+        "acknowledgeWarning": "Reconhecer aviso",
+        "items": "item",
+        "itemsPlural": "itens"
+      },
+      "runner": {
+        "transactionProgress": "Transação {current} de {total}",
+        "reviewDescription": "Revise os detalhes do pagamento e confirme quando for processado.",
+        "installment": "Parcela {number}",
+        "amount": "Valor",
+        "dueDate": "Data de vencimento",
+        "currency": "Moeda",
+        "skip": "Pular",
+        "markAsPaid": "Marcar como pago",
+        "updating": "Atualizando...",
+        "paymentReference": "Referência de Pagamento",
+        "swissQRBill": "QR Code Suíço",
+        "scanInstructions": "Escaneie este QR code com seu aplicativo bancário para completar o pagamento",
+        "reference": "Referência"
+      },
+      "summary": {
+        "title": "Sessão concluída",
+        "description": "Revise o que foi pago e pulado. Você pode revisitar transações puladas na lista de transações.",
+        "paid": "Pago",
+        "skipped": "Pulado",
+        "transactions": "transação(ões)",
+        "summaryTitle": "Resumo",
+        "reviewed": "{count} transação(ões) revisada(s)",
+        "summaryDescription": "Itens pagos agora estão marcados como completos. Itens pulados permanecem não pagos e ficam no período de cobrança atual.",
+        "closeSession": "Fechar sessão",
+        "updating": "Atualizando..."
+      }
     }
   },
   "validation": {

@@ -1,6 +1,7 @@
 "use client";
 
 import { CheckCircle2, ListChecks, SkipForward } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Muted } from "@/components/ui/typography";
@@ -20,6 +21,8 @@ export function SessionSummaryStep({
   onClose,
   isClosing,
 }: SessionSummaryStepProps) {
+  const t = useTranslations("transactions.paymentSession.summary");
+
   const paidTotal = results.paid.reduce(
     (sum, transaction) => sum + Number(transaction.value),
     0,
@@ -34,46 +37,44 @@ export function SessionSummaryStep({
     <div className="space-y-6">
       <div className="space-y-2">
         <ListChecks className="h-10 w-10 text-primary" />
-        <h3 className="text-2xl font-semibold">Session complete</h3>
-        <Muted>
-          Review what was paid and skipped. You can revisit any skipped
-          transactions from the transactions list.
-        </Muted>
+        <h3 className="text-2xl font-semibold">{t("title")}</h3>
+        <Muted>{t("description")}</Muted>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <Card className="border-border p-4 space-y-2">
           <div className="flex items-center gap-2">
             <CheckCircle2 className="h-5 w-5 text-emerald-500" />
-            <p className="text-sm font-semibold">Paid</p>
+            <p className="text-sm font-semibold">{t("paid")}</p>
           </div>
           <p className="text-3xl font-semibold">
             {formatAmount(paidTotal, currency)}
           </p>
-          <Muted>{results.paid.length} transaction(s)</Muted>
+          <Muted>
+            {results.paid.length} {t("transactions")}
+          </Muted>
         </Card>
 
         <Card className="border-border p-4 space-y-2">
           <div className="flex items-center gap-2">
             <SkipForward className="h-5 w-5 text-muted-foreground" />
-            <p className="text-sm font-semibold">Skipped</p>
+            <p className="text-sm font-semibold">{t("skipped")}</p>
           </div>
           <p className="text-3xl font-semibold">
             {formatAmount(skippedTotal, currency)}
           </p>
-          <Muted>{results.skipped.length} transaction(s)</Muted>
+          <Muted>
+            {results.skipped.length} {t("transactions")}
+          </Muted>
         </Card>
       </div>
 
       <Card className="border-border p-4 space-y-2">
-        <p className="text-sm text-muted-foreground">Summary</p>
+        <p className="text-sm text-muted-foreground">{t("summaryTitle")}</p>
         <p className="text-lg font-semibold">
-          {totalProcessed} transaction(s) reviewed
+          {t("reviewed", { count: totalProcessed })}
         </p>
-        <Muted>
-          Paid items are now marked as complete. Skipped items remain unpaid and
-          stay in their current billing period.
-        </Muted>
+        <Muted>{t("summaryDescription")}</Muted>
       </Card>
 
       <Button
@@ -81,7 +82,7 @@ export function SessionSummaryStep({
         disabled={isClosing}
         className="w-full sm:w-auto"
       >
-        {isClosing ? "Updating..." : "Close session"}
+        {isClosing ? t("updating") : t("closeSession")}
       </Button>
     </div>
   );

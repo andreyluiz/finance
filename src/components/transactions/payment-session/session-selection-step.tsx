@@ -50,20 +50,18 @@ export function SessionSelectionStep({
     selectedCount > 0 && (!requiresWarning || warningAcknowledged);
   const tPriority = useTranslations("transactions.priority");
   const tStatus = useTranslations("transactions.status");
+  const t = useTranslations("transactions.paymentSession.selection");
 
   if (!hasExpenses) {
     return (
       <div className="flex flex-col items-center justify-center gap-4 py-16">
         <CalendarDays className="h-10 w-10 text-muted-foreground" />
         <div className="text-center space-y-2">
-          <p className="text-lg font-semibold">No unpaid expenses available</p>
-          <Muted className="max-w-md">
-            Add or unmark expenses before starting a payment session. Only
-            unpaid expenses can be selected.
-          </Muted>
+          <p className="text-lg font-semibold">{t("noExpenses")}</p>
+          <Muted className="max-w-md">{t("noExpensesDescription")}</Muted>
         </div>
         <Button variant="outline" onClick={onCancel}>
-          Close
+          {t("close")}
         </Button>
       </div>
     );
@@ -72,11 +70,8 @@ export function SessionSelectionStep({
   return (
     <div className="flex flex-col gap-6">
       <div className="space-y-2">
-        <h3 className="text-lg font-semibold">Choose expenses to pay</h3>
-        <Muted>
-          Select unpaid expenses from the current period and any overdue periods
-          to add them to this payment session.
-        </Muted>
+        <h3 className="text-lg font-semibold">{t("title")}</h3>
+        <Muted>{t("description")}</Muted>
       </div>
 
       <div className="space-y-6 max-h-[400px] overflow-y-auto pr-2">
@@ -93,8 +88,10 @@ export function SessionSelectionStep({
               <div className="flex items-center justify-between">
                 <h4 className="text-md font-semibold">{group.label}</h4>
                 <span className="text-sm text-muted-foreground">
-                  {group.transactions.length} item
-                  {group.transactions.length > 1 ? "s" : ""}
+                  {group.transactions.length}{" "}
+                  {group.transactions.length > 1
+                    ? t("itemsPlural")
+                    : t("items")}
                 </span>
               </div>
               <Separator />
@@ -181,13 +178,15 @@ export function SessionSelectionStep({
 
       <Card className="border-border p-4 space-y-3">
         <div className="flex justify-between items-center text-sm">
-          <span className="text-muted-foreground">Current period income</span>
+          <span className="text-muted-foreground">
+            {t("currentPeriodIncome")}
+          </span>
           <span className="font-semibold">
             {formatAmount(currentPeriodIncome, currency)}
           </span>
         </div>
         <div className="flex justify-between items-center text-sm">
-          <span className="text-muted-foreground">Selected expenses</span>
+          <span className="text-muted-foreground">{t("selectedExpenses")}</span>
           <span
             className={cn(
               "font-semibold",
@@ -200,43 +199,39 @@ export function SessionSelectionStep({
 
         {requiresWarning && (
           <div className="rounded-md border border-destructive/40 bg-destructive/10 p-3 text-sm">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex items-start gap-3">
-                <AlertTriangle className="mt-0.5 h-6 w-6 text-destructive" />
-                <div className="space-y-1">
-                  <p className="font-semibold text-destructive">
-                    Selected expenses exceed this period&apos;s income
-                  </p>
-                  <p className="text-muted-foreground">
-                    You can continue, but the current billing period does not
-                    fully cover these payments. Adjust selections or acknowledge
-                    the warning to proceed.
-                  </p>
-                </div>
+            <div className="flex items-start gap-3 min-w-6">
+              <AlertTriangle className="mt-0.5 h-12 w-12 text-destructive" />
+              <div className="space-y-1">
+                <p className="font-semibold text-destructive">
+                  {t("warningTitle")}
+                </p>
+                <p className="text-muted-foreground">
+                  {t("warningDescription")}
+                </p>
               </div>
-              {!warningAcknowledged && (
-                <Button
-                  variant="outline"
-                  className="border-destructive text-destructive hover:bg-destructive/10"
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    onAcknowledgeWarning();
-                  }}
-                >
-                  Acknowledge warning
-                </Button>
-              )}
             </div>
+            {!warningAcknowledged && (
+              <Button
+                variant="outline"
+                className="border-destructive text-destructive hover:bg-destructive/10"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onAcknowledgeWarning();
+                }}
+              >
+                {t("acknowledgeWarning")}
+              </Button>
+            )}
           </div>
         )}
       </Card>
 
       <div className="flex justify-between">
         <Button variant="outline" onClick={onCancel}>
-          Cancel
+          {t("cancel")}
         </Button>
         <Button onClick={onContinue} disabled={!canContinue}>
-          Next
+          {t("next")}
         </Button>
       </div>
     </div>

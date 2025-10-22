@@ -39,6 +39,8 @@ const mockTransaction = (
   installmentNumber: null,
   createdAt: new Date("2025-09-01T00:00:00Z"),
   updatedAt: new Date("2025-09-01T00:00:00Z"),
+  paymentReference: null,
+  paymentReferenceType: null,
   ...overrides,
 });
 

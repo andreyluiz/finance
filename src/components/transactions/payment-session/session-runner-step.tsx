@@ -41,7 +41,7 @@ export function SessionRunnerStep({
     year: "numeric",
   });
 
-  const progressLabel = `Transaction ${index + 1} of ${total}`;
+  const t = useTranslations("transactions.paymentSession.runner");
   const tPriority = useTranslations("transactions.priority");
   const tStatus = useTranslations("transactions.status");
 
@@ -72,12 +72,10 @@ export function SessionRunnerStep({
     <div className="space-y-6">
       <div className="space-y-2">
         <Muted className="text-sm uppercase tracking-wide">
-          {progressLabel}
+          {t("transactionProgress", { current: index + 1, total })}
         </Muted>
         <h3 className="text-2xl font-semibold">{transaction.name}</h3>
-        <p className="text-muted-foreground">
-          Review the payment details and confirm when it has been processed.
-        </p>
+        <p className="text-muted-foreground">{t("reviewDescription")}</p>
       </div>
 
       <Card className="border-border p-6 space-y-4">
@@ -96,13 +94,13 @@ export function SessionRunnerStep({
           </Badge>
           {transaction.installmentNumber && (
             <Badge variant="outline">
-              Installment {transaction.installmentNumber}
+              {t("installment", { number: transaction.installmentNumber })}
             </Badge>
           )}
         </div>
 
         <div className="space-y-2">
-          <p className="text-sm text-muted-foreground">Amount</p>
+          <p className="text-sm text-muted-foreground">{t("amount")}</p>
           <p className="text-3xl font-semibold text-red-600 dark:text-red-400">
             {formatAmount(Number(transaction.value), transaction.currency)}
           </p>
@@ -111,13 +109,13 @@ export function SessionRunnerStep({
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="rounded-lg border border-border bg-muted/40 p-3">
             <p className="text-xs text-muted-foreground uppercase tracking-wide">
-              Due date
+              {t("dueDate")}
             </p>
             <p className="text-sm font-semibold">{dueDate}</p>
           </div>
           <div className="rounded-lg border border-border bg-muted/40 p-3">
             <p className="text-xs text-muted-foreground uppercase tracking-wide">
-              Currency
+              {t("currency")}
             </p>
             <p className="text-sm font-semibold">{transaction.currency}</p>
           </div>
@@ -128,12 +126,12 @@ export function SessionRunnerStep({
         <Card className="border-border p-6 space-y-4">
           <div className="flex items-center gap-2">
             <QrCodeIcon className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-            <h4 className="font-semibold">Payment Reference</h4>
+            <h4 className="font-semibold">{t("paymentReference")}</h4>
             <Badge
               variant="outline"
               className="bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-400 border-blue-500 dark:border-blue-600"
             >
-              Swiss QR Bill
+              {t("swissQRBill")}
             </Badge>
           </div>
 
@@ -148,11 +146,11 @@ export function SessionRunnerStep({
             </div>
             <div className="w-full space-y-2">
               <p className="text-xs text-muted-foreground uppercase tracking-wide text-center">
-                Scan this QR code with your banking app to complete the payment
+                {t("scanInstructions")}
               </p>
               <div className="rounded-lg border border-border bg-muted/40 p-3">
                 <p className="text-xs text-muted-foreground uppercase tracking-wide">
-                  Reference
+                  {t("reference")}
                 </p>
                 <p className="text-xs font-mono break-all mt-1">
                   {transaction.paymentReference.substring(0, 100)}
@@ -173,7 +171,7 @@ export function SessionRunnerStep({
           className="sm:w-[180px]"
         >
           <SkipForward className="mr-2 h-4 w-4" />
-          Skip
+          {t("skip")}
         </Button>
         <Button
           type="button"
@@ -184,12 +182,12 @@ export function SessionRunnerStep({
           {isProcessing ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Updating...
+              {t("updating")}
             </>
           ) : (
             <>
               <CheckCircle className="mr-2 h-4 w-4" />
-              Mark as paid
+              {t("markAsPaid")}
             </>
           )}
         </Button>

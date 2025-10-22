@@ -30,6 +30,8 @@ const baseTransaction = (id: string): SessionTransaction => ({
   order: Number.parseInt(id, 10),
   installmentPlanId: null,
   installmentNumber: null,
+  paymentReference: null,
+  paymentReferenceType: null,
 });
 
 describe("paymentSessionReducer", () => {

@@ -20,6 +20,8 @@ function createMockTransaction(
     updatedAt: new Date("2025-10-01"),
     installmentPlanId: null,
     installmentNumber: null,
+    paymentReference: null,
+    paymentReferenceType: null,
     ...overrides,
   } satisfies Transaction;
 }

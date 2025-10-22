@@ -2,6 +2,7 @@
 
 import { useQueryClient } from "@tanstack/react-query";
 import { PlayCircle } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useMemo, useReducer, useState } from "react";
 import { toast } from "sonner";
 import { updateTransactionPaidAction } from "@/actions/transaction-actions";
@@ -41,6 +42,8 @@ export function PaymentSessionLauncher({
   const [isProcessing, setIsProcessing] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const queryClient = useQueryClient();
+  const tLauncher = useTranslations("transactions.paymentSession.launcher");
+  const tDialog = useTranslations("transactions.paymentSession.dialog");
 
   const { groups, currentPeriod } = useMemo(
     () => groupExpensesByPeriod(transactions, billingPeriod),
@@ -261,14 +264,12 @@ export function PaymentSessionLauncher({
     <>
       <div className="flex items-center justify-between rounded-lg border border-border bg-muted/30 p-4">
         <div>
-          <p className="text-sm font-semibold">Payment session</p>
-          <Muted>
-            Work through unpaid expenses step by step and mark them as paid.
-          </Muted>
+          <p className="text-sm font-semibold">{tLauncher("title")}</p>
+          <Muted>{tLauncher("description")}</Muted>
         </div>
         <Button onClick={() => handleOpenChange(true)} disabled={!hasExpenses}>
           <PlayCircle className="mr-2 h-4 w-4" />
-          Start Payment Session
+          {tLauncher("startSession")}
         </Button>
       </div>
 
@@ -277,10 +278,10 @@ export function PaymentSessionLauncher({
           <DialogHeader>
             <DialogTitle>
               {state.phase === "runner"
-                ? "Payment session in progress"
+                ? tDialog("titleRunner")
                 : state.phase === "summary"
-                  ? "Session summary"
-                  : "Configure payment session"}
+                  ? tDialog("titleSummary")
+                  : tDialog("titleSelection")}
             </DialogTitle>
           </DialogHeader>
           <div className="overflow-y-auto">{renderContent()}</div>

@@ -278,6 +278,61 @@
       "installmentPlanFailed": "Failed to create installment plan",
       "invalidInstallments": "Please enter a valid number of installments (minimum 2)",
       "unexpected": "An unexpected error occurred"
+    },
+    "paymentSession": {
+      "launcher": {
+        "title": "Payment session",
+        "description": "Work through unpaid expenses step by step and mark them as paid.",
+        "startSession": "Start Payment Session"
+      },
+      "dialog": {
+        "titleSelection": "Configure payment session",
+        "titleRunner": "Payment session in progress",
+        "titleSummary": "Session summary"
+      },
+      "selection": {
+        "title": "Choose expenses to pay",
+        "description": "Select unpaid expenses from the current period and any overdue periods to add them to this payment session.",
+        "noExpenses": "No unpaid expenses available",
+        "noExpensesDescription": "Add or unmark expenses before starting a payment session. Only unpaid expenses can be selected.",
+        "close": "Close",
+        "cancel": "Cancel",
+        "next": "Next",
+        "currentPeriodIncome": "Current period income",
+        "selectedExpenses": "Selected expenses",
+        "warningTitle": "Selected expenses exceed this period's income",
+        "warningDescription": "You can continue, but the current billing period does not fully cover these payments. Adjust selections or acknowledge the warning to proceed.",
+        "acknowledgeWarning": "Acknowledge warning",
+        "items": "item",
+        "itemsPlural": "items"
+      },
+      "runner": {
+        "transactionProgress": "Transaction {current} of {total}",
+        "reviewDescription": "Review the payment details and confirm when it has been processed.",
+        "installment": "Installment {number}",
+        "amount": "Amount",
+        "dueDate": "Due date",
+        "currency": "Currency",
+        "skip": "Skip",
+        "markAsPaid": "Mark as paid",
+        "updating": "Updating...",
+        "paymentReference": "Payment Reference",
+        "swissQRBill": "Swiss QR Bill",
+        "scanInstructions": "Scan this QR code with your banking app to complete the payment",
+        "reference": "Reference"
+      },
+      "summary": {
+        "title": "Session complete",
+        "description": "Review what was paid and skipped. You can revisit any skipped transactions from the transactions list.",
+        "paid": "Paid",
+        "skipped": "Skipped",
+        "transactions": "transaction(s)",
+        "summaryTitle": "Summary",
+        "reviewed": "{count} transaction(s) reviewed",
+        "summaryDescription": "Paid items are now marked as complete. Skipped items remain unpaid and stay in their current billing period.",
+        "closeSession": "Close session",
+        "updating": "Updating..."
+      }
     }
   },
   "validation": {
