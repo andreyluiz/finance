@@ -200,28 +200,28 @@ export function SessionSelectionStep({
         {requiresWarning && (
           <div className="rounded-md border border-destructive/40 bg-destructive/10 p-3 text-sm">
             <div className="flex items-start gap-3 min-w-6">
-              <AlertTriangle className="mt-0.5 h-12 w-12 text-destructive" />
-              <div className="space-y-1">
+              <AlertTriangle className="mt-0.5 size-16 text-destructive" />
+              <div className="space-y-4">
                 <p className="font-semibold text-destructive">
                   {t("warningTitle")}
                 </p>
                 <p className="text-muted-foreground">
                   {t("warningDescription")}
                 </p>
+                {!warningAcknowledged && (
+                  <Button
+                    variant="outline"
+                    className="border-destructive text-destructive hover:bg-destructive/10"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      onAcknowledgeWarning();
+                    }}
+                  >
+                    {t("acknowledgeWarning")}
+                  </Button>
+                )}
               </div>
             </div>
-            {!warningAcknowledged && (
-              <Button
-                variant="outline"
-                className="border-destructive text-destructive hover:bg-destructive/10"
-                onClick={(event) => {
-                  event.stopPropagation();
-                  onAcknowledgeWarning();
-                }}
-              >
-                {t("acknowledgeWarning")}
-              </Button>
-            )}
           </div>
         )}
       </Card>
