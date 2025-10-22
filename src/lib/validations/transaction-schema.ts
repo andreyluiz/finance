@@ -11,6 +11,8 @@ export const priorityEnum = z.enum([
 
 export const paymentTypeEnum = z.enum(["single", "installments"]);
 
+export const paymentReferenceTypeEnum = z.enum(["SWISS_QR_BILL"]);
+
 // Type-safe translation function type
 type TranslateFn = (key: string) => string;
 
@@ -27,6 +29,8 @@ export const createTransactionSchema = (t: TranslateFn) =>
     dueDate: z.date({ error: t("dueDateRequired") }),
     priority: priorityEnum,
     paid: z.boolean().default(false),
+    paymentReference: z.string().nullable().optional(),
+    paymentReferenceType: paymentReferenceTypeEnum.nullable().optional(),
   });
 
 // Factory function for creating installment form schema with i18n support
@@ -66,6 +70,8 @@ export const createInstallmentPlanSchema = (t: TranslateFn) =>
       .int(t("installmentCountInteger"))
       .min(2, t("installmentCountMin"))
       .max(60, t("installmentCountMax")),
+    paymentReference: z.string().nullable().optional(),
+    paymentReferenceType: paymentReferenceTypeEnum.nullable().optional(),
   });
 
 // Keep the old schemas for backward compatibility (using English messages as fallback)

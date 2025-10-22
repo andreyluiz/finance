@@ -1,7 +1,7 @@
 "use client";
 
 import { useQueryClient } from "@tanstack/react-query";
-import { Edit2Icon, TrashIcon } from "lucide-react";
+import { Edit2Icon, QrCodeIcon, TrashIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { memo, useState } from "react";
 import { toast } from "sonner";
@@ -202,6 +202,14 @@ export const TransactionCard = memo(function TransactionCard({
                     className="bg-yellow-100 text-yellow-800 dark:bg-yellow-950 dark:text-yellow-400 border-yellow-500 dark:border-yellow-600 font-semibold"
                   >
                     {t("dueToday")}
+                  </Badge>
+                )}
+                {transaction.paymentReference && (
+                  <Badge
+                    variant="outline"
+                    className="bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-400 border-blue-500 dark:border-blue-600"
+                  >
+                    <QrCodeIcon className="h-3 w-3" />
                   </Badge>
                 )}
               </div>

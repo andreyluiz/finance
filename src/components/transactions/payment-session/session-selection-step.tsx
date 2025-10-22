@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertTriangle, CalendarDays } from "lucide-react";
+import { AlertTriangle, CalendarDays, QrCodeIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import {
   PRIORITY_BADGE_CLASSNAMES,
@@ -154,6 +154,14 @@ export function SessionSelectionStep({
                           >
                             {tPriority(transaction.priority)}
                           </Badge>
+                          {transaction.paymentReference && (
+                            <Badge
+                              variant="outline"
+                              className="bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-400 border-blue-500 dark:border-blue-600"
+                            >
+                              <QrCodeIcon className="h-3 w-3" />
+                            </Badge>
+                          )}
                         </div>
                         <p className="font-semibold text-red-600 dark:text-red-400">
                           {formatAmount(

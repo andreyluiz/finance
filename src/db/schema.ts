@@ -23,6 +23,10 @@ export const priorityEnum = pgEnum("priority", [
   "very_low",
 ]);
 
+export const paymentReferenceTypeEnum = pgEnum("payment_reference_type", [
+  "SWISS_QR_BILL",
+]);
+
 export const installmentPlans = pgTable(
   "installment_plans",
   {
@@ -34,6 +38,8 @@ export const installmentPlans = pgTable(
     startDate: timestamp("start_date", { withTimezone: true }).notNull(),
     priority: priorityEnum("priority").notNull(),
     installmentCount: integer("installment_count").notNull(),
+    paymentReference: text("payment_reference"),
+    paymentReferenceType: paymentReferenceTypeEnum("payment_reference_type"),
     createdAt: timestamp("created_at", { withTimezone: true })
       .notNull()
       .defaultNow(),
@@ -63,6 +69,8 @@ export const transactions = pgTable(
       { onDelete: "cascade" },
     ),
     installmentNumber: integer("installment_number"),
+    paymentReference: text("payment_reference"),
+    paymentReferenceType: paymentReferenceTypeEnum("payment_reference_type"),
     createdAt: timestamp("created_at", { withTimezone: true })
       .notNull()
       .defaultNow(),

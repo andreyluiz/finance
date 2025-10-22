@@ -1,7 +1,9 @@
 "use client";
 
-import { CheckCircle, Loader2, SkipForward } from "lucide-react";
+import { CheckCircle, Loader2, QrCodeIcon, SkipForward } from "lucide-react";
 import { useTranslations } from "next-intl";
+import QRCode from "qrcode";
+import { useEffect, useState } from "react";
 import {
   PRIORITY_BADGE_CLASSNAMES,
   TYPE_BADGE_CLASSNAMES,
@@ -31,6 +33,8 @@ export function SessionRunnerStep({
   onSkip,
   isProcessing,
 }: SessionRunnerStepProps) {
+  const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string | null>(null);
+
   const dueDate = new Date(transaction.dueDate).toLocaleDateString("en-US", {
     month: "long",
     day: "numeric",
@@ -40,6 +44,29 @@ export function SessionRunnerStep({
   const progressLabel = `Transaction ${index + 1} of ${total}`;
   const tPriority = useTranslations("transactions.priority");
   const tStatus = useTranslations("transactions.status");
+
+  // Generate QR code when payment reference is available
+  useEffect(() => {
+    if (transaction.paymentReference) {
+      QRCode.toDataURL(transaction.paymentReference, {
+        width: 300,
+        margin: 2,
+        color: {
+          dark: "#000000",
+          light: "#FFFFFF",
+        },
+      })
+        .then((url) => {
+          setQrCodeDataUrl(url);
+        })
+        .catch((error) => {
+          console.error("Error generating QR code:", error);
+          setQrCodeDataUrl(null);
+        });
+    } else {
+      setQrCodeDataUrl(null);
+    }
+  }, [transaction.paymentReference]);
 
   return (
     <div className="space-y-6">
@@ -96,6 +123,46 @@ export function SessionRunnerStep({
           </div>
         </div>
       </Card>
+
+      {transaction.paymentReference && qrCodeDataUrl && (
+        <Card className="border-border p-6 space-y-4">
+          <div className="flex items-center gap-2">
+            <QrCodeIcon className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+            <h4 className="font-semibold">Payment Reference</h4>
+            <Badge
+              variant="outline"
+              className="bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-400 border-blue-500 dark:border-blue-600"
+            >
+              Swiss QR Bill
+            </Badge>
+          </div>
+
+          <div className="flex flex-col items-center gap-4">
+            <div className="bg-white p-4 rounded-lg border-2 border-border">
+              {/* biome-ignore lint/performance/noImgElement: QR code is a data URL generated client-side, not an optimizable external image */}
+              <img
+                src={qrCodeDataUrl}
+                alt="Payment QR Code"
+                className="w-[300px] h-[300px]"
+              />
+            </div>
+            <div className="w-full space-y-2">
+              <p className="text-xs text-muted-foreground uppercase tracking-wide text-center">
+                Scan this QR code with your banking app to complete the payment
+              </p>
+              <div className="rounded-lg border border-border bg-muted/40 p-3">
+                <p className="text-xs text-muted-foreground uppercase tracking-wide">
+                  Reference
+                </p>
+                <p className="text-xs font-mono break-all mt-1">
+                  {transaction.paymentReference.substring(0, 100)}
+                  {transaction.paymentReference.length > 100 ? "..." : ""}
+                </p>
+              </div>
+            </div>
+          </div>
+        </Card>
+      )}
 
       <div className="flex flex-col-reverse sm:flex-row sm:justify-between sm:items-center gap-3">
         <Button

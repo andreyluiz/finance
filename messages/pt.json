@@ -107,6 +107,8 @@
     "billingPeriodDayHelp": "Seu período de cobrança começará neste dia de cada mês. Por exemplo, se você definir como 10, seu período de cobrança será do dia 10 de um mês até o dia 10 do próximo mês.",
     "language": "Idioma",
     "languagePlaceholder": "Selecione o idioma",
+    "paymentReference": "Pagamento com QR Code Suíço",
+    "paymentReferenceHelp": "Ative a leitura de QR codes suíços para preencher formulários de transação automaticamente.",
     "cancel": "Cancelar",
     "saveChanges": "Salvar Alterações",
     "errors": {
@@ -177,7 +179,10 @@
       "cancel": "Cancelar",
       "creating": "Criando...",
       "updating": "Atualizando...",
-      "previewInstallments": "Visualizar Parcelas"
+      "previewInstallments": "Visualizar Parcelas",
+      "iHaveQRCode": "Tenho um QR code",
+      "changeReference": "Alterar QR code",
+      "qrCodeScanned": "QR code lido - formulário preenchido automaticamente"
     },
     "card": {
       "paid": "Pago",
@@ -220,6 +225,25 @@
       "confirm": "Confirmar e Criar",
       "cancel": "Cancelar",
       "creating": "Criando..."
+    },
+    "qrScanner": {
+      "title": "Ler QR Code Suíço",
+      "description": "Leia um QR code suíço para preencher automaticamente os detalhes da transação.",
+      "manualEntry": "Inserir manualmente",
+      "manualEntryLabel": "Dados do QR Code",
+      "manualEntryPlaceholder": "Cole os dados do QR code aqui...",
+      "manualEntryHelp": "Cole o texto completo do QR code começando com 'SPC'",
+      "backToCamera": "Voltar para câmera",
+      "cancel": "Cancelar",
+      "process": "Processar",
+      "success": {
+        "scanned": "QR code lido com sucesso",
+        "processed": "QR code processado com sucesso"
+      },
+      "errors": {
+        "cameraError": "Não foi possível acessar a câmera. Por favor, use a entrada manual.",
+        "invalidQR": "Formato de QR code suíço inválido"
+      }
     },
     "list": {
       "pastOverdue": "Vencidas Anteriormente ({count})",

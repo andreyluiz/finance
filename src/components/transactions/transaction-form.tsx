@@ -12,6 +12,7 @@ import {
   updateTransactionAction,
 } from "@/actions/transaction-actions";
 import { InstallmentPreviewModal } from "@/components/transactions/installment-preview-modal";
+import { QRScannerModal } from "@/components/transactions/qr-scanner-modal";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -30,6 +31,7 @@ import {
   calculateInstallments,
   type InstallmentBreakdown,
 } from "@/lib/utils/calculate-installments";
+import { isPaymentReferenceEnabled } from "@/lib/utils/payment-reference-settings";
 import {
   createInstallmentFormSchema,
   type InstallmentFormData,
@@ -48,6 +50,9 @@ export function TransactionForm({ className }: TransactionFormProps) {
   >([]);
   const [pendingInstallmentData, setPendingInstallmentData] =
     useState<InstallmentFormData | null>(null);
+  const [showQRScanner, setShowQRScanner] = useState(false);
+  const [paymentReference, setPaymentReference] = useState<string | null>(null);
+  const [hasQRReferenceFeature, setHasQRReferenceFeature] = useState(false);
 
   const { editingTransaction, isEditMode, clearEditMode } =
     useTransactionStore();
@@ -98,6 +103,11 @@ export function TransactionForm({ className }: TransactionFormProps) {
   const selectedPriority = watch("priority");
   const selectedCurrency = watch("currency");
 
+  // Check if payment reference feature is enabled
+  useEffect(() => {
+    setHasQRReferenceFeature(isPaymentReferenceEnabled());
+  }, []);
+
   // Cache currency to localStorage when it changes
   useEffect(() => {
     if (selectedCurrency && !isEditMode) {
@@ -122,6 +132,9 @@ export function TransactionForm({ className }: TransactionFormProps) {
         startDate: formattedDate as unknown as Date,
         priority: editingTransaction.priority,
       });
+
+      // Load payment reference if it exists
+      setPaymentReference(editingTransaction.paymentReference || null);
     }
   }, [isEditMode, editingTransaction, reset]);
 
@@ -139,6 +152,8 @@ export function TransactionForm({ className }: TransactionFormProps) {
           dueDate: data.startDate,
           priority: data.priority,
           paid: editingTransaction.paid,
+          paymentReference: paymentReference || null,
+          paymentReferenceType: paymentReference ? "SWISS_QR_BILL" : null,
         });
 
         if (result.success) {
@@ -169,6 +184,8 @@ export function TransactionForm({ className }: TransactionFormProps) {
           dueDate: data.startDate,
           priority: data.priority,
           paid: false,
+          paymentReference: paymentReference || null,
+          paymentReferenceType: paymentReference ? "SWISS_QR_BILL" : null,
         });
 
         if (result.success) {
@@ -230,6 +247,8 @@ export function TransactionForm({ className }: TransactionFormProps) {
         priority: pendingInstallmentData.priority,
         installmentCount: pendingInstallmentData.installmentCount || 2,
         type: pendingInstallmentData.type,
+        paymentReference: paymentReference || null,
+        paymentReferenceType: paymentReference ? "SWISS_QR_BILL" : null,
       });
 
       if (result.success) {
@@ -265,6 +284,7 @@ export function TransactionForm({ className }: TransactionFormProps) {
 
   const handleCancel = () => {
     clearEditMode();
+    setPaymentReference(null);
     reset({
       paymentType: "single",
       type: "expense",
@@ -274,6 +294,26 @@ export function TransactionForm({ className }: TransactionFormProps) {
       value: undefined,
       startDate: getLastDayOfMonth() as unknown as Date,
     });
+  };
+
+  const handleQRScanSuccess = (data: {
+    name: string;
+    value: number;
+    currency: string;
+    dueDate: Date | null;
+    paymentReference: string;
+    paymentReferenceType: string;
+  }) => {
+    // Auto-fill form fields
+    setValue("name", data.name);
+    setValue("value", data.value);
+    setValue("currency", data.currency);
+    if (data.dueDate) {
+      setValue("startDate", data.dueDate);
+    }
+
+    // Store payment reference
+    setPaymentReference(data.paymentReference);
   };
 
   return (
@@ -295,6 +335,36 @@ export function TransactionForm({ className }: TransactionFormProps) {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            {/* QR Code Scanner Button - only if feature is enabled and for expenses */}
+            {hasQRReferenceFeature && selectedType === "expense" && (
+              <>
+                <div className="flex items-center gap-2">
+                  <Button
+                    type="button"
+                    variant={paymentReference ? "secondary" : "outline"}
+                    className="w-full"
+                    onClick={() => {
+                      console.log("QR Scanner button clicked");
+                      console.log(
+                        "Current showQRScanner state:",
+                        showQRScanner,
+                      );
+                      setShowQRScanner(true);
+                      console.log("Set showQRScanner to true");
+                    }}
+                  >
+                    {paymentReference ? t("changeReference") : t("iHaveQRCode")}
+                  </Button>
+                </div>
+                {paymentReference && (
+                  <div className="text-xs text-muted-foreground text-center">
+                    {t("qrCodeScanned")}
+                  </div>
+                )}
+                <Separator />
+              </>
+            )}
+
             {/* Payment Type - only in create mode */}
             {!isEditMode && (
               <div className="space-y-3">
@@ -573,6 +643,13 @@ export function TransactionForm({ className }: TransactionFormProps) {
           installments={installmentBreakdown}
         />
       )}
+
+      {/* QR Scanner Modal */}
+      <QRScannerModal
+        open={showQRScanner}
+        onOpenChange={setShowQRScanner}
+        onScanSuccess={handleQRScanSuccess}
+      />
     </>
   );
 }

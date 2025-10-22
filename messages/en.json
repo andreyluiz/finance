@@ -107,6 +107,8 @@
     "billingPeriodDayHelp": "Your billing period will start on this day of each month. For example, if you set it to 10, your billing period will run from the 10th of one month to the 10th of the next month.",
     "language": "Language",
     "languagePlaceholder": "Select language",
+    "paymentReference": "Swiss QR Bill Payment",
+    "paymentReferenceHelp": "Enable scanning Swiss QR bills to auto-fill transaction forms.",
     "cancel": "Cancel",
     "saveChanges": "Save Changes",
     "errors": {
@@ -177,7 +179,10 @@
       "cancel": "Cancel",
       "creating": "Creating...",
       "updating": "Updating...",
-      "previewInstallments": "Preview Installments"
+      "previewInstallments": "Preview Installments",
+      "iHaveQRCode": "I have a QR code",
+      "changeReference": "Change QR code",
+      "qrCodeScanned": "QR code scanned - form auto-filled"
     },
     "card": {
       "paid": "Paid",
@@ -220,6 +225,25 @@
       "confirm": "Confirm & Create",
       "cancel": "Cancel",
       "creating": "Creating..."
+    },
+    "qrScanner": {
+      "title": "Scan Swiss QR Bill",
+      "description": "Scan a Swiss QR bill to auto-fill transaction details.",
+      "manualEntry": "Enter manually instead",
+      "manualEntryLabel": "QR Code Data",
+      "manualEntryPlaceholder": "Paste the QR code data here...",
+      "manualEntryHelp": "Paste the complete QR code text starting with 'SPC'",
+      "backToCamera": "Back to camera",
+      "cancel": "Cancel",
+      "process": "Process",
+      "success": {
+        "scanned": "QR code scanned successfully",
+        "processed": "QR code processed successfully"
+      },
+      "errors": {
+        "cameraError": "Unable to access camera. Please use manual entry.",
+        "invalidQR": "Invalid Swiss QR Bill format"
+      }
     },
     "list": {
       "pastOverdue": "Past Overdue ({count})",

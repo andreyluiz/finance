@@ -22,6 +22,20 @@
       "when": 1760801297729,
       "tag": "0002_wooden_guardsmen",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1761159028823,
+      "tag": "0003_nosy_jubilee",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1761159427593,
+      "tag": "0004_fuzzy_moondragon",
+      "breakpoints": true
     }
   ]
 }

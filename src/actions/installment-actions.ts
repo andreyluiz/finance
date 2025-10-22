@@ -16,6 +16,8 @@ interface CreateInstallmentPlanInput {
   priority: "very_high" | "high" | "medium" | "low" | "very_low";
   installmentCount: number;
   type: "income" | "expense";
+  paymentReference?: string | null;
+  paymentReferenceType?: "SWISS_QR_BILL" | null;
 }
 
 export async function createInstallmentPlanAction(
@@ -72,6 +74,8 @@ export async function createInstallmentPlanAction(
           startDate: data.startDate,
           priority: data.priority,
           installmentCount: data.installmentCount,
+          paymentReference: data.paymentReference || null,
+          paymentReferenceType: data.paymentReferenceType || null,
         })
         .returning();
 
@@ -91,6 +95,8 @@ export async function createInstallmentPlanAction(
         paid: false,
         installmentPlanId: plan.id,
         installmentNumber: installment.installmentNumber,
+        paymentReference: data.paymentReference || null,
+        paymentReferenceType: data.paymentReferenceType || null,
       }));
 
       await tx.insert(transactions).values(transactionValues);

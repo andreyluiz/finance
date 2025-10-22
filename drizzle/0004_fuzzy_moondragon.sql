@@ -1,0 +1,3 @@
+CREATE TYPE "public"."payment_reference_type" AS ENUM('SWISS_QR_BILL');--> statement-breakpoint
+ALTER TABLE "installment_plans" ALTER COLUMN "payment_reference_type" SET DATA TYPE "public"."payment_reference_type" USING "payment_reference_type"::"public"."payment_reference_type";--> statement-breakpoint
+ALTER TABLE "transactions" ALTER COLUMN "payment_reference_type" SET DATA TYPE "public"."payment_reference_type" USING "payment_reference_type"::"public"."payment_reference_type";

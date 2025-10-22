@@ -21,12 +21,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import { type Locale, localeNames } from "@/i18n/config";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import {
   getBillingPeriodDay,
   setBillingPeriodDay,
 } from "@/lib/utils/billing-period";
+import {
+  isPaymentReferenceEnabled,
+  setPaymentReferenceEnabled,
+} from "@/lib/utils/payment-reference-settings";
 
 interface SettingsModalProps {
   open: boolean;
@@ -36,6 +41,8 @@ interface SettingsModalProps {
 export function SettingsModal({ open, onOpenChange }: SettingsModalProps) {
   const [billingDay, setBillingDay] = useState<string>("");
   const [error, setError] = useState<string>("");
+  const [paymentReferenceEnabled, setPaymentReferenceEnabledState] =
+    useState(false);
   const t = useTranslations("settings");
   const locale = useLocale();
   const router = useRouter();
@@ -50,6 +57,7 @@ export function SettingsModal({ open, onOpenChange }: SettingsModalProps) {
       const currentDay = getBillingPeriodDay();
       setBillingDay(currentDay.toString());
       setSelectedLocale(locale as Locale);
+      setPaymentReferenceEnabledState(isPaymentReferenceEnabled());
       setError("");
     }
   }, [open, locale]);
@@ -70,6 +78,7 @@ export function SettingsModal({ open, onOpenChange }: SettingsModalProps) {
 
     try {
       setBillingPeriodDay(day);
+      setPaymentReferenceEnabled(paymentReferenceEnabled);
       toast.success(t("success.saved"));
       onOpenChange(false);
 
@@ -136,6 +145,20 @@ export function SettingsModal({ open, onOpenChange }: SettingsModalProps) {
                 ))}
               </SelectContent>
             </Select>
+          </div>
+
+          <div className="flex items-center justify-between space-x-2">
+            <div className="flex-1 space-y-1">
+              <Label htmlFor="payment-reference">{t("paymentReference")}</Label>
+              <p className="text-xs text-muted-foreground">
+                {t("paymentReferenceHelp")}
+              </p>
+            </div>
+            <Switch
+              id="payment-reference"
+              checked={paymentReferenceEnabled}
+              onCheckedChange={setPaymentReferenceEnabledState}
+            />
           </div>
         </div>
 
