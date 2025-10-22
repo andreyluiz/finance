@@ -1,5 +1,3 @@
-import { SwissQRBill } from "swissqrbill/pdf";
-
 /**
  * Parse a Swiss QR Bill code string and extract structured data
  */
@@ -86,7 +84,7 @@ export function validateSwissQRBill(qrCodeString: string): boolean {
 export function extractTransactionData(qrCodeString: string) {
   const parsed = parseSwissQRBill(qrCodeString);
 
-  if (!parsed.valid) {
+  if (!parsed.valid || !parsed.data) {
     throw new Error(parsed.error || "Invalid QR Bill");
   }
 
@@ -100,37 +98,4 @@ export function extractTransactionData(qrCodeString: string) {
     paymentReference: data.rawData,
     paymentReferenceType: "SWISS_QR_BILL",
   };
-}
-
-/**
- * Generate a visual QR code from a Swiss QR Bill reference
- * This will be used in the payment session to display the QR code
- */
-export async function generateSwissQRBillPDF(
-  qrCodeString: string,
-): Promise<Blob> {
-  const parsed = parseSwissQRBill(qrCodeString);
-
-  if (!parsed.valid || !parsed.data) {
-    throw new Error("Invalid QR Bill data");
-  }
-
-  // Use swissqrbill to generate a PDF with the QR code
-  const qrBill = new SwissQRBill({
-    creditor: {
-      name: parsed.data.creditorName,
-      account: parsed.data.creditorIBAN,
-      address: "",
-      zip: 0,
-      city: "",
-      country: "CH",
-    },
-    amount: parsed.data.amount || undefined,
-    currency: parsed.data.currency as "CHF" | "EUR",
-    reference: parsed.data.reference,
-    message: parsed.data.message,
-  });
-
-  const pdf = await qrBill.getBlob();
-  return pdf;
 }
