@@ -96,6 +96,7 @@
     "home": "Início",
     "dashboard": "Painel",
     "transactions": "Transações",
+    "addTransaction": "Adicionar Transação",
     "settings": "Configurações",
     "signOut": "Sair"
   },
@@ -225,6 +226,17 @@
       "confirm": "Confirmar e Criar",
       "cancel": "Cancelar",
       "creating": "Criando..."
+    },
+    "modal": {
+      "title": "Adicionar Transação",
+      "editTitle": "Editar Transação",
+      "choiceTitle": "Como você gostaria de adicionar esta transação?",
+      "choiceDescription": "Escolha como você quer inserir os detalhes da transação.",
+      "manualEntry": "Entrada Manual",
+      "manualEntryDesc": "Preencha o formulário de transação manualmente",
+      "scanQR": "Ler QR Code Suíço",
+      "scanQRDesc": "Leia um QR code para preencher automaticamente",
+      "back": "Voltar"
     },
     "qrScanner": {
       "title": "Ler QR Code Suíço",

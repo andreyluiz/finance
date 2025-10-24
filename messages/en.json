@@ -96,6 +96,7 @@
     "home": "Home",
     "dashboard": "Dashboard",
     "transactions": "Transactions",
+    "addTransaction": "Add Transaction",
     "settings": "Settings",
     "signOut": "Sign out"
   },
@@ -225,6 +226,17 @@
       "confirm": "Confirm & Create",
       "cancel": "Cancel",
       "creating": "Creating..."
+    },
+    "modal": {
+      "title": "Add Transaction",
+      "editTitle": "Edit Transaction",
+      "choiceTitle": "How would you like to add this transaction?",
+      "choiceDescription": "Choose how you want to enter your transaction details.",
+      "manualEntry": "Manual Entry",
+      "manualEntryDesc": "Fill out the transaction form manually",
+      "scanQR": "Scan Swiss QR Bill",
+      "scanQRDesc": "Scan a QR code to auto-fill details",
+      "back": "Back"
     },
     "qrScanner": {
       "title": "Scan Swiss QR Bill",

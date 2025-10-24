@@ -14,7 +14,6 @@ import {
 import { InstallmentPreviewModal } from "@/components/transactions/installment-preview-modal";
 import { QRScannerModal } from "@/components/transactions/qr-scanner-modal";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -31,7 +30,6 @@ import {
   calculateInstallments,
   type InstallmentBreakdown,
 } from "@/lib/utils/calculate-installments";
-import { isPaymentReferenceEnabled } from "@/lib/utils/payment-reference-settings";
 import {
   createInstallmentFormSchema,
   type InstallmentFormData,
@@ -39,20 +37,32 @@ import {
 import { useTransactionStore } from "@/stores/transaction-store";
 
 interface TransactionFormProps {
-  className?: string;
+  onSuccess?: () => void;
+  qrData?: {
+    name: string;
+    value: number;
+    currency: string;
+    dueDate: Date | null;
+    paymentReference: string;
+    paymentReferenceType: string;
+  } | null;
+  showInModal?: boolean;
 }
 
-export function TransactionForm({ className }: TransactionFormProps) {
+export function TransactionForm({
+  onSuccess,
+  qrData,
+  showInModal = false,
+}: TransactionFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPreviewModal, setShowPreviewModal] = useState(false);
+  const [showQRScanner, setShowQRScanner] = useState(false);
   const [installmentBreakdown, setInstallmentBreakdown] = useState<
     InstallmentBreakdown[]
   >([]);
   const [pendingInstallmentData, setPendingInstallmentData] =
     useState<InstallmentFormData | null>(null);
-  const [showQRScanner, setShowQRScanner] = useState(false);
   const [paymentReference, setPaymentReference] = useState<string | null>(null);
-  const [hasQRReferenceFeature, setHasQRReferenceFeature] = useState(false);
 
   const { editingTransaction, isEditMode, clearEditMode } =
     useTransactionStore();
@@ -103,10 +113,18 @@ export function TransactionForm({ className }: TransactionFormProps) {
   const selectedPriority = watch("priority");
   const selectedCurrency = watch("currency");
 
-  // Check if payment reference feature is enabled
+  // Handle QR data from parent component
   useEffect(() => {
-    setHasQRReferenceFeature(isPaymentReferenceEnabled());
-  }, []);
+    if (qrData) {
+      setValue("name", qrData.name);
+      setValue("value", qrData.value);
+      setValue("currency", qrData.currency);
+      if (qrData.dueDate) {
+        setValue("startDate", qrData.dueDate);
+      }
+      setPaymentReference(qrData.paymentReference);
+    }
+  }, [qrData, setValue]);
 
   // Cache currency to localStorage when it changes
   useEffect(() => {
@@ -118,25 +136,34 @@ export function TransactionForm({ className }: TransactionFormProps) {
   // Populate form when editing (single transactions only)
   useEffect(() => {
     if (isEditMode && editingTransaction) {
+      console.log("=== POPULATE FORM FOR EDIT ===");
+      console.log("Transaction priority:", editingTransaction.priority);
+
       // Format date to YYYY-MM-DD for input[type="date"]
       const dueDate = new Date(editingTransaction.dueDate);
       const formattedDate = dueDate.toISOString().split("T")[0];
 
-      // Reset all fields - edit mode is always for single transactions
-      reset({
-        paymentType: "single",
-        type: editingTransaction.type,
-        name: editingTransaction.name,
-        value: Number(editingTransaction.value),
-        currency: editingTransaction.currency,
-        startDate: formattedDate as unknown as Date,
-        priority: editingTransaction.priority,
-      });
+      // Set each field individually to ensure they all update
+      setValue("paymentType", "single");
+      setValue("type", editingTransaction.type);
+      setValue("name", editingTransaction.name);
+      setValue("value", Number(editingTransaction.value));
+      setValue("currency", editingTransaction.currency);
+      setValue("startDate", formattedDate as unknown as Date);
+      setValue("priority", editingTransaction.priority);
+
+      console.log("Priority set to:", editingTransaction.priority);
+
+      // Verify it worked
+      setTimeout(() => {
+        const currentPriority = form.getValues("priority");
+        console.log("Priority after setValue:", currentPriority);
+      }, 100);
 
       // Load payment reference if it exists
       setPaymentReference(editingTransaction.paymentReference || null);
     }
-  }, [isEditMode, editingTransaction, reset]);
+  }, [isEditMode, editingTransaction, setValue, form]);
 
   const onSubmit = async (data: InstallmentFormData) => {
     // Edit mode - update single transaction
@@ -160,6 +187,7 @@ export function TransactionForm({ className }: TransactionFormProps) {
           toast.success(tSuccess("updated"));
           queryClient.invalidateQueries({ queryKey: QUERY_KEYS.transactions });
           handleCancel();
+          onSuccess?.();
         } else {
           toast.error(result.error || tErrors("updateFailed"));
         }
@@ -191,15 +219,19 @@ export function TransactionForm({ className }: TransactionFormProps) {
         if (result.success) {
           toast.success(tSuccess("created"));
           queryClient.invalidateQueries({ queryKey: QUERY_KEYS.transactions });
-          reset({
-            paymentType: "single",
-            type: "expense",
-            currency: getCachedCurrency(),
-            priority: "medium",
-            name: "",
-            value: undefined,
-            startDate: getLastDayOfMonth() as unknown as Date,
-          });
+          if (showInModal) {
+            onSuccess?.();
+          } else {
+            reset({
+              paymentType: "single",
+              type: "expense",
+              currency: getCachedCurrency(),
+              priority: "medium",
+              name: "",
+              value: undefined,
+              startDate: getLastDayOfMonth() as unknown as Date,
+            });
+          }
         } else {
           toast.error(result.error || tErrors("createFailed"));
         }
@@ -259,19 +291,23 @@ export function TransactionForm({ className }: TransactionFormProps) {
         );
         queryClient.invalidateQueries({ queryKey: QUERY_KEYS.transactions });
 
-        // Close modal and reset form
         setShowPreviewModal(false);
         setPendingInstallmentData(null);
         setInstallmentBreakdown([]);
-        reset({
-          paymentType: "single",
-          type: "expense",
-          currency: getCachedCurrency(),
-          priority: "medium",
-          name: "",
-          value: undefined,
-          startDate: getLastDayOfMonth() as unknown as Date,
-        });
+
+        if (showInModal) {
+          onSuccess?.();
+        } else {
+          reset({
+            paymentType: "single",
+            type: "expense",
+            currency: getCachedCurrency(),
+            priority: "medium",
+            name: "",
+            value: undefined,
+            startDate: getLastDayOfMonth() as unknown as Date,
+          });
+        }
       } else {
         toast.error(result.error || tErrors("installmentPlanFailed"));
       }
@@ -304,328 +340,299 @@ export function TransactionForm({ className }: TransactionFormProps) {
     paymentReference: string;
     paymentReferenceType: string;
   }) => {
-    // Auto-fill form fields
+    // Update form fields
     setValue("name", data.name);
     setValue("value", data.value);
     setValue("currency", data.currency);
     if (data.dueDate) {
-      setValue("startDate", data.dueDate);
+      const formattedDate = new Date(data.dueDate).toISOString().split("T")[0];
+      setValue("startDate", formattedDate as unknown as Date);
     }
-
-    // Store payment reference
     setPaymentReference(data.paymentReference);
+    toast.success(t("qrCodeScanned"));
   };
 
   return (
     <>
-      <Card
-        className={className}
-        data-edit-mode={isEditMode}
-        style={
-          isEditMode
-            ? {
-                borderColor: "hsl(var(--primary))",
-                borderWidth: "2px",
-              }
-            : undefined
-        }
-      >
-        <CardHeader>
-          <CardTitle>{isEditMode ? t("editTitle") : t("title")}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            {/* QR Code Scanner Button - only if feature is enabled and for expenses */}
-            {hasQRReferenceFeature && selectedType === "expense" && (
-              <>
-                <div className="flex items-center gap-2">
-                  <Button
-                    type="button"
-                    variant={paymentReference ? "secondary" : "outline"}
-                    className="w-full"
-                    onClick={() => {
-                      console.log("QR Scanner button clicked");
-                      console.log(
-                        "Current showQRScanner state:",
-                        showQRScanner,
-                      );
-                      setShowQRScanner(true);
-                      console.log("Set showQRScanner to true");
-                    }}
-                  >
-                    {paymentReference ? t("changeReference") : t("iHaveQRCode")}
-                  </Button>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        {/* QR Code Management Section - Show in edit mode */}
+        {isEditMode && (
+          <div className="space-y-2">
+            {paymentReference ? (
+              <div className="flex items-center gap-2">
+                <div className="flex-1 rounded-lg bg-muted p-3 text-center text-xs text-muted-foreground">
+                  {t("qrCodeScanned")}
                 </div>
-                {paymentReference && (
-                  <div className="text-xs text-muted-foreground text-center">
-                    {t("qrCodeScanned")}
-                  </div>
-                )}
-                <Separator />
-              </>
-            )}
-
-            {/* Payment Type - only in create mode */}
-            {!isEditMode && (
-              <div className="space-y-3">
-                <Label className="text-sm font-medium">
-                  {t("paymentType")}
-                </Label>
-                <RadioGroup
-                  value={selectedPaymentType}
-                  onValueChange={(value) =>
-                    setValue("paymentType", value as "single" | "installments")
-                  }
-                  className="grid grid-cols-2 gap-3"
-                >
-                  <Label
-                    htmlFor="single"
-                    className={`flex items-center justify-center gap-2 rounded-lg border-2 p-3 cursor-pointer transition-all ${
-                      selectedPaymentType === "single"
-                        ? "border-primary bg-primary/5 font-medium"
-                        : "border-muted hover:border-primary/50 hover:bg-muted/50"
-                    }`}
-                  >
-                    <RadioGroupItem
-                      value="single"
-                      id="single"
-                      className="sr-only"
-                    />
-                    <span>{t("singlePayment")}</span>
-                  </Label>
-                  <Label
-                    htmlFor="installments"
-                    className={`flex items-center justify-center gap-2 rounded-lg border-2 p-3 cursor-pointer transition-all ${
-                      selectedPaymentType === "installments"
-                        ? "border-primary bg-primary/5 font-medium"
-                        : "border-muted hover:border-primary/50 hover:bg-muted/50"
-                    }`}
-                  >
-                    <RadioGroupItem
-                      value="installments"
-                      id="installments"
-                      className="sr-only"
-                    />
-                    <span>{t("monthlyInstallments")}</span>
-                  </Label>
-                </RadioGroup>
-              </div>
-            )}
-
-            {!isEditMode && <Separator className="my-6" />}
-
-            {/* Type and Priority - Side by Side */}
-            <div className="grid grid-cols-2 gap-4">
-              {/* Type */}
-              <div className="space-y-3">
-                <Label htmlFor="type">{t("type")}</Label>
-                <Select
-                  value={selectedType}
-                  onValueChange={(value) =>
-                    setValue("type", value as "income" | "expense")
-                  }
-                >
-                  <SelectTrigger id="type">
-                    <SelectValue placeholder={t("typePlaceholder")} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="income">{tStatus("income")}</SelectItem>
-                    <SelectItem value="expense">
-                      {tStatus("expense")}
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-                {errors.type && (
-                  <p className="text-sm text-destructive">
-                    {errors.type.message}
-                  </p>
-                )}
-              </div>
-
-              {/* Priority */}
-              <div className="space-y-3">
-                <Label htmlFor="priority">{t("priority")}</Label>
-                <Select
-                  value={selectedPriority}
-                  onValueChange={(value) =>
-                    setValue(
-                      "priority",
-                      value as
-                        | "very_high"
-                        | "high"
-                        | "medium"
-                        | "low"
-                        | "very_low",
-                    )
-                  }
-                >
-                  <SelectTrigger id="priority">
-                    <SelectValue placeholder={t("priorityPlaceholder")} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="very_high">
-                      {tPriority("very_high")}
-                    </SelectItem>
-                    <SelectItem value="high">{tPriority("high")}</SelectItem>
-                    <SelectItem value="medium">
-                      {tPriority("medium")}
-                    </SelectItem>
-                    <SelectItem value="low">{tPriority("low")}</SelectItem>
-                    <SelectItem value="very_low">
-                      {tPriority("very_low")}
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-                {errors.priority && (
-                  <p className="text-sm text-destructive">
-                    {errors.priority.message}
-                  </p>
-                )}
-              </div>
-            </div>
-
-            {/* Name */}
-            <div className="space-y-3">
-              <Label htmlFor="name">{t("name")}</Label>
-              <Input
-                id="name"
-                type="text"
-                placeholder={t("namePlaceholder")}
-                {...register("name")}
-                aria-describedby={errors.name ? "name-error" : undefined}
-              />
-              {errors.name && (
-                <p id="name-error" className="text-sm text-destructive">
-                  {errors.name.message}
-                </p>
-              )}
-            </div>
-
-            {/* Value */}
-            <div className="space-y-3">
-              <Label htmlFor="value">
-                {selectedPaymentType === "installments"
-                  ? t("totalValue")
-                  : t("value")}
-              </Label>
-              <Input
-                id="value"
-                type="number"
-                step="0.01"
-                placeholder={t("valuePlaceholder")}
-                {...register("value")}
-                aria-describedby={errors.value ? "value-error" : undefined}
-              />
-              {errors.value && (
-                <p id="value-error" className="text-sm text-destructive">
-                  {errors.value.message}
-                </p>
-              )}
-            </div>
-
-            {/* Currency */}
-            <div className="space-y-3">
-              <Label htmlFor="currency">{t("currency")}</Label>
-              <Input
-                id="currency"
-                type="text"
-                placeholder={t("currencyPlaceholder")}
-                {...register("currency")}
-                aria-describedby={
-                  errors.currency ? "currency-error" : undefined
-                }
-              />
-              {errors.currency && (
-                <p id="currency-error" className="text-sm text-destructive">
-                  {errors.currency.message}
-                </p>
-              )}
-            </div>
-
-            {/* Start/Due Date */}
-            <div className="space-y-3">
-              <Label htmlFor="startDate">
-                {selectedPaymentType === "installments"
-                  ? t("startDate")
-                  : t("dueDate")}
-              </Label>
-              <Input
-                id="startDate"
-                type="date"
-                {...register("startDate", {
-                  setValueAs: (value) => (value ? new Date(value) : undefined),
-                })}
-                aria-describedby={
-                  errors.startDate ? "startDate-error" : undefined
-                }
-              />
-              {errors.startDate && (
-                <p id="startDate-error" className="text-sm text-destructive">
-                  {errors.startDate.message}
-                </p>
-              )}
-            </div>
-
-            {/* Installment Count - only for installments payment type */}
-            {!isEditMode && selectedPaymentType === "installments" && (
-              <div className="space-y-3">
-                <Label htmlFor="installmentCount">
-                  {t("numberOfInstallments")}
-                </Label>
-                <Input
-                  id="installmentCount"
-                  type="number"
-                  min="2"
-                  max="60"
-                  placeholder={t("numberOfInstallmentsPlaceholder")}
-                  {...register("installmentCount")}
-                  aria-describedby={
-                    errors.installmentCount
-                      ? "installmentCount-error"
-                      : undefined
-                  }
-                />
-                {errors.installmentCount && (
-                  <p
-                    id="installmentCount-error"
-                    className="text-sm text-destructive"
-                  >
-                    {errors.installmentCount.message}
-                  </p>
-                )}
-                <p className="text-xs text-muted-foreground">
-                  {t("numberOfInstallmentsHelp")}
-                </p>
-              </div>
-            )}
-
-            {/* Buttons */}
-            <div className="flex gap-2">
-              <Button type="submit" className="flex-1" disabled={isSubmitting}>
-                {isSubmitting
-                  ? isEditMode
-                    ? t("updating")
-                    : t("creating")
-                  : isEditMode
-                    ? t("update")
-                    : selectedPaymentType === "installments"
-                      ? t("previewInstallments")
-                      : t("create")}
-              </Button>
-              {isEditMode && (
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={handleCancel}
-                  disabled={isSubmitting}
+                  size="sm"
+                  onClick={() => setShowQRScanner(true)}
                 >
-                  {t("cancel")}
+                  {t("changeReference")}
                 </Button>
-              )}
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+              </div>
+            ) : (
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => setShowQRScanner(true)}
+                className="w-full"
+              >
+                {t("iHaveQRCode")}
+              </Button>
+            )}
+          </div>
+        )}
+
+        {/* Show QR reference status in create mode if QR was scanned */}
+        {!isEditMode && paymentReference && (
+          <div className="rounded-lg bg-muted p-3 text-center text-xs text-muted-foreground">
+            {t("qrCodeScanned")}
+          </div>
+        )}
+
+        {/* Payment Type - only in create mode */}
+        {!isEditMode && (
+          <div className="space-y-3">
+            <Label className="text-sm font-medium">{t("paymentType")}</Label>
+            <RadioGroup
+              value={selectedPaymentType}
+              onValueChange={(value) =>
+                setValue("paymentType", value as "single" | "installments")
+              }
+              className="grid grid-cols-2 gap-3"
+            >
+              <Label
+                htmlFor="single"
+                className={`flex items-center justify-center gap-2 rounded-lg border-2 p-3 cursor-pointer transition-all ${
+                  selectedPaymentType === "single"
+                    ? "border-primary bg-primary/5 font-medium"
+                    : "border-muted hover:border-primary/50 hover:bg-muted/50"
+                }`}
+              >
+                <RadioGroupItem
+                  value="single"
+                  id="single"
+                  className="sr-only"
+                />
+                <span>{t("singlePayment")}</span>
+              </Label>
+              <Label
+                htmlFor="installments"
+                className={`flex items-center justify-center gap-2 rounded-lg border-2 p-3 cursor-pointer transition-all ${
+                  selectedPaymentType === "installments"
+                    ? "border-primary bg-primary/5 font-medium"
+                    : "border-muted hover:border-primary/50 hover:bg-muted/50"
+                }`}
+              >
+                <RadioGroupItem
+                  value="installments"
+                  id="installments"
+                  className="sr-only"
+                />
+                <span>{t("monthlyInstallments")}</span>
+              </Label>
+            </RadioGroup>
+          </div>
+        )}
+
+        {!isEditMode && <Separator className="my-6" />}
+
+        {/* Type and Priority - Side by Side */}
+        <div className="grid grid-cols-2 gap-4">
+          {/* Type */}
+          <div className="space-y-3">
+            <Label htmlFor="type">{t("type")}</Label>
+            <Select
+              value={selectedType}
+              onValueChange={(value) =>
+                setValue("type", value as "income" | "expense")
+              }
+            >
+              <SelectTrigger id="type">
+                <SelectValue placeholder={t("typePlaceholder")} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="income">{tStatus("income")}</SelectItem>
+                <SelectItem value="expense">{tStatus("expense")}</SelectItem>
+              </SelectContent>
+            </Select>
+            {errors.type && (
+              <p className="text-sm text-destructive">{errors.type.message}</p>
+            )}
+          </div>
+
+          {/* Priority */}
+          <div className="space-y-3">
+            <Label htmlFor="priority">{t("priority")}</Label>
+            <Select
+              value={selectedPriority}
+              onValueChange={(value) =>
+                setValue(
+                  "priority",
+                  value as "very_high" | "high" | "medium" | "low" | "very_low",
+                )
+              }
+            >
+              <SelectTrigger id="priority">
+                <SelectValue placeholder={t("priorityPlaceholder")} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="very_high">
+                  {tPriority("very_high")}
+                </SelectItem>
+                <SelectItem value="high">{tPriority("high")}</SelectItem>
+                <SelectItem value="medium">{tPriority("medium")}</SelectItem>
+                <SelectItem value="low">{tPriority("low")}</SelectItem>
+                <SelectItem value="very_low">
+                  {tPriority("very_low")}
+                </SelectItem>
+              </SelectContent>
+            </Select>
+            {errors.priority && (
+              <p className="text-sm text-destructive">
+                {errors.priority.message}
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Name */}
+        <div className="space-y-3">
+          <Label htmlFor="name">{t("name")}</Label>
+          <Input
+            id="name"
+            type="text"
+            placeholder={t("namePlaceholder")}
+            {...register("name")}
+            aria-describedby={errors.name ? "name-error" : undefined}
+          />
+          {errors.name && (
+            <p id="name-error" className="text-sm text-destructive">
+              {errors.name.message}
+            </p>
+          )}
+        </div>
+
+        {/* Value */}
+        <div className="space-y-3">
+          <Label htmlFor="value">
+            {selectedPaymentType === "installments"
+              ? t("totalValue")
+              : t("value")}
+          </Label>
+          <Input
+            id="value"
+            type="number"
+            step="0.01"
+            placeholder={t("valuePlaceholder")}
+            {...register("value")}
+            aria-describedby={errors.value ? "value-error" : undefined}
+          />
+          {errors.value && (
+            <p id="value-error" className="text-sm text-destructive">
+              {errors.value.message}
+            </p>
+          )}
+        </div>
+
+        {/* Currency */}
+        <div className="space-y-3">
+          <Label htmlFor="currency">{t("currency")}</Label>
+          <Input
+            id="currency"
+            type="text"
+            placeholder={t("currencyPlaceholder")}
+            {...register("currency")}
+            aria-describedby={errors.currency ? "currency-error" : undefined}
+          />
+          {errors.currency && (
+            <p id="currency-error" className="text-sm text-destructive">
+              {errors.currency.message}
+            </p>
+          )}
+        </div>
+
+        {/* Start/Due Date */}
+        <div className="space-y-3">
+          <Label htmlFor="startDate">
+            {selectedPaymentType === "installments"
+              ? t("startDate")
+              : t("dueDate")}
+          </Label>
+          <Input
+            id="startDate"
+            type="date"
+            {...register("startDate", {
+              setValueAs: (value) => (value ? new Date(value) : undefined),
+            })}
+            aria-describedby={errors.startDate ? "startDate-error" : undefined}
+          />
+          {errors.startDate && (
+            <p id="startDate-error" className="text-sm text-destructive">
+              {errors.startDate.message}
+            </p>
+          )}
+        </div>
+
+        {/* Installment Count - only for installments payment type */}
+        {!isEditMode && selectedPaymentType === "installments" && (
+          <div className="space-y-3">
+            <Label htmlFor="installmentCount">
+              {t("numberOfInstallments")}
+            </Label>
+            <Input
+              id="installmentCount"
+              type="number"
+              min="2"
+              max="60"
+              placeholder={t("numberOfInstallmentsPlaceholder")}
+              {...register("installmentCount")}
+              aria-describedby={
+                errors.installmentCount ? "installmentCount-error" : undefined
+              }
+            />
+            {errors.installmentCount && (
+              <p
+                id="installmentCount-error"
+                className="text-sm text-destructive"
+              >
+                {errors.installmentCount.message}
+              </p>
+            )}
+            <p className="text-xs text-muted-foreground">
+              {t("numberOfInstallmentsHelp")}
+            </p>
+          </div>
+        )}
+
+        {/* Buttons */}
+        <div className="flex gap-2">
+          <Button type="submit" className="flex-1" disabled={isSubmitting}>
+            {isSubmitting
+              ? isEditMode
+                ? t("updating")
+                : t("creating")
+              : isEditMode
+                ? t("update")
+                : selectedPaymentType === "installments"
+                  ? t("previewInstallments")
+                  : t("create")}
+          </Button>
+          {(isEditMode || showInModal) && (
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleCancel}
+              disabled={isSubmitting}
+            >
+              {t("cancel")}
+            </Button>
+          )}
+        </div>
+      </form>
 
       {/* Installment Preview Modal */}
       {pendingInstallmentData && (

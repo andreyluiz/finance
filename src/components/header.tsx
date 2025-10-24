@@ -1,6 +1,6 @@
 "use client";
 
-import { LogOut, Settings } from "lucide-react";
+import { LogOut, Plus, Settings } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { SettingsModal } from "@/components/settings/settings-modal";
@@ -18,13 +18,17 @@ import {
 import { H2 } from "@/components/ui/typography";
 import { useAuth } from "@/contexts/auth-context";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
+import { useTransactionStore } from "@/stores/transaction-store";
 
 export function Header() {
   const { user, signOut } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const { setShowTransactionModal } = useTransactionStore();
   const t = useTranslations("header");
+
+  const isTransactionsPage = pathname === "/app/transactions";
 
   const handleSignOut = async () => {
     await signOut();
@@ -77,6 +81,26 @@ export function Header() {
         </div>
 
         <div className="flex items-center gap-2">
+          {user && isTransactionsPage && (
+            <>
+              <Button
+                onClick={() => setShowTransactionModal(true)}
+                size="sm"
+                className="hidden md:flex gap-2"
+              >
+                <Plus className="h-4 w-4" />
+                {t("addTransaction")}
+              </Button>
+              <Button
+                onClick={() => setShowTransactionModal(true)}
+                size="icon"
+                className="md:hidden h-9 w-9"
+                aria-label={t("addTransaction")}
+              >
+                <Plus className="h-4 w-4" />
+              </Button>
+            </>
+          )}
           <ThemeSwitcher />
           {user && (
             <DropdownMenu>
