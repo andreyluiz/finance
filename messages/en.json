@@ -206,7 +206,8 @@
       "previous": "Previous billing period",
       "next": "Next billing period",
       "selectMonth": "Select month",
-      "selectYear": "Select year"
+      "selectYear": "Select year",
+      "goToCurrent": "Current Period"
     },
     "billingPeriodTotals": {
       "includePastOverdue": "Include past overdue expenses",

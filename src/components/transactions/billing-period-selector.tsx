@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { CalendarCheck, ChevronLeft, ChevronRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,6 +14,7 @@ import {
   type BillingPeriod,
   formatBillingPeriod,
   getBillingPeriod,
+  getCurrentBillingPeriod,
   getNextBillingPeriod,
   getPreviousBillingPeriod,
   isCurrentBillingPeriod,
@@ -71,6 +72,10 @@ export function BillingPeriodSelector({
   const handleYearChange = (year: string) => {
     const newPeriod = getBillingPeriod(Number.parseInt(year, 10), period.month);
     onPeriodChange(newPeriod);
+  };
+
+  const handleGoToCurrent = () => {
+    onPeriodChange(getCurrentBillingPeriod());
   };
 
   return (
@@ -142,6 +147,19 @@ export function BillingPeriodSelector({
         >
           <ChevronRight className="h-4 w-4" />
         </Button>
+
+        {/* Go to Current Period Button */}
+        {!isCurrent && (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleGoToCurrent}
+            className="gap-2"
+          >
+            <CalendarCheck className="h-4 w-4" />
+            {t("goToCurrent")}
+          </Button>
+        )}
       </div>
     </div>
   );

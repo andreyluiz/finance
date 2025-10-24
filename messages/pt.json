@@ -206,7 +206,8 @@
       "previous": "Período de cobrança anterior",
       "next": "Próximo período de cobrança",
       "selectMonth": "Selecione o mês",
-      "selectYear": "Selecione o ano"
+      "selectYear": "Selecione o ano",
+      "goToCurrent": "Período Atual"
     },
     "billingPeriodTotals": {
       "includePastOverdue": "Incluir despesas vencidas anteriores",
