@@ -52,7 +52,7 @@ export function Header() {
         <div className="flex items-center gap-6">
           <H2 className="border-b-0 pb-0">{t("financeTracker")}</H2>
           {user && (
-            <nav className="flex items-center gap-1">
+            <nav className="flex items-center gap-1 md:mr-0 mr-2">
               <Button
                 asChild
                 variant={pathname === "/" ? "secondary" : "ghost"}
