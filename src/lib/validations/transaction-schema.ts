@@ -42,7 +42,8 @@ export const createInstallmentFormSchema = (t: TranslateFn) =>
     value: z.coerce
       .number({ error: t("valueRequired") })
       .positive(t("valuePositive"))
-      .multipleOf(0.01, t("valueDecimals")),
+      .multipleOf(0.01, t("valueDecimals"))
+      .optional(),
     currency: z.string().default("USD"),
     startDate: z.date({ error: t("startDateRequired") }),
     priority: priorityEnum,
@@ -51,6 +52,11 @@ export const createInstallmentFormSchema = (t: TranslateFn) =>
       .int(t("installmentCountInteger"))
       .min(2, t("installmentCountMin"))
       .max(60, t("installmentCountMax"))
+      .optional(),
+    installmentValue: z.coerce
+      .number()
+      .positive(t("valuePositive"))
+      .multipleOf(0.01, t("valueDecimals"))
       .optional(),
   });
 

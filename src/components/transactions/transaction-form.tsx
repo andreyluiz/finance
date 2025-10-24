@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { createInstallmentPlanAction } from "@/actions/installment-actions";
@@ -112,6 +112,9 @@ export function TransactionForm({
   const selectedType = watch("type");
   const selectedPriority = watch("priority");
   const selectedCurrency = watch("currency");
+  const totalValue = watch("value");
+  const installmentCount = watch("installmentCount");
+  const installmentValue = watch("installmentValue");
 
   // Handle QR data from parent component
   useEffect(() => {
@@ -132,6 +135,48 @@ export function TransactionForm({
       localStorage.setItem("lastUsedCurrency", selectedCurrency);
     }
   }, [selectedCurrency, isEditMode]);
+
+  // Track which field was last modified to prevent infinite loops
+  const lastModifiedField = useRef<"total" | "installment" | null>(null);
+  const isCalculating = useRef(false);
+
+  // Bidirectional calculation for installments
+  useEffect(() => {
+    // Skip if we're already calculating or if not in installments mode
+    if (
+      isCalculating.current ||
+      selectedPaymentType !== "installments" ||
+      !installmentCount ||
+      installmentCount < 2
+    ) {
+      return;
+    }
+
+    // Calculate installment value from total value
+    if (lastModifiedField.current === "total" && totalValue) {
+      isCalculating.current = true;
+      const calculated = totalValue / installmentCount;
+      const rounded = Math.round(calculated * 100) / 100;
+      setValue("installmentValue", rounded, { shouldValidate: false });
+      lastModifiedField.current = null;
+      isCalculating.current = false;
+    }
+    // Calculate total value from installment value
+    else if (lastModifiedField.current === "installment" && installmentValue) {
+      isCalculating.current = true;
+      const calculated = installmentValue * installmentCount;
+      const rounded = Math.round(calculated * 100) / 100;
+      setValue("value", rounded, { shouldValidate: false });
+      lastModifiedField.current = null;
+      isCalculating.current = false;
+    }
+  }, [
+    totalValue,
+    installmentValue,
+    installmentCount,
+    selectedPaymentType,
+    setValue,
+  ]);
 
   // Populate form when editing (single transactions only)
   useEffect(() => {
@@ -528,7 +573,13 @@ export function TransactionForm({
             type="number"
             step="0.01"
             placeholder={t("valuePlaceholder")}
-            {...register("value")}
+            {...register("value", {
+              onChange: () => {
+                if (selectedPaymentType === "installments") {
+                  lastModifiedField.current = "total";
+                }
+              },
+            })}
             aria-describedby={errors.value ? "value-error" : undefined}
           />
           {errors.value && (
@@ -604,6 +655,38 @@ export function TransactionForm({
             )}
             <p className="text-xs text-muted-foreground">
               {t("numberOfInstallmentsHelp")}
+            </p>
+          </div>
+        )}
+
+        {/* Installment Value - only for installments payment type */}
+        {!isEditMode && selectedPaymentType === "installments" && (
+          <div className="space-y-3">
+            <Label htmlFor="installmentValue">{t("installmentValue")}</Label>
+            <Input
+              id="installmentValue"
+              type="number"
+              step="0.01"
+              placeholder={t("installmentValuePlaceholder")}
+              {...register("installmentValue", {
+                onChange: () => {
+                  lastModifiedField.current = "installment";
+                },
+              })}
+              aria-describedby={
+                errors.installmentValue ? "installmentValue-error" : undefined
+              }
+            />
+            {errors.installmentValue && (
+              <p
+                id="installmentValue-error"
+                className="text-sm text-destructive"
+              >
+                {errors.installmentValue.message}
+              </p>
+            )}
+            <p className="text-xs text-muted-foreground">
+              {t("installmentValueHelp")}
             </p>
           </div>
         )}
