@@ -17,6 +17,7 @@
     "signOut": "Sair",
     "financeTracker": "Gerenciador Financeiro",
     "overdueFromPast": "Vencidas de Períodos Anteriores",
+    "paidTransactions": "Transações Pagas",
     "unpaidExpense": "despesa não paga"
   },
   "pages": {

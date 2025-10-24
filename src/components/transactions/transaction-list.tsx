@@ -30,6 +30,7 @@ export function TransactionList({
   showPastOverdue = true,
 }: TransactionListProps) {
   const [showOverdue, setShowOverdue] = useState(false);
+  const [showPaid, setShowPaid] = useState(false);
   const t = useTranslations("common");
 
   const {
@@ -47,6 +48,13 @@ export function TransactionList({
         isDateInBillingPeriod(new Date(transaction.dueDate), billingPeriod),
       )
     : transactions;
+
+  const paidTransactions = filteredTransactions.filter(
+    (transaction) => transaction.paid,
+  );
+  const unpaidTransactions = filteredTransactions.filter(
+    (transaction) => !transaction.paid,
+  );
 
   // Filter overdue expenses from past periods (before current billing period)
   const overdueFromPast = billingPeriod
@@ -148,9 +156,41 @@ export function TransactionList({
         )}
 
         {/* Current Period Transactions */}
-        {filteredTransactions.map((transaction) => (
+        {unpaidTransactions.map((transaction) => (
           <TransactionCard key={transaction.id} transaction={transaction} />
         ))}
+
+        {/* Paid Transactions */}
+        {paidTransactions.length > 0 && (
+          <Collapsible
+            open={showPaid}
+            onOpenChange={setShowPaid}
+            className="border border-border rounded-lg bg-muted/30"
+          >
+            <CollapsibleTrigger className="w-full px-4 py-3 hover:bg-muted/40 rounded-lg transition-colors">
+              <div className="flex items-center gap-2">
+                {showPaid ? (
+                  <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                ) : (
+                  <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                )}
+                <span className="font-semibold">{t("paidTransactions")}</span>
+                <span className="text-sm text-muted-foreground">
+                  ({paidTransactions.length} {t("transactions").toLowerCase()})
+                </span>
+              </div>
+            </CollapsibleTrigger>
+
+            <CollapsibleContent className="px-4 pb-4 space-y-3">
+              {paidTransactions.map((transaction) => (
+                <TransactionCard
+                  key={transaction.id}
+                  transaction={transaction}
+                />
+              ))}
+            </CollapsibleContent>
+          </Collapsible>
+        )}
       </div>
     </div>
   );
