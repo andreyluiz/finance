@@ -16,7 +16,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Muted } from "@/components/ui/typography";
 import type { Transaction } from "@/db/schema";
 import { QUERY_KEYS } from "@/lib/react-query";
-import { cn } from "@/lib/utils";
 import {
   isTransactionDueToday,
   isTransactionOverdue,
@@ -127,14 +126,7 @@ export const TransactionCard = memo(function TransactionCard({
     },
   );
 
-  // Determine card styling based on status
-  // Only highlight expenses (not incomes) when overdue or due today
-  const cardClassName = cn({
-    "border-destructive bg-destructive/5":
-      overdue && transaction.type === "expense",
-    "border-yellow-500 dark:border-yellow-600 bg-yellow-50 dark:bg-yellow-950/20":
-      dueToday && transaction.type === "expense",
-  });
+  const cardClassName = "";
 
   return (
     <Card className={cardClassName}>
