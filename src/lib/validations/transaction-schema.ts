@@ -44,7 +44,7 @@ export const createInstallmentFormSchema = (t: TranslateFn) =>
       .positive(t("valuePositive"))
       .multipleOf(0.01, t("valueDecimals"))
       .optional(),
-    currency: z.string().default("USD"),
+    currency: z.string().min(1),
     startDate: z.date({ error: t("startDateRequired") }),
     priority: priorityEnum,
     installmentCount: z.coerce

@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
+import type { Resolver } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { createInstallmentPlanAction } from "@/actions/installment-actions";
@@ -88,14 +89,20 @@ export function TransactionForm({
     return localStorage.getItem("lastUsedCurrency") || "USD";
   };
 
-  const form = useForm({
-    resolver: zodResolver(createInstallmentFormSchema(tValidation)),
+  const form = useForm<InstallmentFormData>({
+    resolver: zodResolver(
+      createInstallmentFormSchema(tValidation),
+    ) as Resolver<InstallmentFormData>,
     defaultValues: {
-      paymentType: "single" as const,
-      type: "expense" as const,
+      paymentType: "single",
+      type: "expense",
+      name: "",
       currency: getCachedCurrency(),
-      priority: "medium" as const,
-      startDate: getLastDayOfMonth() as unknown as Date,
+      priority: "medium",
+      startDate: new Date(getLastDayOfMonth()),
+      value: undefined,
+      installmentCount: undefined,
+      installmentValue: undefined,
     },
   });
 
@@ -216,6 +223,12 @@ export function TransactionForm({
       setIsSubmitting(true);
 
       try {
+        if (!data.value) {
+          toast.error(tErrors("createFailed"));
+          setIsSubmitting(false);
+          return;
+        }
+
         const result = await updateTransactionAction(editingTransaction.id, {
           type: data.type,
           name: data.name,
@@ -249,6 +262,12 @@ export function TransactionForm({
       setIsSubmitting(true);
 
       try {
+        if (!data.value) {
+          toast.error(tErrors("createFailed"));
+          setIsSubmitting(false);
+          return;
+        }
+
         const result = await createTransactionAction({
           type: data.type,
           name: data.name,
@@ -296,6 +315,12 @@ export function TransactionForm({
         return;
       }
 
+      // Validate value is provided
+      if (!data.value) {
+        toast.error(tErrors("createFailed"));
+        return;
+      }
+
       // Calculate installment breakdown
       const breakdown = calculateInstallments({
         totalValue: data.value,
@@ -311,7 +336,7 @@ export function TransactionForm({
   };
 
   const handleConfirmInstallments = async () => {
-    if (!pendingInstallmentData) return;
+    if (!pendingInstallmentData || !pendingInstallmentData.value) return;
 
     setIsSubmitting(true);
 
@@ -718,7 +743,7 @@ export function TransactionForm({
       </form>
 
       {/* Installment Preview Modal */}
-      {pendingInstallmentData && (
+      {pendingInstallmentData?.value && (
         <InstallmentPreviewModal
           open={showPreviewModal}
           onOpenChange={setShowPreviewModal}
