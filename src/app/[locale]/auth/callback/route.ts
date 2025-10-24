@@ -1,17 +1,17 @@
 import { NextResponse } from "next/server";
-import { defaultLocale } from "@/i18n/config";
 import { createClient } from "@/lib/supabase/server";
 
-export async function GET(request: Request) {
+type RouteContext = {
+  params: Promise<{ locale: string }>;
+};
+
+export async function GET(request: Request, context: RouteContext) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
   const next = searchParams.get("next") ?? "/app";
 
-  // Get locale from cookie or use default
-  const cookieLocale = request.headers
-    .get("cookie")
-    ?.match(/NEXT_LOCALE=([^;]+)/)?.[1];
-  const locale = cookieLocale || defaultLocale;
+  // Get locale from URL params
+  const { locale } = await context.params;
 
   if (code) {
     const supabase = await createClient();

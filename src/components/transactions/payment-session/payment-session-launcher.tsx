@@ -274,7 +274,7 @@ export function PaymentSessionLauncher({
       </div>
 
       <Dialog open={open} onOpenChange={handleOpenChange}>
-        <DialogContent className="max-w-2xl border-border">
+        <DialogContent className="md:min-w-2xl border-border">
           <DialogHeader>
             <DialogTitle>
               {state.phase === "runner"

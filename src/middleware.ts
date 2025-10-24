@@ -1,21 +1,22 @@
 import type { NextRequest } from "next/server";
 import createMiddleware from "next-intl/middleware";
 import { updateSession } from "@/lib/supabase/middleware";
-import { defaultLocale, locales } from "./i18n/config";
+import { routing } from "./i18n/routing";
 
 // Create the i18n middleware
-const intlMiddleware = createMiddleware({
-  locales,
-  defaultLocale,
-  localePrefix: "always",
-});
+const intlMiddleware = createMiddleware(routing);
 
 export async function middleware(request: NextRequest) {
   // First handle i18n routing
-  const response = intlMiddleware(request);
+  const intlResponse = intlMiddleware(request);
+
+  // If intl middleware returns a redirect, return it immediately
+  if (intlResponse.status === 307 || intlResponse.status === 308) {
+    return intlResponse;
+  }
 
   // Then handle Supabase session
-  return await updateSession(request, response);
+  return await updateSession(request, intlResponse);
 }
 
 export const config = {
