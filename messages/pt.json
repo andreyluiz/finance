@@ -274,13 +274,26 @@
       "low": "Baixa",
       "very_low": "Muito Baixa"
     },
+    "deleteInstallmentDialog": {
+      "title": "Excluir Parcela",
+      "description": "Esta transação faz parte de \"{name}\" (parcela {number} de {total}). Como você gostaria de prosseguir?",
+      "singleOption": "Excluir Apenas Esta Parcela",
+      "singleDescription": "Apenas a parcela {number} será excluída. As outras parcelas permanecerão.",
+      "allOption": "Excluir Todas as Parcelas",
+      "allDescription": "Todas as {total} parcelas deste plano serão excluídas permanentemente.",
+      "cancel": "Cancelar",
+      "deleteSingle": "Excluir Apenas Esta",
+      "deleteAll": "Excluir Todas",
+      "deleting": "Excluindo..."
+    },
     "success": {
       "created": "Transação criada com sucesso",
       "updated": "Transação atualizada com sucesso",
       "deleted": "Transação excluída com sucesso",
       "markedPaid": "Transação marcada como paga",
       "markedUnpaid": "Transação marcada como não paga",
-      "installmentPlanCreated": "Plano de parcelas criado com sucesso com {count} transações"
+      "installmentPlanCreated": "Plano de parcelas criado com sucesso com {count} transações",
+      "installmentPlanDeleted": "Plano de parcelas excluído com sucesso"
     },
     "errors": {
       "createFailed": "Falha ao criar transação",

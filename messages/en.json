@@ -274,13 +274,26 @@
       "low": "Low",
       "very_low": "Very Low"
     },
+    "deleteInstallmentDialog": {
+      "title": "Delete Installment",
+      "description": "This transaction is part of \"{name}\" (installment {number} of {total}). How would you like to proceed?",
+      "singleOption": "Delete This Installment Only",
+      "singleDescription": "Only installment {number} will be deleted. Other installments will remain.",
+      "allOption": "Delete All Installments",
+      "allDescription": "All {total} installments in this plan will be permanently deleted.",
+      "cancel": "Cancel",
+      "deleteSingle": "Delete This Only",
+      "deleteAll": "Delete All",
+      "deleting": "Deleting..."
+    },
     "success": {
       "created": "Transaction created successfully",
       "updated": "Transaction updated successfully",
       "deleted": "Transaction deleted successfully",
       "markedPaid": "Transaction marked as paid",
       "markedUnpaid": "Transaction marked as unpaid",
-      "installmentPlanCreated": "Installment plan created successfully with {count} transactions"
+      "installmentPlanCreated": "Installment plan created successfully with {count} transactions",
+      "installmentPlanDeleted": "Installment plan deleted successfully"
     },
     "errors": {
       "createFailed": "Failed to create transaction",

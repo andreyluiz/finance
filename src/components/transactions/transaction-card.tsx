@@ -5,10 +5,12 @@ import { Edit2Icon, QrCodeIcon, TrashIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { memo, useState } from "react";
 import { toast } from "sonner";
+import { deleteInstallmentPlanAction } from "@/actions/installment-actions";
 import {
   deleteTransactionAction,
   updateTransactionPaidAction,
 } from "@/actions/transaction-actions";
+import { DeleteInstallmentDialog } from "@/components/transactions/delete-installment-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -34,6 +36,7 @@ export const TransactionCard = memo(function TransactionCard({
   transaction,
 }: TransactionCardProps) {
   const [isDeleting, setIsDeleting] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const { setEditingTransaction } = useTransactionStore();
   const queryClient = useQueryClient();
   const t = useTranslations("transactions.card");
@@ -44,16 +47,28 @@ export const TransactionCard = memo(function TransactionCard({
 
   const overdue = isTransactionOverdue(transaction.dueDate, transaction.paid);
   const dueToday = isTransactionDueToday(transaction.dueDate, transaction.paid);
+  const isPartOfInstallment = !!transaction.installmentPlanId;
 
   const handleEdit = () => {
     setEditingTransaction(transaction);
   };
 
   const handleDelete = async () => {
+    // If part of installment plan, show dialog
+    if (isPartOfInstallment) {
+      setShowDeleteDialog(true);
+      return;
+    }
+
+    // Otherwise, use simple confirm dialog
     if (!confirm(t("deleteConfirm"))) {
       return;
     }
 
+    await deleteSingleTransaction();
+  };
+
+  const deleteSingleTransaction = async () => {
     setIsDeleting(true);
 
     try {
@@ -62,6 +77,31 @@ export const TransactionCard = memo(function TransactionCard({
       if (result.success) {
         toast.success(tSuccess("deleted"));
         queryClient.invalidateQueries({ queryKey: QUERY_KEYS.transactions });
+        setShowDeleteDialog(false);
+      } else {
+        toast.error(result.error || tErrors("deleteFailed"));
+      }
+    } catch (_error) {
+      toast.error(tErrors("unexpected"));
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const deleteAllInstallments = async () => {
+    if (!transaction.installmentPlanId) return;
+
+    setIsDeleting(true);
+
+    try {
+      const result = await deleteInstallmentPlanAction(
+        transaction.installmentPlanId,
+      );
+
+      if (result.success) {
+        toast.success(tSuccess("installmentPlanDeleted"));
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.transactions });
+        setShowDeleteDialog(false);
       } else {
         toast.error(result.error || tErrors("deleteFailed"));
       }
@@ -240,6 +280,24 @@ export const TransactionCard = memo(function TransactionCard({
           </div>
         </div>
       </CardContent>
+      {/* Delete Installment Dialog */}
+      {isPartOfInstallment && transaction.installmentNumber && (
+        <DeleteInstallmentDialog
+          open={showDeleteDialog}
+          onOpenChange={setShowDeleteDialog}
+          onDeleteSingle={deleteSingleTransaction}
+          onDeleteAll={deleteAllInstallments}
+          isDeleting={isDeleting}
+          installmentInfo={{
+            number: transaction.installmentNumber,
+            total: parseInt(
+              transaction.name.match(/\((\d+)\/(\d+)\)/)?.[2] || "1",
+              10,
+            ),
+            name: transaction.name.split(" (")[0] || transaction.name,
+          }}
+        />
+      )}
     </Card>
   );
 });

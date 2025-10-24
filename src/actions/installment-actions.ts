@@ -1,5 +1,6 @@
 "use server";
 
+import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { db } from "@/db";
 import type { InstallmentPlan } from "@/db/schema";
@@ -112,6 +113,54 @@ export async function createInstallmentPlanAction(
     return {
       success: false,
       error: "Failed to create installment plan and transactions",
+    };
+  }
+}
+
+export async function deleteInstallmentPlanAction(
+  installmentPlanId: string,
+): Promise<{
+  success: boolean;
+  error?: string;
+}> {
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      return { success: false, error: "Unauthorized" };
+    }
+
+    // Verify the installment plan belongs to the user
+    const [plan] = await db
+      .select()
+      .from(installmentPlans)
+      .where(eq(installmentPlans.id, installmentPlanId))
+      .limit(1);
+
+    if (!plan) {
+      return { success: false, error: "Installment plan not found" };
+    }
+
+    if (plan.userId !== user.id) {
+      return { success: false, error: "Unauthorized" };
+    }
+
+    // Delete the installment plan (cascade will delete all related transactions)
+    await db
+      .delete(installmentPlans)
+      .where(eq(installmentPlans.id, installmentPlanId));
+
+    revalidatePath("/app/transactions");
+
+    return { success: true };
+  } catch (error) {
+    console.error("Error deleting installment plan:", error);
+    return {
+      success: false,
+      error: "Failed to delete installment plan",
     };
   }
 }
