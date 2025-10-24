@@ -3,13 +3,13 @@
  */
 export function parseSwissQRBill(qrCodeString: string) {
   try {
-    // Swiss QR Bill format is a specific string format
-    // The swissqrbill library can parse this
-    const lines = qrCodeString.split("\n");
+    const lines = qrCodeString.split(/\r\n|\r|\n/);
 
-    // Basic validation - Swiss QR Bill should start with "SPC"
-    if (lines[0] !== "SPC") {
-      throw new Error("Invalid Swiss QR Bill format - must start with SPC");
+    const firstLine = lines[0]?.trim();
+    if (!firstLine || firstLine !== "SPC") {
+      throw new Error(
+        `Invalid Swiss QR Bill format - must start with SPC (found: "${firstLine || "empty"}")`,
+      );
     }
 
     // Extract key fields from the QR code

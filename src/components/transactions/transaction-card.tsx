@@ -17,6 +17,10 @@ import { Muted } from "@/components/ui/typography";
 import type { Transaction } from "@/db/schema";
 import { QUERY_KEYS } from "@/lib/react-query";
 import { cn } from "@/lib/utils";
+import {
+  isTransactionDueToday,
+  isTransactionOverdue,
+} from "@/lib/utils/transaction-dates";
 import { useTransactionStore } from "@/stores/transaction-store";
 import {
   PRIORITY_BADGE_CLASSNAMES,
@@ -39,27 +43,8 @@ export const TransactionCard = memo(function TransactionCard({
   const tSuccess = useTranslations("transactions.success");
   const tErrors = useTranslations("transactions.errors");
 
-  // Helper functions for date checking
-  const isOverdue = () => {
-    if (transaction.paid) return false;
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const dueDate = new Date(transaction.dueDate);
-    dueDate.setHours(0, 0, 0, 0);
-    return dueDate < today;
-  };
-
-  const isDueToday = () => {
-    if (transaction.paid) return false;
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const dueDate = new Date(transaction.dueDate);
-    dueDate.setHours(0, 0, 0, 0);
-    return dueDate.getTime() === today.getTime();
-  };
-
-  const overdue = isOverdue();
-  const dueToday = isDueToday();
+  const overdue = isTransactionOverdue(transaction.dueDate, transaction.paid);
+  const dueToday = isTransactionDueToday(transaction.dueDate, transaction.paid);
 
   const handleEdit = () => {
     setEditingTransaction(transaction);
@@ -143,10 +128,12 @@ export const TransactionCard = memo(function TransactionCard({
   );
 
   // Determine card styling based on status
+  // Only highlight expenses (not incomes) when overdue or due today
   const cardClassName = cn({
-    "border-destructive bg-destructive/5": overdue,
+    "border-destructive bg-destructive/5":
+      overdue && transaction.type === "expense",
     "border-yellow-500 dark:border-yellow-600 bg-yellow-50 dark:bg-yellow-950/20":
-      dueToday,
+      dueToday && transaction.type === "expense",
   });
 
   return (
@@ -191,12 +178,12 @@ export const TransactionCard = memo(function TransactionCard({
                     {t("paid")}
                   </Badge>
                 )}
-                {overdue && (
+                {overdue && transaction.type === "expense" && (
                   <Badge variant="destructive" className="font-semibold">
                     {t("overdue")}
                   </Badge>
                 )}
-                {dueToday && (
+                {dueToday && transaction.type === "expense" && (
                   <Badge
                     variant="outline"
                     className="bg-yellow-100 text-yellow-800 dark:bg-yellow-950 dark:text-yellow-400 border-yellow-500 dark:border-yellow-600 font-semibold"
@@ -226,9 +213,9 @@ export const TransactionCard = memo(function TransactionCard({
                 </Muted>
                 <Muted
                   className={
-                    overdue
+                    overdue && transaction.type === "expense"
                       ? "text-destructive font-semibold"
-                      : dueToday
+                      : dueToday && transaction.type === "expense"
                         ? "text-yellow-700 dark:text-yellow-500 font-semibold"
                         : ""
                   }

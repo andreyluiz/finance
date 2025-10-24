@@ -76,7 +76,30 @@ export function groupExpensesByPeriod(
   });
 
   groups.forEach((group) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const isCurrent =
+      group.period.year === currentPeriod.year &&
+      group.period.month === currentPeriod.month &&
+      group.period.startDate.getTime() === currentPeriod.startDate.getTime();
+
     group.transactions.sort((a, b) => {
+      // For current period, prioritize bills due today
+      if (isCurrent) {
+        const aDueDate = new Date(a.dueDate);
+        aDueDate.setHours(0, 0, 0, 0);
+        const bDueDate = new Date(b.dueDate);
+        bDueDate.setHours(0, 0, 0, 0);
+
+        const aIsDueToday = aDueDate.getTime() === today.getTime();
+        const bIsDueToday = bDueDate.getTime() === today.getTime();
+
+        // Bills due today come first
+        if (aIsDueToday && !bIsDueToday) return -1;
+        if (!aIsDueToday && bIsDueToday) return 1;
+      }
+
+      // Then sort by due date, then by name
       return (
         new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime() ||
         a.name.localeCompare(b.name)

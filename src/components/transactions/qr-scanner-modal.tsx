@@ -42,11 +42,6 @@ export function QRScannerModal({
   const scannerElementRef = useRef<HTMLDivElement>(null);
   const t = useTranslations("transactions.qrScanner");
 
-  // Debug logging
-  useEffect(() => {
-    console.log("QRScannerModal open state changed:", open);
-  }, [open]);
-
   const handleScanSuccess = useCallback(
     (decodedText: string) => {
       try {
@@ -63,26 +58,18 @@ export function QRScannerModal({
     [onScanSuccess, onOpenChange, t],
   );
 
-  const handleScanFailure = useCallback((error: string) => {
-    // Ignore scan failures - they happen continuously while scanning
-    // Only log actual errors
-    if (!error.includes("NotFoundException")) {
-      console.warn("QR scan error:", error);
-    }
+  const handleScanFailure = useCallback((_error: string) => {
+    // Scan failures happen continuously while scanning, so we ignore them
   }, []);
 
   const stopScanning = useCallback(async () => {
     if (scannerRef.current) {
       try {
-        console.log("Stopping scanner...");
         await scannerRef.current.stop();
         scannerRef.current.clear();
-        scannerRef.current = null; // Clear the ref
+        scannerRef.current = null;
         setIsScanning(false);
-        console.log("Scanner stopped and cleared");
-      } catch (error) {
-        console.error("Error stopping scanner:", error);
-        // Even if there's an error, clear the ref to allow reinitialization
+      } catch (_error) {
         scannerRef.current = null;
         setIsScanning(false);
       }
@@ -90,46 +77,33 @@ export function QRScannerModal({
   }, []);
 
   const startScanning = useCallback(async () => {
-    if (!scannerElementRef.current) {
-      console.log("Scanner element not ready");
-      return;
-    }
-
-    // Prevent multiple initializations
-    if (scannerRef.current) {
-      console.log("Scanner already running");
+    if (!scannerElementRef.current || scannerRef.current) {
       return;
     }
 
     try {
-      console.log("Initializing QR scanner...");
       const html5QrCode = new Html5Qrcode("qr-scanner");
       scannerRef.current = html5QrCode;
 
-      console.log("Starting camera...");
       await html5QrCode.start(
-        { facingMode: "environment" }, // Use back camera
+        { facingMode: "environment" },
         {
           fps: 10,
-          qrbox: 250, // Square box of 250x250
-          aspectRatio: 1.0, // Keep video square
+          qrbox: 250,
+          aspectRatio: 1.0,
         },
         handleScanSuccess,
         handleScanFailure,
       );
 
-      console.log("Camera started successfully");
       setIsScanning(true);
-    } catch (error) {
-      console.error("Error starting QR scanner:", error);
+    } catch (_error) {
       toast.error(t("errors.cameraError"));
       setShowManualEntry(true);
-      // Clear ref on error to allow retry
       scannerRef.current = null;
     }
   }, [handleScanSuccess, handleScanFailure, t]);
 
-  // Cleanup scanner when component unmounts
   useEffect(() => {
     return () => {
       if (scannerRef.current) {
@@ -139,25 +113,23 @@ export function QRScannerModal({
             scannerRef.current?.clear();
             scannerRef.current = null;
           })
-          .catch((error) => {
-            console.error("Cleanup error:", error);
+          .catch(() => {
             scannerRef.current = null;
           });
       }
     };
   }, []);
 
-  // Start camera scanning when modal opens
   useEffect(() => {
     if (open && !showManualEntry) {
-      // Add a small delay to ensure the DOM element is mounted
       const timer = setTimeout(() => {
         if (scannerElementRef.current) {
           startScanning();
         }
       }, 100);
       return () => clearTimeout(timer);
-    } else if (!open || showManualEntry) {
+    }
+    if (!open || showManualEntry) {
       stopScanning();
     }
   }, [open, showManualEntry, startScanning, stopScanning]);

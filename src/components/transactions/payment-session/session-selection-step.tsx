@@ -13,6 +13,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { Muted } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
+import { isTransactionDueToday } from "@/lib/utils/transaction-dates";
 import { formatAmount } from "./payment-session-utils";
 import type { SessionPeriodGroup, SessionTransaction } from "./types";
 
@@ -50,6 +51,7 @@ export function SessionSelectionStep({
     selectedCount > 0 && (!requiresWarning || warningAcknowledged);
   const tPriority = useTranslations("transactions.priority");
   const tStatus = useTranslations("transactions.status");
+  const tCard = useTranslations("transactions.card");
   const t = useTranslations("transactions.paymentSession.selection");
 
   if (!hasExpenses) {
@@ -106,6 +108,10 @@ export function SessionSelectionStep({
                   });
 
                   const checked = selectedIds.has(transaction.id);
+                  const isDueToday = isTransactionDueToday(
+                    transaction.dueDate,
+                    false,
+                  );
 
                   return (
                     <button
@@ -151,6 +157,14 @@ export function SessionSelectionStep({
                           >
                             {tPriority(transaction.priority)}
                           </Badge>
+                          {isDueToday && (
+                            <Badge
+                              variant="outline"
+                              className="bg-yellow-100 text-yellow-800 dark:bg-yellow-950 dark:text-yellow-400 border-yellow-500 dark:border-yellow-600 font-semibold"
+                            >
+                              {tCard("dueToday")}
+                            </Badge>
+                          )}
                           {transaction.paymentReference && (
                             <Badge
                               variant="outline"
