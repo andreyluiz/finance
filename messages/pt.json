@@ -20,6 +20,218 @@
     "paidTransactions": "Transações Pagas",
     "unpaidExpense": "despesa não paga"
   },
+  "landing": {
+    "header": {
+      "logo": "Gerenciador Financeiro",
+      "features": "Recursos",
+      "howItWorks": "Como Funciona",
+      "pricing": "Preços",
+      "signIn": "Entrar",
+      "getStarted": "Começar"
+    },
+    "hero": {
+      "badge": "Feito na Suíça",
+      "title": "Assuma o Controle das Suas Finanças com Confiança",
+      "subtitle": "Rastreie pagamentos, gerencie parcelas e nunca perca um vencimento. O companheiro financeiro suíço feito para clareza e controle.",
+      "getStarted": "Começar Teste Grátis",
+      "viewPricing": "Ver Preços",
+      "goToDashboard": "Ir para o Painel",
+      "noCreditCard": "Sem cartão de crédito necessário • Plano grátis para sempre"
+    },
+    "stats": {
+      "tracked": "Rastreado em Pagamentos",
+      "payments": "Pagamentos Gerenciados",
+      "users": "Usuários Satisfeitos",
+      "uptime": "Tempo de Atividade"
+    },
+    "features": {
+      "badge": "Recursos",
+      "title": "Tudo o Que Você Precisa para Manter Suas Finanças Organizadas",
+      "subtitle": "Recursos poderosos projetados para dar a você visibilidade e controle completos sobre seus compromissos financeiros.",
+      "paymentTracking": {
+        "title": "Rastreamento Inteligente de Pagamentos",
+        "description": "Monitore todos os seus pagamentos com indicadores de status codificados por cores. Veja instantaneamente o que está pendente, vencendo hoje ou vencido."
+      },
+      "dueDateAlerts": {
+        "title": "Alertas Inteligentes de Vencimento",
+        "description": "Nunca perca um prazo de pagamento. Receba lembretes e notificações automatizados para estar sempre à frente dos seus vencimentos."
+      },
+      "financialOverview": {
+        "title": "Painel Financeiro Visual",
+        "description": "Gráficos bonitos e insights mostrando sua receita, despesas e tendências de gastos. Tome decisões informadas com dados na ponta dos dedos."
+      },
+      "qrBills": {
+        "title": "Integração com QR Bills Suíços",
+        "description": "Escaneie QR bills suíços para preencher automaticamente os detalhes da transação instantaneamente. Sem mais entrada manual de dados para seus pagamentos suíços."
+      },
+      "installments": {
+        "title": "Planos de Parcelas Flexíveis",
+        "description": "Divida grandes despesas em pagamentos mensais gerenciáveis. Rastreie automaticamente cada parcela com datas de vencimento individuais."
+      },
+      "paymentSessions": {
+        "title": "Sessões de Pagamento Guiadas",
+        "description": "Percorra despesas não pagas sistematicamente. Marque pagamentos como concluídos em um fluxo de trabalho organizado e sem estresse."
+      }
+    },
+    "howItWorks": {
+      "badge": "Como Funciona",
+      "title": "Comece em Três Passos Simples",
+      "subtitle": "Da configuração à clareza financeira completa em minutos. Nosso processo intuitivo torna o gerenciamento de dinheiro sem esforço.",
+      "step1": {
+        "title": "Adicione Suas Transações",
+        "description": "Comece adicionando suas receitas e despesas. Use nossa entrada manual rápida ou escaneie QR bills suíços para captura instantânea de dados.",
+        "feature1": "Entrada manual com formulários inteligentes",
+        "feature2": "Scanner de QR bills suíços para captura instantânea",
+        "feature3": "Suporte para pagamentos únicos e parcelas"
+      },
+      "step2": {
+        "title": "Rastreie Tudo Visualmente",
+        "description": "Seu painel mostra exatamente o que está pago, pendente ou vencido. Cartões e gráficos codificados por cores tornam o status financeiro instantaneamente claro.",
+        "feature1": "Indicadores de status em tempo real",
+        "feature2": "Gráficos e detalhamentos interativos",
+        "feature3": "Filtre por período de faturamento ou tipo de pagamento"
+      },
+      "step3": {
+        "title": "Mantenha o Controle",
+        "description": "Receba alertas antes dos vencimentos e use sessões de pagamento para trabalhar em contas sistematicamente. Nunca mais perca o controle de suas finanças.",
+        "feature1": "Notificações automáticas de vencimento",
+        "feature2": "Fluxos de trabalho estruturados de sessões de pagamento",
+        "feature3": "Rastreamento histórico e insights"
+      }
+    },
+    "pricing": {
+      "badge": "Preços",
+      "title": "Escolha o Plano Que Atende Suas Necessidades",
+      "subtitle": "Comece grátis e faça upgrade conforme suas necessidades de rastreamento financeiro crescem. Todos os planos incluem nossos recursos principais.",
+      "period": "mês",
+      "free": {
+        "name": "Grátis",
+        "description": "Perfeito para começar",
+        "cta": "Começar Grátis",
+        "transactions": "5 transações por mês",
+        "dashboard": "Painel financeiro",
+        "alerts": "Alertas de pagamento",
+        "qrBills": "QR bills suíços",
+        "installments": "Planos de parcelas",
+        "sessions": "Sessões de pagamento",
+        "ai": "Insights de IA"
+      },
+      "budget": {
+        "name": "Orçamento",
+        "description": "Para rastreamento de finanças pessoais",
+        "cta": "Começar Plano Orçamento",
+        "transactions": "10 transações por mês",
+        "dashboard": "Painel financeiro",
+        "alerts": "Alertas de pagamento",
+        "qrBills": "QR bills suíços",
+        "installments": "Planos de parcelas",
+        "sessions": "Sessões de pagamento",
+        "ai": "Insights de IA"
+      },
+      "balance": {
+        "name": "Equilíbrio",
+        "description": "Mais popular para famílias",
+        "cta": "Começar Plano Equilíbrio",
+        "transactions": "50 transações por mês",
+        "dashboard": "Painel financeiro",
+        "alerts": "Alertas de pagamento",
+        "qrBills": "QR bills suíços",
+        "installments": "Planos de parcelas",
+        "sessions": "Sessões de pagamento",
+        "ai": "Insights de IA"
+      },
+      "wealth": {
+        "name": "Riqueza",
+        "description": "Para usuários avançados e empresas",
+        "cta": "Começar Plano Riqueza",
+        "transactions": "100 transações por mês",
+        "dashboard": "Painel financeiro",
+        "alerts": "Alertas de pagamento",
+        "qrBills": "QR bills suíços",
+        "installments": "Planos de parcelas",
+        "sessions": "Sessões de pagamento",
+        "ai": "Insights de IA"
+      }
+    },
+    "testimonials": {
+      "badge": "Depoimentos",
+      "title": "Amado por Usuários em Toda a Suíça",
+      "subtitle": "Junte-se a milhares que assumiram o controle de suas finanças com nossa plataforma.",
+      "testimonial1": {
+        "quote": "Este aplicativo transformou completamente como gerencio minhas contas mensais. Só o scanner de QR bills me economiza horas todo mês. Altamente recomendado!",
+        "author": "Sarah Mueller",
+        "role": "Designer Freelance"
+      },
+      "testimonial2": {
+        "quote": "O recurso de rastreamento de parcelas é brilhante. Finalmente posso ver todos os meus planos de pagamento em um só lugar e nunca perder um vencimento. Vale cada franco!",
+        "author": "Marco Costa",
+        "role": "Proprietário de Pequena Empresa"
+      },
+      "testimonial3": {
+        "quote": "Interface limpa, recursos poderosos e feito na Suíça. As sessões de pagamento me ajudam a ficar organizado sem estresse. Adoro!",
+        "author": "Anna Lehmann",
+        "role": "Gerente de Projeto"
+      }
+    },
+    "benefits": {
+      "badge": "Por Que Nos Escolher",
+      "title": "Construído com Precisão e Cuidado Suíços",
+      "subtitle": "Mais do que apenas um rastreador financeiro. Estamos comprometidos com qualidade, privacidade e experiência do usuário.",
+      "swiss": {
+        "value": "Feito na Suíça",
+        "label": "Construído com precisão e confiabilidade suíças"
+      },
+      "languages": {
+        "value": "Multi-Idioma",
+        "label": "Suporte completo para inglês e português"
+      },
+      "darkMode": {
+        "value": "Modo Escuro",
+        "label": "Temas bonitos para dia e noite"
+      },
+      "updates": {
+        "value": "Atualizações Regulares",
+        "label": "Melhorando constantemente com novos recursos"
+      }
+    },
+    "cta": {
+      "title": "Pronto para Assumir o Controle das Suas Finanças?",
+      "subtitle": "Junte-se a milhares de usuários que confiam em nossa plataforma para gerenciar seus compromissos financeiros. Comece grátis hoje.",
+      "button": "Começar Teste Grátis",
+      "noCreditCard": "Sem cartão de crédito necessário • Comece em menos de 2 minutos"
+    },
+    "footer": {
+      "product": {
+        "title": "Produto",
+        "features": "Recursos",
+        "pricing": "Preços",
+        "changelog": "Histórico de Alterações",
+        "roadmap": "Roteiro"
+      },
+      "company": {
+        "title": "Empresa",
+        "about": "Sobre Nós",
+        "blog": "Blog",
+        "contact": "Contato",
+        "careers": "Carreiras"
+      },
+      "resources": {
+        "title": "Recursos",
+        "documentation": "Documentação",
+        "helpCenter": "Central de Ajuda",
+        "api": "API",
+        "status": "Status"
+      },
+      "legal": {
+        "title": "Legal",
+        "privacy": "Política de Privacidade",
+        "terms": "Termos de Serviço",
+        "cookies": "Política de Cookies",
+        "security": "Segurança"
+      },
+      "copyright": "© {year} Gerenciador Financeiro. Todos os direitos reservados."
+    }
+  },
   "pages": {
     "home": {
       "hero": {

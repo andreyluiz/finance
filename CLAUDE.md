@@ -23,6 +23,9 @@ npm run lint
 
 # Format code with Biome
 npm run format
+
+# Run type checks
+npm run typecheck
 ```
 
 ## Technology Stack

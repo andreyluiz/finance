@@ -20,6 +20,218 @@
     "paidTransactions": "Paid Transactions",
     "unpaidExpense": "unpaid expense"
   },
+  "landing": {
+    "header": {
+      "logo": "Finance Tracker",
+      "features": "Features",
+      "howItWorks": "How It Works",
+      "pricing": "Pricing",
+      "signIn": "Sign In",
+      "getStarted": "Get Started"
+    },
+    "hero": {
+      "badge": "Made in Switzerland",
+      "title": "Take Control of Your Finances with Confidence",
+      "subtitle": "Track payments, manage installments, and never miss a due date. The Swiss-made financial companion built for clarity and control.",
+      "getStarted": "Start Free Trial",
+      "viewPricing": "View Pricing",
+      "goToDashboard": "Go to Dashboard",
+      "noCreditCard": "No credit card required • Free forever plan"
+    },
+    "stats": {
+      "tracked": "Tracked in Payments",
+      "payments": "Payments Managed",
+      "users": "Happy Users",
+      "uptime": "Uptime"
+    },
+    "features": {
+      "badge": "Features",
+      "title": "Everything You Need to Stay Financially Organized",
+      "subtitle": "Powerful features designed to give you complete visibility and control over your financial commitments.",
+      "paymentTracking": {
+        "title": "Smart Payment Tracking",
+        "description": "Monitor all your payments with color-coded status indicators. Instantly see what's pending, due today, or overdue at a glance."
+      },
+      "dueDateAlerts": {
+        "title": "Intelligent Due Date Alerts",
+        "description": "Never miss a payment deadline. Get automated reminders and notifications so you're always ahead of your due dates."
+      },
+      "financialOverview": {
+        "title": "Visual Financial Dashboard",
+        "description": "Beautiful charts and insights showing your income, expenses, and spending trends. Make informed decisions with data at your fingertips."
+      },
+      "qrBills": {
+        "title": "Swiss QR Bill Integration",
+        "description": "Scan Swiss QR bills to auto-fill transaction details instantly. No more manual data entry for your Swiss payments."
+      },
+      "installments": {
+        "title": "Flexible Installment Plans",
+        "description": "Break large expenses into manageable monthly payments. Automatically track each installment with individual due dates."
+      },
+      "paymentSessions": {
+        "title": "Guided Payment Sessions",
+        "description": "Step through unpaid expenses systematically. Mark payments as completed in an organized, stress-free workflow."
+      }
+    },
+    "howItWorks": {
+      "badge": "How It Works",
+      "title": "Get Started in Three Simple Steps",
+      "subtitle": "From setup to full financial clarity in minutes. Our intuitive process makes money management effortless.",
+      "step1": {
+        "title": "Add Your Transactions",
+        "description": "Start by adding your income and expenses. Use our quick manual entry or scan Swiss QR bills for instant data capture.",
+        "feature1": "Manual entry with smart forms",
+        "feature2": "Swiss QR bill scanner for instant capture",
+        "feature3": "Support for one-time payments and installments"
+      },
+      "step2": {
+        "title": "Track Everything Visually",
+        "description": "Your dashboard shows exactly what's paid, pending, or overdue. Color-coded cards and charts make financial status instantly clear.",
+        "feature1": "Real-time status indicators",
+        "feature2": "Interactive charts and breakdowns",
+        "feature3": "Filter by billing period or payment type"
+      },
+      "step3": {
+        "title": "Stay in Control",
+        "description": "Get alerts before due dates and use payment sessions to work through bills systematically. Never lose track of your finances again.",
+        "feature1": "Automated due date notifications",
+        "feature2": "Structured payment session workflows",
+        "feature3": "Historical tracking and insights"
+      }
+    },
+    "pricing": {
+      "badge": "Pricing",
+      "title": "Choose the Plan That Fits Your Needs",
+      "subtitle": "Start free and upgrade as your financial tracking needs grow. All plans include our core features.",
+      "period": "month",
+      "free": {
+        "name": "Free",
+        "description": "Perfect for getting started",
+        "cta": "Get Started Free",
+        "transactions": "5 transactions per month",
+        "dashboard": "Financial dashboard",
+        "alerts": "Payment alerts",
+        "qrBills": "Swiss QR bills",
+        "installments": "Installment plans",
+        "sessions": "Payment sessions",
+        "ai": "AI insights"
+      },
+      "budget": {
+        "name": "Budget",
+        "description": "For personal finance tracking",
+        "cta": "Start Budget Plan",
+        "transactions": "10 transactions per month",
+        "dashboard": "Financial dashboard",
+        "alerts": "Payment alerts",
+        "qrBills": "Swiss QR bills",
+        "installments": "Installment plans",
+        "sessions": "Payment sessions",
+        "ai": "AI insights"
+      },
+      "balance": {
+        "name": "Balance",
+        "description": "Most popular for households",
+        "cta": "Start Balance Plan",
+        "transactions": "50 transactions per month",
+        "dashboard": "Financial dashboard",
+        "alerts": "Payment alerts",
+        "qrBills": "Swiss QR bills",
+        "installments": "Installment plans",
+        "sessions": "Payment sessions",
+        "ai": "AI insights"
+      },
+      "wealth": {
+        "name": "Wealth",
+        "description": "For power users and businesses",
+        "cta": "Start Wealth Plan",
+        "transactions": "100 transactions per month",
+        "dashboard": "Financial dashboard",
+        "alerts": "Payment alerts",
+        "qrBills": "Swiss QR bills",
+        "installments": "Installment plans",
+        "sessions": "Payment sessions",
+        "ai": "AI insights"
+      }
+    },
+    "testimonials": {
+      "badge": "Testimonials",
+      "title": "Loved by Users Across Switzerland",
+      "subtitle": "Join thousands who have taken control of their finances with our platform.",
+      "testimonial1": {
+        "quote": "This app completely transformed how I manage my monthly bills. The QR bill scanner alone saves me hours every month. Highly recommended!",
+        "author": "Sarah Mueller",
+        "role": "Freelance Designer"
+      },
+      "testimonial2": {
+        "quote": "The installment tracking feature is brilliant. I can finally see all my payment plans in one place and never miss a due date. Worth every franc!",
+        "author": "Marco Costa",
+        "role": "Small Business Owner"
+      },
+      "testimonial3": {
+        "quote": "Clean interface, powerful features, and made in Switzerland. The payment sessions help me stay organized without the stress. Love it!",
+        "author": "Anna Lehmann",
+        "role": "Project Manager"
+      }
+    },
+    "benefits": {
+      "badge": "Why Choose Us",
+      "title": "Built with Swiss Precision and Care",
+      "subtitle": "More than just a finance tracker. We're committed to quality, privacy, and user experience.",
+      "swiss": {
+        "value": "Swiss Made",
+        "label": "Built with Swiss precision and reliability"
+      },
+      "languages": {
+        "value": "Multi-Language",
+        "label": "Full support for English and Portuguese"
+      },
+      "darkMode": {
+        "value": "Dark Mode",
+        "label": "Beautiful themes for day and night"
+      },
+      "updates": {
+        "value": "Regular Updates",
+        "label": "Constantly improving with new features"
+      }
+    },
+    "cta": {
+      "title": "Ready to Take Control of Your Finances?",
+      "subtitle": "Join thousands of users who trust our platform to manage their financial commitments. Start free today.",
+      "button": "Start Free Trial",
+      "noCreditCard": "No credit card required • Start in under 2 minutes"
+    },
+    "footer": {
+      "product": {
+        "title": "Product",
+        "features": "Features",
+        "pricing": "Pricing",
+        "changelog": "Changelog",
+        "roadmap": "Roadmap"
+      },
+      "company": {
+        "title": "Company",
+        "about": "About Us",
+        "blog": "Blog",
+        "contact": "Contact",
+        "careers": "Careers"
+      },
+      "resources": {
+        "title": "Resources",
+        "documentation": "Documentation",
+        "helpCenter": "Help Center",
+        "api": "API",
+        "status": "Status"
+      },
+      "legal": {
+        "title": "Legal",
+        "privacy": "Privacy Policy",
+        "terms": "Terms of Service",
+        "cookies": "Cookie Policy",
+        "security": "Security"
+      },
+      "copyright": "© {year} Finance Tracker. All rights reserved."
+    }
+  },
   "pages": {
     "home": {
       "hero": {
