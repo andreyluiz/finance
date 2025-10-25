@@ -369,6 +369,54 @@
       "income": "Receita",
       "expenses": "Despesas",
       "paid": "Pago"
+    },
+    "savingsRate": {
+      "title": "Taxa de Poupança",
+      "saving": "Poupando",
+      "overspending": "Gastando demais"
+    },
+    "billsDueThisWeek": {
+      "title": "Contas a Vencer Esta Semana",
+      "total": "total",
+      "today": "Hoje",
+      "tomorrow": "Amanhã",
+      "thisWeek": "Esta Semana",
+      "noBills": "Nenhuma conta a vencer esta semana"
+    },
+    "topExpenses": {
+      "title": "Maiores Despesas Este Período",
+      "noExpenses": "Nenhuma despesa este período"
+    },
+    "installmentPlans": {
+      "title": "Planos de Parcelamento Ativos",
+      "totalRemaining": "Total restante",
+      "remaining": "restante",
+      "noPlans": "Nenhum plano de parcelamento ativo",
+      "morePlans": "mais planos"
+    },
+    "periodComparison": {
+      "title": "Comparação de Períodos",
+      "comparedToPrevious": "Comparado ao período anterior",
+      "income": "Receita",
+      "expenses": "Despesas",
+      "balance": "Saldo"
+    },
+    "paymentPerformance": {
+      "title": "Desempenho de Pagamentos",
+      "onTimeRate": "Taxa de pagamento no prazo (12 meses)",
+      "avgDays": "Média de dias para pagamento",
+      "days": "dias",
+      "streak": "Sequência atual",
+      "payments": "pagamentos"
+    },
+    "cashFlowForecast": {
+      "title": "Previsão de Fluxo de Caixa",
+      "warning": "Saldo pode ficar negativo",
+      "30days": "30 Dias",
+      "90days": "90 Dias",
+      "currentBalance": "Saldo Atual",
+      "projected": "Saldo Projetado",
+      "balance": "Saldo"
     }
   },
   "transactions": {

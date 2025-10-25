@@ -79,7 +79,7 @@ export function ExpenseBreakdown({ transactions }: ExpenseBreakdownProps) {
   };
 
   return (
-    <Card className="col-span-3">
+    <Card className="col-span-2">
       <CardHeader>
         <CardTitle>{t("title")}</CardTitle>
       </CardHeader>

@@ -369,6 +369,54 @@
       "income": "Income",
       "expenses": "Expenses",
       "paid": "Paid"
+    },
+    "savingsRate": {
+      "title": "Savings Rate",
+      "saving": "Saving",
+      "overspending": "Overspending"
+    },
+    "billsDueThisWeek": {
+      "title": "Bills Due This Week",
+      "total": "total",
+      "today": "Today",
+      "tomorrow": "Tomorrow",
+      "thisWeek": "This Week",
+      "noBills": "No bills due this week"
+    },
+    "topExpenses": {
+      "title": "Top Expenses This Period",
+      "noExpenses": "No expenses this period"
+    },
+    "installmentPlans": {
+      "title": "Active Installment Plans",
+      "totalRemaining": "Total remaining",
+      "remaining": "remaining",
+      "noPlans": "No active installment plans",
+      "morePlans": "more plans"
+    },
+    "periodComparison": {
+      "title": "Period Comparison",
+      "comparedToPrevious": "Compared to previous period",
+      "income": "Income",
+      "expenses": "Expenses",
+      "balance": "Balance"
+    },
+    "paymentPerformance": {
+      "title": "Payment Performance",
+      "onTimeRate": "On-time payment rate (12 months)",
+      "avgDays": "Avg. days to payment",
+      "days": "days",
+      "streak": "Current streak",
+      "payments": "payments"
+    },
+    "cashFlowForecast": {
+      "title": "Cash Flow Forecast",
+      "warning": "Balance may go negative",
+      "30days": "30 Days",
+      "90days": "90 Days",
+      "currentBalance": "Current Balance",
+      "projected": "Projected Balance",
+      "balance": "Balance"
     }
   },
   "transactions": {
