@@ -92,7 +92,7 @@ export default function AppPage() {
             />
 
             {/* Charts Grid */}
-            <div className="grid gap-6 md:grid-cols-7">
+            <div className="grid gap-6 md:grid-cols-4">
               <IncomeExpenseChart transactions={transactions} />
               <PaymentBurndownChart transactions={transactions} />
             </div>

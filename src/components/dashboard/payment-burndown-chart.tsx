@@ -86,7 +86,7 @@ export function PaymentBurndownChart({
   };
 
   return (
-    <Card className="col-span-4">
+    <Card className="col-span-2">
       <CardHeader>
         <CardTitle>{t("title")}</CardTitle>
       </CardHeader>
