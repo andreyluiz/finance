@@ -262,7 +262,7 @@ export function PaymentSessionLauncher({
 
   return (
     <>
-      <div className="flex items-center justify-between rounded-lg border border-border bg-muted/30 p-4">
+      <div className="flex md:flex-row flex-col gap-4 justify-between rounded-lg border border-border bg-muted/30 p-4">
         <div>
           <p className="text-sm font-semibold">{tLauncher("title")}</p>
           <Muted>{tLauncher("description")}</Muted>

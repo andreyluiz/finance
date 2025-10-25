@@ -134,13 +134,15 @@ export function TransactionList({
                 ) : (
                   <ChevronRight className="h-4 w-4 text-destructive" />
                 )}
-                <span className="font-semibold text-destructive">
+                <div className="flex md:flex-row flex-col md:gap-2 items-start md:items-center">
+                <span className="font-semibold text-destructive text-left">
                   {t("overdueFromPast")}
                 </span>
                 <span className="text-sm text-muted-foreground">
                   ({overdueFromPast.length} {t("unpaidExpense")}
                   {overdueFromPast.length !== 1 ? "s" : ""})
                 </span>
+                </div>
               </div>
             </CollapsibleTrigger>
 

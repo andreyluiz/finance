@@ -64,7 +64,7 @@ export function IncomeExpenseChart({ transactions }: IncomeExpenseChartProps) {
   };
 
   return (
-    <Card className="col-span-2">
+    <Card className="col-span-full md:col-span-2">
       <CardHeader>
         <CardTitle>{t("title")}</CardTitle>
       </CardHeader>

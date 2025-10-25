@@ -67,7 +67,7 @@ export default function AppPage() {
             <p className="text-muted-foreground">Loading dashboard...</p>
           </div>
         ) : (
-          <div className="space-y-6">
+          <div className="space-y-4">
             {/* Summary Cards Row */}
             <SummaryCards transactions={transactions} />
 
@@ -92,7 +92,7 @@ export default function AppPage() {
             />
 
             {/* Charts Grid */}
-            <div className="grid gap-6 md:grid-cols-4">
+            <div className="grid gap-6 md:grid-cols-4 grid-cols-1">
               <IncomeExpenseChart transactions={transactions} />
               <PaymentBurndownChart transactions={transactions} />
             </div>
@@ -111,7 +111,7 @@ export default function AppPage() {
             </div>
 
             {/* Comparison Grid */}
-            <div className="grid gap-6 md:grid-cols-4">
+            <div className="grid gap-6 md:grid-cols-4 grid-cols-1">
               <PeriodComparison
                 transactions={transactions}
                 currentPeriod={currentPeriod}

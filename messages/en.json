@@ -311,7 +311,8 @@
     "transactions": "Transactions",
     "addTransaction": "Add Transaction",
     "settings": "Settings",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "menu": "Menu"
   },
   "settings": {
     "title": "Settings",

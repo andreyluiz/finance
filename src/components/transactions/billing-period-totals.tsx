@@ -90,7 +90,7 @@ export function BillingPeriodTotals({
         </div>
 
         {/* Totals Grid */}
-        <div className="grid grid-cols-3 gap-4 py-4">
+        <div className="grid md:grid-cols-3 grid-cols-2 gap-4 py-4">
           {/* Income */}
           <div className="space-y-1">
             <div className="text-xs text-muted-foreground uppercase tracking-wide">
@@ -102,7 +102,7 @@ export function BillingPeriodTotals({
           </div>
 
           {/* Expenses */}
-          <div className="space-y-1">
+          <div className="space-y-1 md:text-center text-right">
             <div className="text-xs text-muted-foreground uppercase tracking-wide">
               {t("expenses")}
             </div>
@@ -119,7 +119,7 @@ export function BillingPeriodTotals({
           </div>
 
           {/* Balance */}
-          <div className="space-y-1">
+          <div className="space-y-1 md:col-span-1 col-span-2 text-right md:text-center">
             <div className="text-xs text-muted-foreground uppercase tracking-wide">
               {t("balance")}
             </div>

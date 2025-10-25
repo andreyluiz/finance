@@ -311,7 +311,8 @@
     "transactions": "Transações",
     "addTransaction": "Adicionar Transação",
     "settings": "Configurações",
-    "signOut": "Sair"
+    "signOut": "Sair",
+    "menu": "Menu"
   },
   "settings": {
     "title": "Configurações",
