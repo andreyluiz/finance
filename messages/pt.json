@@ -336,9 +336,9 @@
   },
   "dashboard": {
     "summaryCards": {
-      "incomeThisMonth": "Receita Este Mês",
-      "expensesThisMonth": "Despesas Este Mês",
-      "balanceThisMonth": "Saldo Este Mês",
+      "incomeThisPeriod": "Receita Este Período",
+      "expensesThisPeriod": "Despesas Este Período",
+      "balanceThisPeriod": "Saldo Este Período",
       "overdue": "Vencidas",
       "transactions": "transações",
       "positive": "Positivo",
@@ -363,6 +363,12 @@
       "today": "Hoje",
       "tomorrow": "Amanhã",
       "days": "dias"
+    },
+    "paymentBurndownChart": {
+      "title": "Acompanhamento de Pagamentos (Últimos 6 Meses)",
+      "income": "Receita",
+      "expenses": "Despesas",
+      "paid": "Pago"
     }
   },
   "transactions": {

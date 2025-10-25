@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getTransactionsAction } from "@/actions/transaction-actions";
 import { ExpenseBreakdown } from "@/components/dashboard/expense-breakdown";
 import { IncomeExpenseChart } from "@/components/dashboard/income-expense-chart";
+import { PaymentBurndownChart } from "@/components/dashboard/payment-burndown-chart";
 import { SummaryCards } from "@/components/dashboard/summary-cards";
 import { UpcomingPayments } from "@/components/dashboard/upcoming-payments";
 import { Header } from "@/components/header";
@@ -36,6 +37,11 @@ export default function AppPage() {
             <div className="grid gap-6 md:grid-cols-7">
               <IncomeExpenseChart transactions={transactions} />
               <ExpenseBreakdown transactions={transactions} />
+            </div>
+
+            {/* Payment Burndown Chart */}
+            <div className="grid gap-6 md:grid-cols-7">
+              <PaymentBurndownChart transactions={transactions} />
             </div>
 
             {/* Upcoming Payments */}

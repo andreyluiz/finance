@@ -10,6 +10,7 @@ import { useTranslations } from "next-intl";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { Transaction } from "@/db/schema";
 import { cn } from "@/lib/utils";
+import { getCurrentBillingPeriod } from "@/lib/utils/billing-period";
 
 interface SummaryCardsProps {
   transactions: Transaction[];
@@ -18,44 +19,55 @@ interface SummaryCardsProps {
 export function SummaryCards({ transactions }: SummaryCardsProps) {
   const t = useTranslations("dashboard.summaryCards");
 
-  // Calculate current month totals
-  const now = new Date();
-  const currentMonth = now.getMonth();
-  const currentYear = now.getFullYear();
+  // Get current billing period
+  const billingPeriod = getCurrentBillingPeriod();
 
-  const currentMonthTransactions = transactions.filter((t) => {
+  // Calculate current billing period totals
+  const currentPeriodTransactions = transactions.filter((t) => {
     const dueDate = new Date(t.dueDate);
     return (
-      dueDate.getMonth() === currentMonth &&
-      dueDate.getFullYear() === currentYear
+      dueDate >= billingPeriod.startDate && dueDate < billingPeriod.endDate
     );
   });
 
-  const totalIncome = currentMonthTransactions
+  const totalIncome = currentPeriodTransactions
     .filter((t) => t.type === "income")
     .reduce((sum, t) => sum + Number(t.value), 0);
 
-  const totalExpenses = currentMonthTransactions
+  const totalExpenses = currentPeriodTransactions
     .filter((t) => t.type === "expense")
     .reduce((sum, t) => sum + Number(t.value), 0);
 
   const balance = totalIncome - totalExpenses;
 
-  // Calculate overdue
+  // Format billing period for display
+  const formatPeriod = () => {
+    const startMonth = billingPeriod.startDate.toLocaleDateString("en-US", {
+      month: "short",
+    });
+    const startDay = billingPeriod.startDate.getDate();
+    const endMonth = billingPeriod.endDate.toLocaleDateString("en-US", {
+      month: "short",
+    });
+    const endDay = billingPeriod.endDate.getDate();
+    return `${startMonth} ${startDay} - ${endMonth} ${endDay}`;
+  };
+
+  // Calculate overdue (expenses only)
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
   const overdueCount = transactions.filter((t) => {
     const dueDate = new Date(t.dueDate);
     dueDate.setHours(0, 0, 0, 0);
-    return !t.paid && dueDate < today;
+    return !t.paid && dueDate < today && t.type === "expense";
   }).length;
 
   const overdueAmount = transactions
     .filter((t) => {
       const dueDate = new Date(t.dueDate);
       dueDate.setHours(0, 0, 0, 0);
-      return !t.paid && dueDate < today;
+      return !t.paid && dueDate < today && t.type === "expense";
     })
     .reduce((sum, t) => sum + Number(t.value), 0);
 
@@ -75,9 +87,12 @@ export function SummaryCards({ transactions }: SummaryCardsProps) {
       {/* Income Card */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">
-            {t("incomeThisMonth")}
-          </CardTitle>
+          <div className="flex flex-col space-y-1">
+            <CardTitle className="text-sm font-medium">
+              {t("incomeThisPeriod")}
+            </CardTitle>
+            <p className="text-xs text-muted-foreground">{formatPeriod()}</p>
+          </div>
           <ArrowUpCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
         </CardHeader>
         <CardContent>
@@ -85,7 +100,10 @@ export function SummaryCards({ transactions }: SummaryCardsProps) {
             {formatCurrency(totalIncome)}
           </div>
           <p className="text-xs text-muted-foreground">
-            {currentMonthTransactions.filter((t) => t.type === "income").length}{" "}
+            {
+              currentPeriodTransactions.filter((t) => t.type === "income")
+                .length
+            }{" "}
             {t("transactions")}
           </p>
         </CardContent>
@@ -94,9 +112,12 @@ export function SummaryCards({ transactions }: SummaryCardsProps) {
       {/* Expenses Card */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">
-            {t("expensesThisMonth")}
-          </CardTitle>
+          <div className="flex flex-col space-y-1">
+            <CardTitle className="text-sm font-medium">
+              {t("expensesThisPeriod")}
+            </CardTitle>
+            <p className="text-xs text-muted-foreground">{formatPeriod()}</p>
+          </div>
           <ArrowDownCircle className="h-4 w-4 text-red-600 dark:text-red-400" />
         </CardHeader>
         <CardContent>
@@ -105,7 +126,7 @@ export function SummaryCards({ transactions }: SummaryCardsProps) {
           </div>
           <p className="text-xs text-muted-foreground">
             {
-              currentMonthTransactions.filter((t) => t.type === "expense")
+              currentPeriodTransactions.filter((t) => t.type === "expense")
                 .length
             }{" "}
             {t("transactions")}
@@ -116,9 +137,12 @@ export function SummaryCards({ transactions }: SummaryCardsProps) {
       {/* Balance Card */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">
-            {t("balanceThisMonth")}
-          </CardTitle>
+          <div className="flex flex-col space-y-1">
+            <CardTitle className="text-sm font-medium">
+              {t("balanceThisPeriod")}
+            </CardTitle>
+            <p className="text-xs text-muted-foreground">{formatPeriod()}</p>
+          </div>
           <DollarSign
             className={cn(
               "h-4 w-4",

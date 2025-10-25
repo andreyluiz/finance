@@ -336,9 +336,9 @@
   },
   "dashboard": {
     "summaryCards": {
-      "incomeThisMonth": "Income This Month",
-      "expensesThisMonth": "Expenses This Month",
-      "balanceThisMonth": "Balance This Month",
+      "incomeThisPeriod": "Income This Period",
+      "expensesThisPeriod": "Expenses This Period",
+      "balanceThisPeriod": "Balance This Period",
       "overdue": "Overdue",
       "transactions": "transactions",
       "positive": "Positive",
@@ -363,6 +363,12 @@
       "today": "Today",
       "tomorrow": "Tomorrow",
       "days": "days"
+    },
+    "paymentBurndownChart": {
+      "title": "Payment Tracking (Last 6 Months)",
+      "income": "Income",
+      "expenses": "Expenses",
+      "paid": "Paid"
     }
   },
   "transactions": {
