@@ -147,20 +147,19 @@ export function BillingPeriodSelector({
         >
           <ChevronRight className="h-4 w-4" />
         </Button>
-
-        {/* Go to Current Period Button */}
-        {!isCurrent && (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleGoToCurrent}
-            className="gap-2"
-          >
-            <CalendarCheck className="h-4 w-4" />
-            {t("goToCurrent")}
-          </Button>
-        )}
       </div>
+      {/* Go to Current Period Button */}
+      {!isCurrent && (
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleGoToCurrent}
+          className="gap-2"
+        >
+          <CalendarCheck className="h-4 w-4" />
+          {t("goToCurrent")}
+        </Button>
+      )}
     </div>
   );
 }

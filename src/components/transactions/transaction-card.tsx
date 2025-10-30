@@ -11,6 +11,7 @@ import {
   updateTransactionPaidAction,
 } from "@/actions/transaction-actions";
 import { DeleteInstallmentDialog } from "@/components/transactions/delete-installment-dialog";
+import { QRDisplayModal } from "@/components/transactions/qr-display-modal";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -37,6 +38,7 @@ export const TransactionCard = memo(function TransactionCard({
 }: TransactionCardProps) {
   const [isDeleting, setIsDeleting] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [showQRModal, setShowQRModal] = useState(false);
   const { setEditingTransaction } = useTransactionStore();
   const queryClient = useQueryClient();
   const t = useTranslations("transactions.card");
@@ -260,6 +262,16 @@ export const TransactionCard = memo(function TransactionCard({
 
           {/* Right side - Actions */}
           <div className="flex gap-2">
+            {transaction.paymentReference && (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setShowQRModal(true)}
+                aria-label={t("showQRCode")}
+              >
+                <QrCodeIcon className="h-4 w-4" />
+              </Button>
+            )}
             <Button
               variant="ghost"
               size="icon"
@@ -296,6 +308,14 @@ export const TransactionCard = memo(function TransactionCard({
             ),
             name: transaction.name.split(" (")[0] || transaction.name,
           }}
+        />
+      )}
+      {/* QR Display Modal */}
+      {transaction.paymentReference && (
+        <QRDisplayModal
+          open={showQRModal}
+          onOpenChange={setShowQRModal}
+          transaction={transaction}
         />
       )}
     </Card>

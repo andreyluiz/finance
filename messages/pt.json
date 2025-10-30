@@ -463,6 +463,7 @@
       "due": "Vence",
       "markAsPaid": "Marcar transação como paga",
       "markAsUnpaid": "Marcar transação como não paga",
+      "showQRCode": "Mostrar QR code",
       "editTransaction": "Editar transação",
       "deleteTransaction": "Excluir transação",
       "deleteConfirm": "Tem certeza que deseja excluir esta transação?"
@@ -575,6 +576,25 @@
       "installmentPlanFailed": "Falha ao criar plano de parcelas",
       "invalidInstallments": "Por favor, insira um número válido de parcelas (mínimo 2)",
       "unexpected": "Ocorreu um erro inesperado"
+    },
+    "qrDisplay": {
+      "title": "QR Code de Pagamento",
+      "description": "Escaneie este QR code com seu aplicativo bancário para completar o pagamento.",
+      "transactionName": "Transação",
+      "amount": "Valor",
+      "dueDate": "Data de Vencimento",
+      "referenceType": "Tipo de Pagamento",
+      "swissQRBill": "QR Code Suíço",
+      "generating": "Gerando QR code...",
+      "scanInstructions": "Escaneie este código com seu aplicativo bancário",
+      "reference": "Referência de Pagamento",
+      "close": "Fechar",
+      "markAsPaid": "Marcar como Pago",
+      "markingPaid": "Marcando como pago...",
+      "errors": {
+        "generateFailed": "Falha ao gerar QR code",
+        "noReference": "Nenhuma referência de pagamento disponível"
+      }
     },
     "paymentSession": {
       "launcher": {

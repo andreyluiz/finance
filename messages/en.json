@@ -463,6 +463,7 @@
       "due": "Due",
       "markAsPaid": "Mark transaction as paid",
       "markAsUnpaid": "Mark transaction as unpaid",
+      "showQRCode": "Show QR code",
       "editTransaction": "Edit transaction",
       "deleteTransaction": "Delete transaction",
       "deleteConfirm": "Are you sure you want to delete this transaction?"
@@ -575,6 +576,25 @@
       "installmentPlanFailed": "Failed to create installment plan",
       "invalidInstallments": "Please enter a valid number of installments (minimum 2)",
       "unexpected": "An unexpected error occurred"
+    },
+    "qrDisplay": {
+      "title": "Payment QR Code",
+      "description": "Scan this QR code with your banking app to complete the payment.",
+      "transactionName": "Transaction",
+      "amount": "Amount",
+      "dueDate": "Due Date",
+      "referenceType": "Payment Type",
+      "swissQRBill": "Swiss QR Bill",
+      "generating": "Generating QR code...",
+      "scanInstructions": "Scan this code with your banking app",
+      "reference": "Payment Reference",
+      "close": "Close",
+      "markAsPaid": "Mark as Paid",
+      "markingPaid": "Marking as paid...",
+      "errors": {
+        "generateFailed": "Failed to generate QR code",
+        "noReference": "No payment reference available"
+      }
     },
     "paymentSession": {
       "launcher": {
