@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { H1, Muted } from "@/components/ui/typography";
 import { Link, useRouter } from "@/i18n/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { getRedirectUrlBase } from "@/lib/utils";
 
 export default function SignUpPage() {
   const [loading, setLoading] = useState(false);
@@ -72,10 +73,12 @@ export default function SignUpPage() {
     setLoading(true);
 
     try {
+      const redirectUrl = `${getRedirectUrlBase()}/auth/callback`;
+      
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: redirectUrl,
         },
       });
       if (error) throw error;

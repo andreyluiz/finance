@@ -6,26 +6,27 @@ type RouteContext = {
 };
 
 export async function GET(request: Request, context: RouteContext) {
-  const { searchParams, origin } = new URL(request.url);
+  const { searchParams } = new URL(request.url);
   const code = searchParams.get("code");
   const next = searchParams.get("next") ?? "/app";
 
-  // Get locale from URL params
   const { locale } = await context.params;
+
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL;
+  const redirectBase = siteUrl?.trim() || new URL(request.url).origin;
 
   if (code) {
     const supabase = await createClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
-      // Ensure the redirect URL includes the locale
       const redirectPath = next.startsWith("/") ? next : `/${next}`;
       const localeRedirect = redirectPath.startsWith(`/${locale}`)
         ? redirectPath
         : `/${locale}${redirectPath}`;
-      return NextResponse.redirect(`${origin}${localeRedirect}`);
+      return NextResponse.redirect(`${redirectBase}${localeRedirect}`);
     }
   }
 
-  // Return the user to the home page with locale
-  return NextResponse.redirect(`${origin}/${locale}`);
+  return NextResponse.redirect(`${redirectBase}/${locale}`);
 }
