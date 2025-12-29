@@ -1,6 +1,10 @@
-# CLAUDE.md
+---
+trigger: always_on
+---
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+# AGENTS.md
+
+This file provides guidance to coding agents when working with code in this repository.
 
 ## Project Overview
 
@@ -146,15 +150,11 @@ Common components to check for:
 
 ## Available Tools
 
+### Next DevTools MCP
+For specifics on Next.js development, use the Next DevTools MCP tool.
+
 ### Context7 MCP
 When in doubt about implementation details, best practices, or technology-specific questions, use the Context7 MCP tool to search for relevant documentation and examples.
-
-### Chrome Dev Tools MCP
-The Chrome Dev Tools MCP is available for browser automation and testing. Test credentials are stored in `.env.local`:
-- **Username**: `TEST_USER` environment variable
-- **Password**: `TEST_PASSWORD` environment variable
-
-Use this tool to verify UI functionality, test user flows, and validate implementations in the browser.
 
 ## Code Quality Requirements
 
@@ -162,139 +162,3 @@ Use this tool to verify UI functionality, test user flows, and validate implemen
 1. Pass Biome linting (`npm run lint`)
 2. Be formatted with Biome (`npm run format`)
 3. Pass all unit tests (once test suite is implemented)
-
-## Feature Development Methodology
-
-This project follows a Behavior-Driven Development (BDD) approach. For each new feature, three documents must be created before implementation begins:
-
-### 1. Specification Document (Spec)
-
-**Purpose:** Defines what the feature should do from a user perspective.
-
-**Structure:**
-- **Introduction**: Overview of the feature and its purpose
-- **Requirements**: Numbered requirements, each containing:
-  - **User Story**: "As a [role], I want [goal], so that [benefit]"
-  - **Acceptance Criteria**: BDD clauses using WHEN/THEN/IF format
-    - WHEN [condition] THEN the system SHALL [expected behavior]
-    - IF [condition] THEN the system SHALL [expected behavior]
-
-**Example:**
-```markdown
-### Requirement 1: View Payment Status
-
-**User Story:** As a user, I want to see all my payments categorized by status, so that I can track what's pending, due, and overdue.
-
-#### Acceptance Criteria
-
-1. WHEN a user views the dashboard THEN the system SHALL display payments grouped by status (pending, due, overdue)
-2. WHEN a payment is overdue THEN the system SHALL highlight it in red with a warning indicator
-3. IF there are no payments THEN the system SHALL display an empty state with a call-to-action
-```
-
-**Location:** `specs/[feature-name]/spec.md`
-
-### 2. Architecture Document (Design)
-
-**Purpose:** Defines how the feature will be implemented technically.
-
-**Structure:**
-- **Overview**: High-level description of the implementation approach
-- **Architecture**: Component diagram using Mermaid
-- **Components and Interfaces**: Detailed breakdown of:
-  - TypeScript interfaces and types
-  - React components and their props
-  - Functions and utilities
-  - Database tables and schemas
-  - API endpoints
-  - State management structure
-- **Data Models**: Complete type definitions
-- **Error Handling**: Error scenarios and recovery strategies
-- **Testing Strategy**: Unit, integration, and E2E testing approach
-- **Security Considerations**: Authentication, authorization, data protection
-- **Performance Considerations**: Optimization strategies
-
-**Example Mermaid Diagram:**
-```mermaid
-graph TD
-    A[Dashboard] --> B[PaymentList]
-    B --> C[PaymentCard]
-    C --> D[StatusBadge]
-    B --> E[FilterBar]
-    F[PaymentService] --> B
-```
-
-**Must Reference:** Should reference specific requirements from the spec document (e.g., "_Requirements: 1.1, 1.2, 1.3_")
-
-**Location:** `specs/[feature-name]/design.md`
-
-### 3. Tasks Document (Implementation Plan)
-
-**Purpose:** Breaks down the implementation into actionable tasks.
-
-**Structure:**
-- Hierarchical task list with checkboxes
-- Tasks grouped by implementation phase
-- Each task references related requirements
-- Optional tasks marked with `- [ ]*` (typically accessibility, unit tests, integration tests)
-
-**Task Format:**
-```markdown
-- [ ] 1. Set up component structure
-  - Create directory structure for feature components
-  - Define TypeScript interfaces
-  - _Requirements: 1.1, 1.2_
-
-- [ ] 2. Implement core functionality
-- [ ] 2.1 Build PaymentList component
-  - Implement filtering and sorting logic
-  - _Requirements: 1.1, 1.3_
-
-- [ ]* 2.2 Write unit tests for PaymentList
-  - Test filtering and edge cases
-  - _Requirements: 1.1_
-```
-
-**Task Organization Guidelines:**
-- Main tasks (numbered: 1, 2, 3...)
-- Sub-tasks (numbered: 2.1, 2.2, 2.3...)
-- Optional tasks marked with `*` after the checkbox
-- Requirements referenced at the end of each task description
-- **Task titles MUST be descriptive like commit messages** (e.g., "Phase 3: Validation & Utilities", "Phase 5: Server Actions")
-- Task titles will be used as commit messages at the end of each phase
-
-**Location:** `specs/[feature-name]/tasks.md`
-
-### BDD Workflow
-
-When a new feature is requested:
-
-1. **Specification Phase**: Create the spec document with requirements and acceptance criteria
-2. **Design Phase**: Create the architecture document with technical implementation details
-3. **Planning Phase**: Create the tasks document with implementation breakdown
-4. **Review Phase**: Review all three documents before coding begins
-5. **Implementation Phase**: Follow the tasks document, marking tasks as completed
-   - **IMPORTANT**: Create a git commit at the end of each phase to save changes step by step
-   - Use the phase/task title from `tasks.md` as the commit message
-   - Example: `git commit -m "Phase 3: Validation & Utilities"`
-6. **Validation Phase**: Verify all acceptance criteria from the spec are met
-
-### Document Storage
-
-All feature documentation should be stored in:
-```
-specs/
-└── [feature-name]/
-    ├── spec.md
-    ├── design.md
-    └── tasks.md
-```
-
-### Important Notes
-
-- Documents are created **only when explicitly requested** for a new feature
-- All three documents should be created before implementation begins
-- Documents must reference each other (design references spec, tasks reference requirements)
-- Optional tasks (`- [ ]*`) should cover: accessibility, unit tests, integration tests, performance optimizations
-- All documents use Markdown format
-- Mermaid diagrams should be used in architecture documents for visual clarity
