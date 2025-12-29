@@ -158,3 +158,4 @@ When in doubt about implementation details, best practices, or technology-specif
 1. Pass Biome linting (`npm run lint`)
 2. Be formatted with Biome (`npm run format`)
 3. Pass all unit tests (once test suite is implemented)
+4. Have all strings translated and added to all language files

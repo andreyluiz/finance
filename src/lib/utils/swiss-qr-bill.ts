@@ -8,7 +8,7 @@ export function parseSwissQRBill(qrCodeString: string) {
     const firstLine = lines[0]?.trim();
     if (!firstLine || firstLine !== "SPC") {
       throw new Error(
-        `Invalid Swiss QR Bill format - must start with SPC (found: "${firstLine || "empty"}")`,
+        "This is not a valid Swiss QR Bill. Please ensure you are scanning the generated Swiss QR code specific to the bill.",
       );
     }
 

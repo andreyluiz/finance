@@ -507,13 +507,13 @@
       "choiceDescription": "Choose how you want to enter your transaction details.",
       "manualEntry": "Manual Entry",
       "manualEntryDesc": "Fill out the transaction form manually",
-      "scanQR": "Scan Swiss QR Bill",
-      "scanQRDesc": "Scan a QR code to auto-fill details",
+      "scanQR": "Swiss QR Bill",
+      "scanQRDesc": "Scan a QR code or upload a file",
       "back": "Back"
     },
     "qrScanner": {
-      "title": "Scan Swiss QR Bill",
-      "description": "Scan a Swiss QR bill to auto-fill transaction details.",
+      "title": "Swiss QR Bill",
+      "description": "Scan a Swiss QR bill or upload a PDF/Image.",
       "manualEntry": "Enter manually instead",
       "manualEntryLabel": "QR Code Data",
       "manualEntryPlaceholder": "Paste the QR code data here...",
@@ -527,8 +527,13 @@
       },
       "errors": {
         "cameraError": "Unable to access camera. Please use manual entry.",
-        "invalidQR": "Invalid Swiss QR Bill format"
-      }
+        "invalidQR": "Invalid Swiss QR Bill format",
+        "unsupportedFileType": "Unsupported file type. Please upload a PDF or image.",
+        "noQRFound": "No valid QR code found in the file.",
+        "scanFailed": "Failed to scan file."
+      },
+      "uploadFile": "Upload File",
+      "analyzing": "Analyzing..."
     },
     "list": {
       "pastOverdue": "Past Overdue ({count})",
