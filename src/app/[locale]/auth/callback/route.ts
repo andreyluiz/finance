@@ -13,7 +13,8 @@ export async function GET(request: Request, context: RouteContext) {
   const { locale } = await context.params;
 
   const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL;
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL;
   const redirectBase = siteUrl?.trim() || new URL(request.url).origin;
 
   if (code) {

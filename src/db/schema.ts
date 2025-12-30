@@ -92,7 +92,51 @@ export const transactions = pgTable(
   }),
 );
 
+export const spendingCategories = pgTable(
+  "spending_categories",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    userId: text("user_id").notNull(),
+    name: text("name").notNull(),
+    color: text("color").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => ({
+    userIdIdx: index("spending_categories_user_id_idx").on(table.userId),
+  }),
+);
+
+export const spendingCategoryEntries = pgTable(
+  "spending_category_entries",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    categoryId: uuid("category_id")
+      .notNull()
+      .references(() => spendingCategories.id, { onDelete: "cascade" }),
+    amount: numeric("amount", { precision: 19, scale: 2 }).notNull(),
+    note: text("note"),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => ({
+    categoryIdIdx: index("spending_category_entries_category_id_idx").on(
+      table.categoryId,
+    ),
+  }),
+);
+
 export type InstallmentPlan = typeof installmentPlans.$inferSelect;
 export type NewInstallmentPlan = typeof installmentPlans.$inferInsert;
 export type Transaction = typeof transactions.$inferSelect;
 export type NewTransaction = typeof transactions.$inferInsert;
+export type SpendingCategory = typeof spendingCategories.$inferSelect;
+export type NewSpendingCategory = typeof spendingCategories.$inferInsert;
+export type SpendingCategoryEntry = typeof spendingCategoryEntries.$inferSelect;
+export type NewSpendingCategoryEntry =
+  typeof spendingCategoryEntries.$inferInsert;

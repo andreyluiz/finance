@@ -20,6 +20,15 @@
     "paidTransactions": "Paid Transactions",
     "unpaidExpense": "unpaid expense"
   },
+  "spending": {
+    "categoriesLabel": "Spending Categories",
+    "details": {
+      "title": "Category Details",
+      "addEntry": "Add Entry",
+      "bulkAdd": "Bulk Add",
+      "history": "History"
+    }
+  },
   "landing": {
     "header": {
       "logo": "Finance Tracker",
@@ -333,6 +342,24 @@
     },
     "success": {
       "saved": "Settings saved successfully"
+    },
+    "general": "General",
+    "categoriesLabel": "Categories",
+    "categories": {
+      "title": "Spending Categories",
+      "description": "Manage your spending categories for quick expense tracking.",
+      "addNew": "Add New Category",
+      "namePlaceholder": "e.g. Groceries",
+      "selectColor": "Select color",
+      "add": "Add",
+      "existing": "Existing Categories",
+      "noCategories": "No categories yet.",
+      "deleteConfirm": "Are you sure? This will delete all entries associated with this category.",
+      "created": "Category created",
+      "createFailed": "Failed to create category",
+      "deleted": "Category deleted",
+      "deleteFailed": "Failed to delete category",
+      "loading": "Loading..."
     }
   },
   "dashboard": {

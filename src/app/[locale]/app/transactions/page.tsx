@@ -8,6 +8,7 @@ import { AddTransactionFab } from "@/components/transactions/add-transaction-fab
 import { BillingPeriodSelector } from "@/components/transactions/billing-period-selector";
 import { BillingPeriodTotals } from "@/components/transactions/billing-period-totals";
 import { PaymentSessionLauncher } from "@/components/transactions/payment-session/payment-session-launcher";
+import { SpendingCategoriesList } from "@/components/transactions/spending/spending-categories-list";
 import { TransactionList } from "@/components/transactions/transaction-list";
 import { TransactionModal } from "@/components/transactions/transaction-modal";
 import { H1 } from "@/components/ui/typography";
@@ -44,6 +45,8 @@ export default function TransactionsPage() {
         <H1 className="mb-6 pb-2 border-b border-border">Transactions</H1>
 
         <div className="space-y-4">
+          {/* Spending Categories */}
+
           <PaymentSessionLauncher
             transactions={transactions}
             billingPeriod={billingPeriod}
@@ -66,6 +69,9 @@ export default function TransactionsPage() {
               onIncludePastOverdueChange={setIncludePastOverdue}
             />
           )}
+
+          {/* Spending Categories */}
+          <SpendingCategoriesList billingPeriod={billingPeriod} />
 
           {/* Transaction List */}
           <TransactionList

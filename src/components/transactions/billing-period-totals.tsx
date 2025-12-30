@@ -1,6 +1,8 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
+import { getSpendingCategoryTotalsAction } from "@/actions/spending-actions";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
@@ -21,6 +23,27 @@ export function BillingPeriodTotals({
   onIncludePastOverdueChange,
 }: BillingPeriodTotalsProps) {
   const t = useTranslations("transactions.billingPeriodTotals");
+  const tSpending = useTranslations("spending");
+
+  // Fetch spending category totals
+  const { data: spendingCategories = [] } = useQuery({
+    queryKey: [
+      "spendingCategoriesTotals",
+      billingPeriod.startDate,
+      billingPeriod.endDate,
+    ],
+    queryFn: async () => {
+      return await getSpendingCategoryTotalsAction(
+        billingPeriod.startDate,
+        billingPeriod.endDate,
+      );
+    },
+  });
+
+  const totalSpending = spendingCategories.reduce(
+    (sum, cat) => sum + cat.totalAmount,
+    0,
+  );
 
   // Calculate totals for current period
   const currentPeriodIncome = transactions
@@ -51,10 +74,11 @@ export function BillingPeriodTotals({
     )
     .reduce((sum, t) => sum + Number(t.value), 0);
 
-  // Total expenses based on toggle
-  const totalExpenses = includePastOverdue
-    ? currentPeriodExpenses + pastOverdueExpenses
-    : currentPeriodExpenses;
+  // Total expenses with spending categories
+  const totalExpenses =
+    (includePastOverdue
+      ? currentPeriodExpenses + pastOverdueExpenses
+      : currentPeriodExpenses) + totalSpending;
 
   // Balance calculation
   const balance = currentPeriodIncome - totalExpenses;
@@ -109,13 +133,22 @@ export function BillingPeriodTotals({
             <div className="text-xl font-semibold text-red-600 dark:text-red-400">
               {formatCurrency(totalExpenses)}
             </div>
-            {includePastOverdue && pastOverdueExpenses > 0 && (
-              <div className="text-xs text-muted-foreground">
-                {t("current")}: {formatCurrency(currentPeriodExpenses)}
-                <br />
-                {t("overdue")}: {formatCurrency(pastOverdueExpenses)}
-              </div>
-            )}
+            <div className="text-xs text-muted-foreground mt-1">
+              {t("current")}: {formatCurrency(currentPeriodExpenses)}
+              {includePastOverdue && pastOverdueExpenses > 0 && (
+                <>
+                  <br />
+                  {t("overdue")}: {formatCurrency(pastOverdueExpenses)}
+                </>
+              )}
+              {totalSpending > 0 && (
+                <>
+                  <br />
+                  {tSpending("categoriesLabel")}:{" "}
+                  {formatCurrency(totalSpending)}
+                </>
+              )}
+            </div>
           </div>
 
           {/* Balance */}

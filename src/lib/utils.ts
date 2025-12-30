@@ -16,7 +16,8 @@ export function getRedirectUrlBase(): string {
   }
 
   const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL;
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    process.env.NEXT_PUBLIC_SUPABASE_REDIRECT_URL;
 
   if (siteUrl && siteUrl.trim()) {
     return siteUrl.trim().replace(/\/$/, "");

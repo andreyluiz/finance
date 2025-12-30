@@ -57,7 +57,11 @@ export function QRScannerModal({
         </div>
 
         <DialogFooter>
-          <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => onOpenChange(false)}
+          >
             {t("cancel")}
           </Button>
         </DialogFooter>

@@ -62,7 +62,7 @@ export default function SignInPage() {
 
     try {
       const redirectUrl = `${getRedirectUrlBase()}/auth/callback`;
-      
+
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {

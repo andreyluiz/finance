@@ -3,6 +3,7 @@
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { CategoriesSettings } from "@/components/settings/categories-settings";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -22,6 +23,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { type Locale, localeNames } from "@/i18n/config";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import {
@@ -107,59 +109,76 @@ export function SettingsModal({ open, onOpenChange }: SettingsModalProps) {
           <DialogDescription>{t("description")}</DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-4 py-4">
-          <div className="space-y-2">
-            <Label htmlFor="billingDay">{t("billingPeriodDay")}</Label>
-            <Input
-              id="billingDay"
-              type="number"
-              min="1"
-              max="31"
-              value={billingDay}
-              onChange={(e) => {
-                setBillingDay(e.target.value);
-                setError("");
-              }}
-              placeholder={t("billingPeriodDayPlaceholder")}
-            />
-            {error && <p className="text-sm text-destructive">{error}</p>}
-            <p className="text-xs text-muted-foreground">
-              {t("billingPeriodDayHelp")}
-            </p>
-          </div>
+        <div className="py-4">
+          <Tabs defaultValue="general" className="w-full">
+            <TabsList className="grid w-full grid-cols-2 mb-4">
+              <TabsTrigger value="general">{t("general")}</TabsTrigger>
+              <TabsTrigger value="categories">
+                {t("categoriesLabel")}
+              </TabsTrigger>
+            </TabsList>
 
-          <div className="space-y-2">
-            <Label htmlFor="language">{t("language")}</Label>
-            <Select
-              value={selectedLocale}
-              onValueChange={(value) => setSelectedLocale(value as Locale)}
-            >
-              <SelectTrigger id="language">
-                <SelectValue placeholder={t("languagePlaceholder")} />
-              </SelectTrigger>
-              <SelectContent>
-                {Object.entries(localeNames).map(([code, name]) => (
-                  <SelectItem key={code} value={code}>
-                    {name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+            <TabsContent value="general" className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="billingDay">{t("billingPeriodDay")}</Label>
+                <Input
+                  id="billingDay"
+                  type="number"
+                  min="1"
+                  max="31"
+                  value={billingDay}
+                  onChange={(e) => {
+                    setBillingDay(e.target.value);
+                    setError("");
+                  }}
+                  placeholder={t("billingPeriodDayPlaceholder")}
+                />
+                {error && <p className="text-sm text-destructive">{error}</p>}
+                <p className="text-xs text-muted-foreground">
+                  {t("billingPeriodDayHelp")}
+                </p>
+              </div>
 
-          <div className="flex items-center justify-between space-x-2">
-            <div className="flex-1 space-y-1">
-              <Label htmlFor="payment-reference">{t("paymentReference")}</Label>
-              <p className="text-xs text-muted-foreground">
-                {t("paymentReferenceHelp")}
-              </p>
-            </div>
-            <Switch
-              id="payment-reference"
-              checked={paymentReferenceEnabled}
-              onCheckedChange={setPaymentReferenceEnabledState}
-            />
-          </div>
+              <div className="space-y-2">
+                <Label htmlFor="language">{t("language")}</Label>
+                <Select
+                  value={selectedLocale}
+                  onValueChange={(value) => setSelectedLocale(value as Locale)}
+                >
+                  <SelectTrigger id="language">
+                    <SelectValue placeholder={t("languagePlaceholder")} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Object.entries(localeNames).map(([code, name]) => (
+                      <SelectItem key={code} value={code}>
+                        {name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="flex items-center justify-between space-x-2">
+                <div className="flex-1 space-y-1">
+                  <Label htmlFor="payment-reference">
+                    {t("paymentReference")}
+                  </Label>
+                  <p className="text-xs text-muted-foreground">
+                    {t("paymentReferenceHelp")}
+                  </p>
+                </div>
+                <Switch
+                  id="payment-reference"
+                  checked={paymentReferenceEnabled}
+                  onCheckedChange={setPaymentReferenceEnabledState}
+                />
+              </div>
+            </TabsContent>
+
+            <TabsContent value="categories">
+              <CategoriesSettings />
+            </TabsContent>
+          </Tabs>
         </div>
 
         <DialogFooter>

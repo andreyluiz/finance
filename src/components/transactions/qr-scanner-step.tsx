@@ -16,10 +16,7 @@ interface QRScannerStepProps {
 export function QRScannerStep({ onScanSuccess }: QRScannerStepProps) {
   return (
     <div className="py-2">
-      <QRScanner
-        onScanSuccess={onScanSuccess}
-        scannerId="qr-scanner-step"
-      />
+      <QRScanner onScanSuccess={onScanSuccess} scannerId="qr-scanner-step" />
     </div>
   );
 }

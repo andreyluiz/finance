@@ -36,6 +36,13 @@
       "when": 1761159427593,
       "tag": "0004_fuzzy_moondragon",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1767011532261,
+      "tag": "0005_furry_sister_grimm",
+      "breakpoints": true
     }
   ]
 }
